@@ -1,0 +1,25 @@
+{
+  "name": "darbaar-root",
+  "version": "1.0.0",
+  "private": true,
+  "description": "DARBAAR - A Global House of Fine Art, Rare Timepieces and Collectible Assets",
+  "scripts": {
+    "dev:frontend": "cd frontend && npm run dev",
+    "build:frontend": "cd frontend && npm run build",
+    "start:frontend": "cd frontend && npm run start",
+    "dev:backend": "cd backend && npm run dev",
+    "build:backend": "cd backend && npm run build",
+    "start:backend": "cd backend && npm run start",
+    "lint:frontend": "cd frontend && npm run lint"
+  },
+  "keywords": [
+    "darbaar",
+    "fine-art",
+    "rare-timepieces",
+    "collectibles",
+    "luxury-marketplace",
+    "private-advisory"
+  ],
+  "author": "DARBAAR Luxury Holdings",
+  "license": "Private"
+}
