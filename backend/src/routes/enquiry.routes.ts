@@ -22,3 +22,4 @@ router.get("/", authenticate, authorize("admin", "advisor"), getAllEnquiries);
 router.patch("/:id", authenticate, authorize("admin", "advisor"), updateEnquiryStatus);
 
 export default router;
+

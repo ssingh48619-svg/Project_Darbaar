@@ -3,11 +3,15 @@ dotenv.config();
 
 import { createApp } from "./app";
 import { connectDatabase } from "./config/database";
+import { configureCloudinary } from "./config/cloudinary";
 
 const PORT = process.env.PORT || 5000;
 
 async function bootstrap() {
   const app = createApp();
+
+  // Configure Cloudinary Media Vault
+  configureCloudinary();
 
   if (process.env.MONGODB_URI) {
     await connectDatabase(process.env.MONGODB_URI);

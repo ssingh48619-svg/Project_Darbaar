@@ -1,4 +1,6 @@
 
+import mongoose, { Document, Schema } from "mongoose";
+
 export interface IProvenanceRecord extends Document {
   assetId: mongoose.Types.ObjectId;
   timeline: Array<{

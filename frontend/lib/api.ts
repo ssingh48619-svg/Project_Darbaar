@@ -110,4 +110,31 @@ export const darbaarApi = {
     getUsers: (token: string) =>
       request<{ success: boolean; users: any[] }>("/admin/users", { token }),
   },
+
+  // Media Vault & Artwork Upload (Cloudinary)
+  media: {
+    uploadArtwork: async (file: File, token?: string) => {
+      const formData = new FormData();
+      formData.append("image", file);
+      const res = await fetch(`${API_BASE_URL}/upload/image`, {
+        method: "POST",
+        headers: {
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
+        credentials: "include",
+        body: formData,
+      });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.error || `Upload failed with status ${res.status}`);
+      }
+      return res.json();
+    },
+    deleteArtwork: (publicId: string, token: string) =>
+      request<{ success: boolean; message: string }>(`/upload/image/${encodeURIComponent(publicId)}`, {
+        method: "DELETE",
+        token,
+      }),
+  },
 };
+

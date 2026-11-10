@@ -8,11 +8,13 @@
     "start": "node dist/server.js",
     "dev": "ts-node-dev --respawn --transpile-only src/server.ts",
     "seed": "ts-node src/utils/seed.ts",
+    "test:credentials": "ts-node src/utils/test-credentials.ts",
     "lint": "eslint . --ext .ts",
     "test": "echo \"Running test suite...\" && exit 0"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
+    "cloudinary": "^2.11.0",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
@@ -22,6 +24,7 @@
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.9.5",
     "morgan": "^1.10.0",
+    "multer": "^2.5.0",
     "zod": "^3.24.1"
   },
   "devDependencies": {
@@ -31,9 +34,9 @@
     "@types/express": "^4.17.21",
     "@types/jsonwebtoken": "^9.0.7",
     "@types/morgan": "^1.9.9",
+    "@types/multer": "^2.3.0",
     "@types/node": "^20.17.14",
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.7.3"
   }
 }
-

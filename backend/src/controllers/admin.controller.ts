@@ -68,3 +68,4 @@ export async function getUsers(_req: AuthenticatedRequest, res: Response): Promi
     });
   }
 }
+

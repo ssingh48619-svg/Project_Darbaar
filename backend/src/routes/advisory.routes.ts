@@ -20,3 +20,4 @@ router.get("/my", authenticate, getMyAdvisoryRequests);
 router.get("/", authenticate, authorize("admin", "advisor"), getAllAdvisoryRequests);
 
 export default router;
+

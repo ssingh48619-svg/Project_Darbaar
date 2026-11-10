@@ -11,6 +11,7 @@ import enquiryRoutes from "./routes/enquiry.routes";
 import advisoryRoutes from "./routes/advisory.routes";
 import collectionRoutes from "./routes/collection.routes";
 import adminRoutes from "./routes/admin.routes";
+import uploadRoutes from "./routes/upload.routes";
 
 export function createApp(): Application {
   const app: Application = express();
@@ -65,6 +66,7 @@ export function createApp(): Application {
   app.use("/api/advisory", advisoryRoutes);
   app.use("/api/collections", collectionRoutes);
   app.use("/api/admin", adminRoutes);
+  app.use("/api/upload", uploadRoutes);
 
   // 404 Handler for Unrecognized Corridors
   app.use((_req: Request, res: Response) => {

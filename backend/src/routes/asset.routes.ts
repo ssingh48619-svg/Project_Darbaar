@@ -19,3 +19,4 @@ router.patch("/:id", authenticate, authorize("admin", "advisor"), updateAsset);
 router.delete("/:id", authenticate, authorize("admin"), deleteAsset);
 
 export default router;
+
