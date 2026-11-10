@@ -1,11 +1,11 @@
 "use client";
 
 import React, { useState, useMemo } from "react";
-import Image from "next/image";
 import { Search, X, ArrowUpRight, Sparkles, Filter } from "lucide-react";
 import { useDarbaar } from "@/features/context/DarbaarContext";
 import { CURATED_ASSETS } from "@/lib/data";
 import { AssetCategory } from "@/lib/types";
+import { LuxuryImage } from "@/components/LuxuryImage";
 
 export function SearchModal() {
   const { searchOpen, closeSearch, openSpecimenModal, openInquiryModal, formatRange } = useDarbaar();
@@ -125,9 +125,11 @@ export function SearchModal() {
                   className="flex border border-[#E5E5EA] p-3 bg-[#F7F5F0]/60 hover:bg-[#F7F5F0] transition-colors rounded-sm gap-3 group"
                 >
                   <div className="relative w-24 h-24 flex-shrink-0 bg-white border border-[#E5E5EA] overflow-hidden">
-                    <Image
+                    <LuxuryImage
                       src={asset.image}
                       alt={asset.title}
+                      fallbackTitle={asset.title}
+                      categoryLabel={asset.categoryLabel}
                       fill
                       className="object-cover group-hover:scale-105 transition-transform duration-300"
                     />
@@ -175,3 +177,4 @@ export function SearchModal() {
     </div>
   );
 }
+

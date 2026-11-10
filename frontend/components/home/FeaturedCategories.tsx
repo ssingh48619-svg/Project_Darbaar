@@ -2,8 +2,8 @@
 
 import React from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { ArrowUpRight } from "lucide-react";
+import { LuxuryImage } from "@/components/LuxuryImage";
 
 export function FeaturedCategories() {
   const categories = [
@@ -64,9 +64,11 @@ export function FeaturedCategories() {
             >
               {/* Image Frame */}
               <div className="relative h-72 sm:h-80 w-full overflow-hidden bg-[#EAE5DC]">
-                <Image
+                <LuxuryImage
                   src={cat.image}
                   alt={cat.title}
+                  fallbackTitle={cat.title}
+                  categoryLabel={cat.subtitle}
                   fill
                   className="object-cover group-hover:scale-105 transition-transform duration-500"
                   sizes="(max-width: 768px) 100vw, 33vw"
@@ -107,3 +109,4 @@ export function FeaturedCategories() {
     </section>
   );
 }
+

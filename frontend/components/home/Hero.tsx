@@ -1,9 +1,9 @@
 "use client";
 
 import React from "react";
-import Image from "next/image";
 import { ArrowDown, Shield, Sparkles, ChevronRight } from "lucide-react";
 import { useDarbaar } from "@/features/context/DarbaarContext";
+import { LuxuryImage } from "@/components/LuxuryImage";
 
 export function Hero() {
   const { openInquiryModal } = useDarbaar();
@@ -91,9 +91,11 @@ export function Hero() {
             <div className="relative mx-auto max-w-md lg:max-w-none">
               {/* Primary Architectural / Fine Object Image */}
               <div className="relative h-[440px] sm:h-[520px] w-full bg-white border border-[#E5E5EA] shadow-xl overflow-hidden">
-                <Image
+                <LuxuryImage
                   src="https://images.unsplash.com/photo-1582561424760-0321d75e81fa?auto=format&fit=crop&w=1200&q=85"
                   alt="Historic Indian Royal Architecture and Heritage Aesthetics"
+                  fallbackTitle="Historic Palace Architecture & Royal Ateliers"
+                  categoryLabel="Heritage Ateliers"
                   fill
                   priority
                   className="object-cover object-center"
@@ -122,9 +124,11 @@ export function Hero() {
               {/* Secondary Overlapping Horological Inset */}
               <div className="hidden sm:block absolute -bottom-6 -left-8 w-48 h-56 bg-white border border-[#E5E5EA] shadow-2xl p-2 z-10">
                 <div className="relative w-full h-full overflow-hidden bg-[#F7F5F0]">
-                  <Image
+                  <LuxuryImage
                     src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=600&q=85"
                     alt="High Horology Timepiece"
+                    fallbackTitle="Perpetual Calendar Chronograph"
+                    categoryLabel="Haute Horlogerie"
                     fill
                     className="object-cover"
                   />
@@ -147,3 +151,4 @@ export function Hero() {
     </section>
   );
 }
+

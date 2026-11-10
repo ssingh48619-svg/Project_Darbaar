@@ -1,12 +1,12 @@
 "use client";
 
 import React, { useState } from "react";
-import Image from "next/image";
 import Link from "next/link";
 import { ShieldCheck, Eye, Sparkles, ArrowRight, ArrowUpRight } from "lucide-react";
 import { useDarbaar } from "@/features/context/DarbaarContext";
 import { CURATED_ASSETS } from "@/lib/data";
 import { AssetCategory } from "@/lib/types";
+import { LuxuryImage } from "@/components/LuxuryImage";
 
 export function CuratedAssetsGrid() {
   const { formatRange, openSpecimenModal, openInquiryModal } = useDarbaar();
@@ -66,9 +66,11 @@ export function CuratedAssetsGrid() {
             >
               {/* Asset Image Frame */}
               <div className="relative h-72 sm:h-80 w-full bg-[#EAE5DC] overflow-hidden">
-                <Image
+                <LuxuryImage
                   src={asset.image}
                   alt={asset.title}
+                  fallbackTitle={asset.title}
+                  categoryLabel={asset.categoryLabel}
                   fill
                   className="object-cover group-hover:scale-105 transition-transform duration-500"
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
@@ -175,3 +177,4 @@ export function CuratedAssetsGrid() {
     </section>
   );
 }
+

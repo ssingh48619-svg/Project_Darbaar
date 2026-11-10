@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState } from "react";
-import Image from "next/image";
 import Link from "next/link";
 import {
   User,
@@ -18,6 +17,7 @@ import {
 } from "lucide-react";
 import { useDarbaar } from "@/features/context/DarbaarContext";
 import { CURATED_ASSETS } from "@/lib/data";
+import { LuxuryImage } from "@/components/LuxuryImage";
 
 export default function DashboardPage() {
   const { formatAmount, formatRange, openSpecimenModal, openInquiryModal } = useDarbaar();
@@ -163,7 +163,14 @@ export default function DashboardPage() {
                     className="flex border border-[#E5E5EA] p-4 bg-[#F7F5F0] rounded-sm gap-4 group"
                   >
                     <div className="relative w-28 h-28 flex-shrink-0 bg-white border border-[#E5E5EA] overflow-hidden">
-                      <Image src={asset.image} alt={asset.title} fill className="object-cover" />
+                      <LuxuryImage
+                        src={asset.image}
+                        alt={asset.title}
+                        fallbackTitle={asset.title}
+                        categoryLabel={asset.categoryLabel}
+                        fill
+                        className="object-cover"
+                      />
                     </div>
                     <div className="flex flex-col justify-between flex-grow">
                       <div>
@@ -201,7 +208,14 @@ export default function DashboardPage() {
               {clientCollection.map((asset) => (
                 <div key={asset.id} className="border border-[#E5E5EA] p-6 bg-[#F7F5F0] space-y-4">
                   <div className="relative h-64 w-full bg-[#EAE5DC]">
-                    <Image src={asset.image} alt={asset.title} fill className="object-cover" />
+                    <LuxuryImage
+                      src={asset.image}
+                      alt={asset.title}
+                      fallbackTitle={asset.title}
+                      categoryLabel={asset.categoryLabel}
+                      fill
+                      className="object-cover"
+                    />
                   </div>
                   <div>
                     <span className="text-xs text-[#A68A55] uppercase tracking-wider">{asset.makerOrArtist}</span>
@@ -230,7 +244,14 @@ export default function DashboardPage() {
               {savedAssets.map((asset) => (
                 <div key={asset.id} className="border border-[#E5E5EA] p-4 bg-[#F7F5F0] flex gap-4">
                   <div className="relative w-32 h-32 flex-shrink-0 bg-white">
-                    <Image src={asset.image} alt={asset.title} fill className="object-cover" />
+                    <LuxuryImage
+                      src={asset.image}
+                      alt={asset.title}
+                      fallbackTitle={asset.title}
+                      categoryLabel={asset.categoryLabel}
+                      fill
+                      className="object-cover"
+                    />
                   </div>
                   <div className="flex flex-col justify-between flex-grow">
                     <div>
@@ -330,3 +351,4 @@ export default function DashboardPage() {
     </div>
   );
 }
+

@@ -1,9 +1,9 @@
 "use client";
 
 import React from "react";
-import Image from "next/image";
 import { Sparkles, Shield, Compass, Landmark } from "lucide-react";
 import { useDarbaar } from "@/features/context/DarbaarContext";
+import { LuxuryImage } from "@/components/LuxuryImage";
 
 export default function AboutPage() {
   const { openInquiryModal } = useDarbaar();
@@ -43,9 +43,11 @@ export default function AboutPage() {
 
           <div className="lg:col-span-6">
             <div className="relative h-[380px] sm:h-[460px] w-full border border-[#E5E5EA] overflow-hidden bg-[#EAE5DC]">
-              <Image
+              <LuxuryImage
                 src="https://images.unsplash.com/photo-1582561424760-0321d75e81fa?auto=format&fit=crop&w=1000&q=85"
                 alt="Palace Architecture Inspiration"
+                fallbackTitle="Royal Architecture & Sovereign Heritage"
+                categoryLabel="Palace Heritage"
                 fill
                 className="object-cover"
               />
@@ -91,3 +93,4 @@ export default function AboutPage() {
     </div>
   );
 }
+

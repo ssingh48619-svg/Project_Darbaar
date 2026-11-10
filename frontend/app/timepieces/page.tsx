@@ -1,11 +1,11 @@
 "use client";
 
 import React from "react";
-import Image from "next/image";
 import Link from "next/link";
 import { ShieldCheck, Eye, Sparkles, Watch } from "lucide-react";
 import { useDarbaar } from "@/features/context/DarbaarContext";
 import { CURATED_ASSETS } from "@/lib/data";
+import { LuxuryImage } from "@/components/LuxuryImage";
 
 export default function TimepiecesPage() {
   const { formatRange, openSpecimenModal, openInquiryModal } = useDarbaar();
@@ -49,9 +49,11 @@ export default function TimepiecesPage() {
               className="bg-[#F7F5F0] border border-[#E5E5EA] flex flex-col justify-between group hover:border-[#A68A55] transition-all duration-300"
             >
               <div className="relative h-80 w-full bg-[#EAE5DC] overflow-hidden">
-                <Image
+                <LuxuryImage
                   src={asset.image}
                   alt={asset.title}
+                  fallbackTitle={asset.title}
+                  categoryLabel={asset.categoryLabel}
                   fill
                   className="object-cover group-hover:scale-105 transition-transform duration-500"
                 />
@@ -133,3 +135,4 @@ export default function TimepiecesPage() {
     </div>
   );
 }
+

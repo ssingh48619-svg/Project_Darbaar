@@ -12,3 +12,4 @@ export async function connectDatabase(uri?: string): Promise<void> {
     }
   }
 }
+

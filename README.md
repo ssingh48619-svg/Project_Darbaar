@@ -134,3 +134,4 @@ npm run dev
 4. **Confidential Advisory System:** Private inquiry intake modal with target salon corridor preferences (Geneva, London, New York, Singapore, Mumbai, Dubai).
 5. **Real-time Catalogue Search:** Search modal with instant filtering across artists, periods, references, and categories.
 6. **Regulatory Transparency:** Demonstration markers on sample records, distinct service boundaries between direct DARBAAR advisory and third-party laboratory verification.
+

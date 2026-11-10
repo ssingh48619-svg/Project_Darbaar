@@ -77,3 +77,4 @@ export function formatPriceRange(
   const maxFormatted = formatCurrencyAmount(maxUSD, currency, rates);
   return `${minFormatted} – ${maxFormatted}`;
 }
+

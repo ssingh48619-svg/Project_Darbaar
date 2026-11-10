@@ -1,9 +1,9 @@
 "use client";
 
 import React, { useState } from "react";
-import Image from "next/image";
 import { X, ShieldCheck, CheckCircle2, FileText, Calendar, MapPin, ZoomIn, Eye, Sparkles, Send } from "lucide-react";
 import { useDarbaar } from "@/features/context/DarbaarContext";
+import { LuxuryImage } from "@/components/LuxuryImage";
 
 export function SpecimenModal() {
   const { specimenAsset, closeSpecimenModal, openInquiryModal, formatRange } = useDarbaar();
@@ -85,9 +85,11 @@ export function SpecimenModal() {
                 }`}
                 onClick={() => setIsZoomed(!isZoomed)}
               >
-                <Image
+                <LuxuryImage
                   src={currentImage}
                   alt={specimenAsset.title}
+                  fallbackTitle={specimenAsset.title}
+                  categoryLabel={specimenAsset.categoryLabel}
                   fill
                   className={`object-cover object-center transition-all duration-300 ${
                     isZoomed ? "scale-150" : "group-hover:scale-105"
@@ -111,7 +113,13 @@ export function SpecimenModal() {
                         activeImageIndex === idx ? "border-[#A68A55] opacity-100" : "border-[#E5E5EA] opacity-60 hover:opacity-100"
                       }`}
                     >
-                      <Image src={img} alt={`Angle ${idx + 1}`} fill className="object-cover" />
+                      <LuxuryImage
+                        src={img}
+                        alt={`Angle ${idx + 1}`}
+                        fallbackTitle={`Angle ${idx + 1}`}
+                        fill
+                        className="object-cover"
+                      />
                     </button>
                   ))}
                 </div>
@@ -258,3 +266,4 @@ export function SpecimenModal() {
     </div>
   );
 }
+

@@ -114,3 +114,4 @@ Returns valuation records, historical estimates, and certified appraisal dates.
 Returns live timestamps and rates for:
 `USD`, `GBP`, `EUR`, `CHF`, `AED`, `INR`, `SGD`, `HKD`.
 Rate source: European Central Bank / Interbank feeds with caching and fallback.
+

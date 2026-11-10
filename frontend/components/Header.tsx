@@ -13,7 +13,10 @@ export function Header() {
   const [currencyDropdownOpen, setCurrencyDropdownOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
+  const [accountDropdownOpen, setAccountDropdownOpen] = useState(false);
+
   const navLinks = [
+    { label: "The Collection", href: "/marketplace" },
     { label: "Fine Art", href: "/fine-art" },
     { label: "Timepieces", href: "/timepieces" },
     { label: "Collectibles", href: "/collectibles" },
@@ -170,15 +173,54 @@ export function Header() {
               <Search className="w-4 h-4" />
             </button>
 
-            {/* Account Link */}
-            <Link
-              href="/dashboard"
-              className="p-2 text-[#111111] hover:text-[#A68A55] transition-colors rounded-full hover:bg-[#F7F5F0]"
-              aria-label="Client Portal"
-              title="Client Portal & Private Collection"
-            >
-              <User className="w-4 h-4" />
-            </Link>
+            {/* Account Dropdown */}
+            <div className="relative">
+              <button
+                type="button"
+                onClick={() => setAccountDropdownOpen(!accountDropdownOpen)}
+                className="p-2 text-[#111111] hover:text-[#A68A55] transition-colors rounded-full hover:bg-[#F7F5F0]"
+                aria-label="Client Portal"
+                title="Client Portal & Private Collection"
+              >
+                <User className="w-4 h-4" />
+              </button>
+
+              {accountDropdownOpen && (
+                <div className="absolute right-0 mt-2 w-56 bg-white border border-[#E5E5EA] shadow-xl py-2 z-50 rounded-xs">
+                  <div className="px-4 py-2 border-b border-[#E5E5EA] text-[10px] uppercase tracking-wider text-[#A68A55] font-semibold">
+                    Client & Advisory Portals
+                  </div>
+                  <Link
+                    href="/login"
+                    onClick={() => setAccountDropdownOpen(false)}
+                    className="block px-4 py-2 text-xs text-[#111111] hover:bg-[#F7F5F0] hover:text-[#A68A55] transition-colors"
+                  >
+                    Sign In to Private Vault
+                  </Link>
+                  <Link
+                    href="/register"
+                    onClick={() => setAccountDropdownOpen(false)}
+                    className="block px-4 py-2 text-xs text-[#111111] hover:bg-[#F7F5F0] hover:text-[#A68A55] transition-colors"
+                  >
+                    Apply for Private Admission
+                  </Link>
+                  <Link
+                    href="/dashboard"
+                    onClick={() => setAccountDropdownOpen(false)}
+                    className="block px-4 py-2 text-xs text-[#111111] hover:bg-[#F7F5F0] hover:text-[#A68A55] transition-colors border-t border-[#E5E5EA]/60"
+                  >
+                    My Collection Portfolio
+                  </Link>
+                  <Link
+                    href="/admin"
+                    onClick={() => setAccountDropdownOpen(false)}
+                    className="block px-4 py-2 text-[11px] text-[#686868] hover:bg-[#F7F5F0] hover:text-[#111111] transition-colors"
+                  >
+                    Curatorial Control Desk
+                  </Link>
+                </div>
+              )}
+            </div>
 
             {/* Private Inquiry CTA */}
             <button
@@ -232,3 +274,4 @@ export function Header() {
     </header>
   );
 }
+

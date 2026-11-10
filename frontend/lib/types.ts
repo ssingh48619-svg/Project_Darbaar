@@ -65,3 +65,4 @@ export interface AdvisoryInquiry {
   message: string;
   confidentialityAgreed: boolean;
 }
+

@@ -2,7 +2,6 @@
 
 import React, { useState } from "react";
 import { useParams, notFound } from "next/navigation";
-import Image from "next/image";
 import Link from "next/link";
 import {
   ShieldCheck,
@@ -18,6 +17,7 @@ import {
 } from "lucide-react";
 import { useDarbaar } from "@/features/context/DarbaarContext";
 import { CURATED_ASSETS } from "@/lib/data";
+import { LuxuryImage } from "@/components/LuxuryImage";
 
 export default function AssetDetailPage() {
   const params = useParams();
@@ -79,9 +79,11 @@ export default function AssetDetailPage() {
               className="relative w-full h-[420px] sm:h-[540px] bg-[#F7F5F0] border border-[#E5E5EA] overflow-hidden group cursor-crosshair"
               onClick={() => setIsZoomed(!isZoomed)}
             >
-              <Image
+              <LuxuryImage
                 src={currentImage}
                 alt={asset.title}
+                fallbackTitle={asset.title}
+                categoryLabel={asset.categoryLabel}
                 fill
                 priority
                 className={`object-cover object-center transition-all duration-300 ${
@@ -115,7 +117,13 @@ export default function AssetDetailPage() {
                         : "border-[#E5E5EA] opacity-60 hover:opacity-100"
                     }`}
                   >
-                    <Image src={img} alt={`View ${i + 1}`} fill className="object-cover" />
+                    <LuxuryImage
+                      src={img}
+                      alt={`View ${i + 1}`}
+                      fallbackTitle={`View ${i + 1}`}
+                      fill
+                      className="object-cover"
+                    />
                   </button>
                 ))}
               </div>
@@ -230,3 +238,4 @@ export default function AssetDetailPage() {
     </div>
   );
 }
+
