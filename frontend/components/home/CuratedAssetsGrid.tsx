@@ -1,180 +1,185 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import Link from "next/link";
-import { ShieldCheck, Eye, Sparkles, ArrowRight, ArrowUpRight } from "lucide-react";
+import { ShieldCheck, Compass, BookOpen, KeyRound, Sparkles, ArrowRight, ArrowUpRight, Scale, Eye } from "lucide-react";
 import { useDarbaar } from "@/features/context/DarbaarContext";
-import { CURATED_ASSETS } from "@/lib/data";
-import { AssetCategory } from "@/lib/types";
 import { LuxuryImage } from "@/components/LuxuryImage";
 
 export function CuratedAssetsGrid() {
-  const { formatRange, openSpecimenModal, openInquiryModal } = useDarbaar();
-  const [filter, setFilter] = useState<string>("all");
+  const { openInquiryModal } = useDarbaar();
 
-  const filteredAssets = CURATED_ASSETS.filter((a) => {
-    if (filter === "all") return true;
-    return a.category === filter;
-  });
+  const disciplines = [
+    {
+      id: "fine-art",
+      title: "Imperial Fine Art & Miniatures",
+      subtitle: "18th-Century Court Ateliers & Modernist Sculptures",
+      image: "https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&w=1200&q=85",
+      description:
+        "Specializing in the royal ateliers of Mewar, Kangra, Kishangarh, and Mughal courts, executed with mineral pigments and gold foil on wasli paper, alongside significant post-war European modernist sculptures.",
+      standards: [
+        "Primary source archival epigraph translation (Takri, Devanagari, Persian)",
+        "Non-invasive infrared reflectography & pigment spectrometry",
+        "Clearance under national & international cultural property treaties",
+      ],
+      link: "/fine-art",
+    },
+    {
+      id: "timepieces",
+      title: "Haute Horlogerie & Rare Complications",
+      subtitle: "Historical Complications & Neo-Vintage Masterworks",
+      image: "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=1200&q=85",
+      description:
+        "Curating investment-grade complications from Patek Philippe, F.P. Journe, Audemars Piguet, and Vacheron Constantin. Prioritizing unpolished factory case geometry, documented archive extracts, and pristine period dials.",
+      standards: [
+        "Official Extract from the Archives coordination in Geneva",
+        "Microscopic case bevel integrity & hallmarking verification",
+        "Timing diagnostic & amplitude testing in secure vault suites",
+      ],
+      link: "/timepieces",
+    },
+    {
+      id: "collectibles",
+      title: "Palace Toshakhana & Royal Antiquities",
+      subtitle: "Imperial Arms, Carved Jade & Ceremonial Regalia",
+      image: "https://images.unsplash.com/photo-1584727638096-042c45049ebe?auto=format&fit=crop&w=1200&q=85",
+      description:
+        "Documenting sovereign court regalia, crucible wootz steel blades with jauhar crystallization, carved nephrite jade hilts, and royal gemstone insignia preserved from royal treasury inventories.",
+      standards: [
+        "Metallurgical alloy testing & crucible steel carbon verification",
+        "Royal Toshakhana inventory cross-referencing",
+        "Gemmological origin determination for untreated royal stones",
+      ],
+      link: "/collectibles",
+    },
+  ];
 
   return (
     <section id="curated-collection" className="py-20 sm:py-28 bg-[#F7F5F0] border-b border-[#E5E5EA]">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Section Heading & Category Filter Nav */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 border-b border-[#E5E5EA] pb-6 gap-6">
-          <div>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
+        {/* Section Heading */}
+        <div className="flex flex-col md:flex-row md:items-end justify-between border-b border-[#E5E5EA] pb-6 gap-6">
+          <div className="space-y-2">
             <span className="text-xs uppercase tracking-[0.25em] text-[#A68A55] font-semibold block">
-              Curated Catalogue
+              Curatorial Scope & Departmental Focus
             </span>
-            <h2 className="text-3xl sm:text-4xl font-serif text-[#111111] font-normal mt-1">
-              Exceptional Works & Rare Complications
+            <h2 className="text-3xl sm:text-4xl font-serif text-[#111111] font-normal">
+              Three Curatorial Disciplines of DARBAAR
             </h2>
-            <p className="text-xs text-[#686868] font-light mt-1 max-w-xl">
-              Each specimen below has been catalogued with comprehensive condition scorecards, archival provenance records, and independent specialist dossier coordination.
+            <p className="text-xs sm:text-sm text-[#686868] font-light max-w-2xl leading-relaxed">
+              DARBAAR does not maintain a commercial storefront. We operate as a private curatorial house, conducting bespoke acquisition due diligence and off-market private sourcing across three specialized historical fields.
             </p>
           </div>
 
-          {/* Filter Pills */}
-          <div className="flex items-center space-x-2 overflow-x-auto pb-1">
-            {[
-              { id: "all", label: "Complete Gallery" },
-              { id: "timepieces", label: "Rare Watches" },
-              { id: "fine-art", label: "Fine Art" },
-              { id: "collectibles", label: "Heritage Collectibles" },
-            ].map((tab) => (
-              <button
-                key={tab.id}
-                onClick={() => setFilter(tab.id)}
-                className={`px-4 py-2 text-xs uppercase tracking-[0.16em] transition-all whitespace-nowrap border ${
-                  filter === tab.id
-                    ? "bg-[#263A31] text-white border-[#263A31] font-medium"
-                    : "bg-white text-[#686868] border-[#E5E5EA] hover:border-[#A68A55] hover:text-[#111111]"
-                }`}
-              >
-                {tab.label}
-              </button>
-            ))}
-          </div>
+          <button
+            type="button"
+            onClick={() => openInquiryModal()}
+            className="inline-flex items-center space-x-2 text-xs uppercase tracking-[0.2em] font-medium text-white bg-[#263A31] hover:bg-[#1B2A23] px-6 py-3 transition-colors flex-shrink-0"
+          >
+            <span>Retain Advisory Desk</span>
+            <ArrowRight className="w-3.5 h-3.5 text-[#C4AC79]" />
+          </button>
         </div>
 
-        {/* Assets Editorial Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {filteredAssets.map((asset) => (
+        {/* 3 Editorial Discipline Deep-Dives */}
+        <div className="space-y-12">
+          {disciplines.map((item, index) => (
             <div
-              key={asset.id}
-              className="bg-white border border-[#E5E5EA] flex flex-col justify-between group hover:border-[#A68A55] transition-all duration-300 shadow-xs hover:shadow-md"
+              key={item.id}
+              className={`bg-white border border-[#E5E5EA] p-6 sm:p-10 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center hover:border-[#A68A55] transition-all duration-300 shadow-xs ${
+                index % 2 === 1 ? "lg:flex-row-reverse" : ""
+              }`}
             >
-              {/* Asset Image Frame */}
-              <div className="relative h-72 sm:h-80 w-full bg-[#EAE5DC] overflow-hidden">
+              {/* Image Frame */}
+              <div className="lg:col-span-5 relative h-72 sm:h-96 w-full bg-[#EAE5DC] overflow-hidden border border-[#E5E5EA]">
                 <LuxuryImage
-                  src={asset.image}
-                  alt={asset.title}
-                  fallbackTitle={asset.title}
-                  categoryLabel={asset.categoryLabel}
+                  src={item.image}
+                  alt={item.title}
+                  fallbackTitle={item.title}
+                  categoryLabel={item.subtitle}
                   fill
-                  className="object-cover group-hover:scale-105 transition-transform duration-500"
-                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                  className="object-cover"
+                  sizes="(max-width: 1024px) 100vw, 40vw"
                 />
-
-                {/* Demonstration Marker Badge */}
-                {asset.isDemonstration && (
-                  <div className="absolute top-3 left-3 bg-black/75 text-[#F7F5F0] text-[9px] uppercase tracking-wider px-2 py-0.5 rounded-xs backdrop-blur-xs">
-                    Demonstration Listing
-                  </div>
-                )}
-
-                {/* Provenance Status Tag */}
-                <div className="absolute top-3 right-3 bg-white/90 text-[#263A31] text-[10px] font-medium uppercase tracking-wider px-2.5 py-0.5 rounded-xs border border-[#E5E5EA] backdrop-blur-xs flex items-center gap-1">
-                  <ShieldCheck className="w-3 h-3 text-[#A68A55]" />
-                  <span>{asset.provenanceStatus}</span>
-                </div>
-
-                {/* Quick Inspection Action Hover Overlay */}
-                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center p-4">
-                  <button
-                    onClick={() => openSpecimenModal(asset)}
-                    className="inline-flex items-center space-x-2 px-5 py-2.5 bg-white text-[#111111] text-xs uppercase tracking-[0.18em] font-medium shadow-lg hover:bg-[#F7F5F0] transition-colors"
-                  >
-                    <Eye className="w-3.5 h-3.5 text-[#A68A55]" />
-                    <span>Inspect Specimen</span>
-                  </button>
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+                <div className="absolute bottom-4 left-4 right-4 text-white">
+                  <span className="text-[10px] uppercase tracking-[0.25em] text-[#C4AC79] block">
+                    Curatorial Focus 0{index + 1}
+                  </span>
+                  <p className="text-base font-serif font-medium mt-0.5">{item.title}</p>
                 </div>
               </div>
 
-              {/* Asset Editorial Information */}
-              <div className="p-6 flex-grow flex flex-col justify-between space-y-4">
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between text-[11px] uppercase tracking-widest text-[#A68A55] font-medium">
-                    <span>{asset.makerOrArtist}</span>
-                    <span>{asset.year}</span>
-                  </div>
-
-                  <h3 className="text-lg font-serif text-[#111111] font-normal leading-snug group-hover:text-[#263A31] transition-colors">
-                    {asset.title}
+              {/* Text & Curatorial Standards */}
+              <div className="lg:col-span-7 space-y-5">
+                <div className="space-y-1.5">
+                  <span className="text-[10px] uppercase tracking-[0.25em] text-[#A68A55] font-semibold block">
+                    {item.subtitle}
+                  </span>
+                  <h3 className="text-2xl sm:text-3xl font-serif text-[#111111] font-normal leading-snug">
+                    {item.title}
                   </h3>
-
-                  <p className="text-[11px] font-mono text-[#686868]">
-                    {asset.referenceNumber} • {asset.dimensionsOrSpecs}
-                  </p>
-
-                  <p className="text-xs text-[#686868] line-clamp-2 font-light leading-relaxed">
-                    {asset.summary}
-                  </p>
                 </div>
 
-                {/* Valuation & Actions Bar */}
-                <div className="pt-4 border-t border-[#E5E5EA] space-y-3">
-                  <div className="flex items-baseline justify-between">
-                    <span className="text-[10px] uppercase tracking-wider text-[#686868]">
-                      Indicative Valuation:
-                    </span>
-                    <span className="text-sm font-serif font-semibold text-[#263A31]">
-                      {formatRange(asset.valuationMinUSD, asset.valuationMaxUSD)}
-                    </span>
-                  </div>
+                <p className="text-xs sm:text-sm text-[#686868] font-light leading-relaxed">
+                  {item.description}
+                </p>
 
-                  <div className="grid grid-cols-2 gap-2 pt-1">
-                    <button
-                      type="button"
-                      onClick={() => openSpecimenModal(asset)}
-                      className="w-full text-center py-2.5 px-2 text-[10px] uppercase tracking-[0.16em] font-medium text-[#111111] bg-[#F7F5F0] hover:bg-[#EAE5DC] border border-[#E5E5EA] transition-colors"
-                    >
-                      Scorecard
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => openInquiryModal(asset)}
-                      className="w-full text-center py-2.5 px-2 text-[10px] uppercase tracking-[0.16em] font-medium text-white bg-[#263A31] hover:bg-[#1B2A23] transition-colors"
-                    >
-                      Enquire Privately
-                    </button>
+                {/* Standards Checklist */}
+                <div className="space-y-2.5 pt-2 border-t border-[#E5E5EA]">
+                  <p className="text-[11px] uppercase tracking-wider text-[#111111] font-medium">
+                    DARBAAR Acquisition & Stewardship Protocols:
+                  </p>
+                  <div className="space-y-2 text-xs text-[#111111]">
+                    {item.standards.map((std, sIdx) => (
+                      <div key={sIdx} className="flex items-start space-x-2.5">
+                        <ShieldCheck className="w-4 h-4 text-[#263A31] flex-shrink-0 mt-0.5" />
+                        <span className="font-light">{std}</span>
+                      </div>
+                    ))}
                   </div>
+                </div>
+
+                {/* Direct Department Link & Advisory CTA */}
+                <div className="pt-4 flex flex-wrap items-center gap-4">
+                  <Link
+                    href={item.link}
+                    className="inline-flex items-center space-x-1.5 text-xs uppercase tracking-[0.18em] text-[#263A31] hover:text-[#A68A55] font-medium transition-colors"
+                  >
+                    <span>Read Department Treatise</span>
+                    <ArrowUpRight className="w-3.5 h-3.5" />
+                  </Link>
+
+                  <button
+                    onClick={() => openInquiryModal()}
+                    className="inline-flex items-center space-x-1.5 text-xs uppercase tracking-[0.18em] text-[#A68A55] hover:text-[#8C7243] font-medium underline underline-offset-4"
+                  >
+                    <span>Commission Sourcing Mandate</span>
+                  </button>
                 </div>
               </div>
             </div>
           ))}
         </div>
 
-        {/* Bottom Editorial Sourcing Note */}
-        <div className="mt-14 p-6 sm:p-8 bg-white border border-[#E5E5EA] flex flex-col md:flex-row items-center justify-between gap-6">
-          <div className="space-y-1 text-center md:text-left">
-            <h4 className="text-base font-serif text-[#111111] font-normal">
-              Seeking an uncatalogued reference or specific museum acquisition?
+        {/* Institutional Statement Box */}
+        <div className="p-8 sm:p-10 bg-white border border-[#E5E5EA] flex flex-col md:flex-row items-center justify-between gap-6">
+          <div className="space-y-2 text-center md:text-left">
+            <h4 className="text-xl font-serif text-[#111111]">
+              Seeking Specific Archival Heirlooms or Sourcing Mandates?
             </h4>
-            <p className="text-xs text-[#686868] font-light">
-              Our private advisory desk maintains off-market mandates with international estates, private trusts, and royal collections.
+            <p className="text-xs text-[#686868] font-light max-w-xl">
+              DARBAAR does not publicly display private client inventory. All transactions and sourcing requests are conducted discreetly under mutual non-disclosure agreements.
             </p>
           </div>
           <button
             onClick={() => openInquiryModal()}
-            className="inline-flex items-center space-x-2 text-xs uppercase tracking-[0.2em] font-medium text-[#263A31] hover:text-[#111111] border-b border-[#263A31] pb-1 hover:border-[#111111] transition-all flex-shrink-0"
+            className="px-8 py-3.5 text-xs uppercase tracking-[0.2em] font-medium text-white bg-[#263A31] hover:bg-[#1B2A23] transition-colors flex-shrink-0"
           >
-            <span>Commission Private Sourcing Mandate</span>
-            <ArrowRight className="w-3.5 h-3.5" />
+            Initiate Confidential Consultation
           </button>
         </div>
       </div>
     </section>
   );
 }
-

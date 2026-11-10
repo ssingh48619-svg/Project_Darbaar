@@ -16,13 +16,13 @@ export function Header() {
   const [accountDropdownOpen, setAccountDropdownOpen] = useState(false);
 
   const navLinks = [
-    { label: "The Collection", href: "/marketplace" },
+    { label: "The House", href: "/about" },
     { label: "Fine Art", href: "/fine-art" },
     { label: "Timepieces", href: "/timepieces" },
     { label: "Collectibles", href: "/collectibles" },
     { label: "Private Sales", href: "/private-sales" },
     { label: "Advisory", href: "/advisory" },
-    { label: "About", href: "/about" },
+    { label: "Provenance", href: "/provenance" },
   ];
 
   const targetSalons = [

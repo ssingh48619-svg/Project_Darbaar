@@ -50,7 +50,7 @@ export function Hero() {
                 onClick={scrollToCollection}
                 className="inline-flex items-center justify-center px-8 py-4 text-xs uppercase tracking-[0.22em] font-medium text-white bg-[#263A31] hover:bg-[#1B2A23] border border-[#263A31] shadow-sm hover:shadow transition-all group"
               >
-                <span>Explore the Collection</span>
+                <span>Curatorial Disciplines</span>
                 <ChevronRight className="w-3.5 h-3.5 ml-2 group-hover:translate-x-1 transition-transform" />
               </button>
 

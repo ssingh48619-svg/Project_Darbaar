@@ -14,7 +14,7 @@ export function FeaturedCategories() {
         "Monumental court miniatures, 18th-century Rajput and Mughal masterworks, alongside significant post-war and modern sculptural milestones.",
       image: "https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&w=800&q=85",
       link: "/fine-art",
-      itemCount: "Curated Masterworks",
+      itemCount: "Indic & Modern Art",
     },
     {
       title: "Rare Timepieces",
@@ -23,7 +23,7 @@ export function FeaturedCategories() {
         "Patek Philippe, F.P. Journe, Audemars Piguet, and historically significant neo-vintage complications preserved in unpolished condition.",
       image: "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=800&q=85",
       link: "/timepieces",
-      itemCount: "Exceptional Provenance",
+      itemCount: "Geneva Vault Council",
     },
     {
       title: "Heritage Collectibles",
@@ -32,7 +32,7 @@ export function FeaturedCategories() {
         "Museum-standard wootz steel blades, carved nephrite jade hilts, royal gemstones, and priceless ceremonial relics preserved across centuries.",
       image: "https://images.unsplash.com/photo-1584727638096-042c45049ebe?auto=format&fit=crop&w=800&q=85",
       link: "/collectibles",
-      itemCount: "Documented Lineage",
+      itemCount: "Royal Toshakhana",
     },
   ];
 
@@ -98,7 +98,7 @@ export function FeaturedCategories() {
                 </p>
 
                 <div className="pt-2 flex items-center justify-between text-xs uppercase tracking-[0.18em] text-[#263A31] font-medium group-hover:text-[#A68A55] transition-colors">
-                  <span>Explore Field</span>
+                  <span>Consult Department</span>
                   <ArrowUpRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
                 </div>
               </div>
