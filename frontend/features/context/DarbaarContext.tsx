@@ -17,6 +17,9 @@ interface DarbaarContextType {
   ratesSource: string;
   formatAmount: (amountUSD: number) => string;
   formatRange: (minUSD: number, maxUSD: number) => string;
+  // Theme: Light / Dark Mode
+  theme: "light" | "dark";
+  toggleTheme: () => void;
   // Modals
   specimenAsset: CuratedAsset | null;
   openSpecimenModal: (asset: CuratedAsset) => void;
@@ -44,6 +47,40 @@ export function DarbaarProvider({ children }: { children: React.ReactNode }) {
   const [inquiryOpen, setInquiryOpen] = useState(false);
   const [inquiryAsset, setInquiryAsset] = useState<CuratedAsset | null>(null);
   const [searchOpen, setSearchOpen] = useState(false);
+  const [theme, setTheme] = useState<"light" | "dark">("light");
+
+  // Sync theme with localStorage & document element on mount
+  useEffect(() => {
+    try {
+      const savedTheme = localStorage.getItem("darbaar_theme") as "light" | "dark" | null;
+      if (savedTheme === "dark") {
+        setTheme("dark");
+        document.documentElement.classList.add("dark");
+      } else {
+        setTheme("light");
+        document.documentElement.classList.remove("dark");
+      }
+    } catch {
+      // Safe fallback if localStorage not accessible
+    }
+  }, []);
+
+  const toggleTheme = () => {
+    setTheme((prev) => {
+      const nextTheme = prev === "light" ? "dark" : "light";
+      try {
+        localStorage.setItem("darbaar_theme", nextTheme);
+        if (nextTheme === "dark") {
+          document.documentElement.classList.add("dark");
+        } else {
+          document.documentElement.classList.remove("dark");
+        }
+      } catch {
+        // Safe fallback
+      }
+      return nextTheme;
+    });
+  };
 
   // Attempt live exchange rates fetch dynamically without breaking if offline
   useEffect(() => {
@@ -133,6 +170,8 @@ export function DarbaarProvider({ children }: { children: React.ReactNode }) {
         searchOpen,
         openSearch,
         closeSearch,
+        theme,
+        toggleTheme,
       }}
     >
       {children}

@@ -3,13 +3,13 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Search, User, Globe, ChevronDown, Menu, X, Shield, Lock } from "lucide-react";
+import { Search, User, Globe, ChevronDown, Menu, X, Shield, Lock, Sun, Moon } from "lucide-react";
 import { useDarbaar } from "@/features/context/DarbaarContext";
 import { CURRENCIES, SupportedCurrency } from "@/lib/currency";
 
 export function Header() {
   const pathname = usePathname();
-  const { currency, setCurrency, openSearch, openInquiryModal } = useDarbaar();
+  const { currency, setCurrency, openSearch, openInquiryModal, theme, toggleTheme } = useDarbaar();
   const [currencyDropdownOpen, setCurrencyDropdownOpen] = useState(false);
   const [accountDropdownOpen, setAccountDropdownOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -82,6 +82,27 @@ export function Header() {
                 </div>
               )}
             </div>
+
+            {/* Aesthetic Dark / Light Mode Toggle */}
+            <button
+              type="button"
+              onClick={toggleTheme}
+              className="flex items-center space-x-1.5 text-[#EAE5DC] hover:text-[#C4AC79] transition-colors"
+              title={theme === "dark" ? "Switch to Royal Gallery Light Mode" : "Switch to Nocturne Vault Dark Mode"}
+              aria-label="Toggle Theme Mode"
+            >
+              {theme === "dark" ? (
+                <>
+                  <Sun className="w-3.5 h-3.5 text-[#C4AC79]" />
+                  <span className="hidden md:inline text-[10px] uppercase tracking-wider font-medium">Light</span>
+                </>
+              ) : (
+                <>
+                  <Moon className="w-3.5 h-3.5 text-[#C4AC79]" />
+                  <span className="hidden md:inline text-[10px] uppercase tracking-wider font-medium">Dark</span>
+                </>
+              )}
+            </button>
 
             {/* Quick Search Trigger */}
             <button
@@ -192,6 +213,21 @@ export function Header() {
 
           {/* Right Action: Request Private Advisory Button */}
           <div className="flex items-center space-x-3 flex-shrink-0">
+            {/* Aesthetic Theme Mode Toggle (Sun / Moon) */}
+            <button
+              type="button"
+              onClick={toggleTheme}
+              className="p-2 text-[#111111] hover:text-[#A68A55] border border-[#E5E5EA] rounded-full hover:border-[#A68A55] transition-all flex items-center justify-center bg-white/60 shadow-2xs"
+              title={theme === "dark" ? "Switch to Royal Gallery Light Mode" : "Switch to Nocturne Vault Dark Mode"}
+              aria-label="Toggle Theme Mode"
+            >
+              {theme === "dark" ? (
+                <Sun className="w-4 h-4 text-[#C4AC79]" />
+              ) : (
+                <Moon className="w-4 h-4 text-[#263A31]" />
+              )}
+            </button>
+
             <button
               type="button"
               onClick={() => openInquiryModal()}
@@ -231,6 +267,26 @@ export function Header() {
 
           <div className="pt-2 flex flex-col space-y-3">
             <div className="flex items-center justify-between text-xs text-[#686868] border-t border-[#E5E5EA] pt-3">
+              <span>Atmosphere:</span>
+              <button
+                type="button"
+                onClick={toggleTheme}
+                className="flex items-center space-x-1.5 px-3 py-1 text-xs border border-[#E5E5EA] rounded-full font-medium text-[#111111] bg-white"
+              >
+                {theme === "dark" ? (
+                  <>
+                    <Sun className="w-3.5 h-3.5 text-[#C4AC79]" />
+                    <span>Gallery Light</span>
+                  </>
+                ) : (
+                  <>
+                    <Moon className="w-3.5 h-3.5 text-[#263A31]" />
+                    <span>Nocturne Dark</span>
+                  </>
+                )}
+              </button>
+            </div>
+            <div className="flex items-center justify-between text-xs text-[#686868] pt-1">
               <span>Valuation Currency:</span>
               <span className="font-semibold text-[#111111]">{currency}</span>
             </div>
