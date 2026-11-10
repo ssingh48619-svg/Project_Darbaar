@@ -25,42 +25,26 @@ export function Header() {
     { label: "Provenance", href: "/provenance" },
   ];
 
-  const targetSalons = [
-    { name: "Geneva", role: "Horology & Vault Corridor" },
-    { name: "London", role: "European Advisory Corridor" },
-    { name: "New York", role: "Americas Liaison" },
-    { name: "Singapore", role: "Asia-Pacific Salons" },
-  ];
-
   return (
     <header className="sticky top-0 z-40 w-full bg-white/95 backdrop-blur-md border-b border-[#E5E5EA]">
       {/* 1. Utility Top Bar */}
       <div className="bg-[#263A31] text-[#F7F5F0] text-xs py-2 px-4 md:px-8 border-b border-[#1B2A23]">
-        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2">
-          {/* Target Salons / Private Appointment Corridor Notice */}
-          <div className="flex items-center space-x-3 overflow-x-auto text-[11px] tracking-widest uppercase">
-            <span className="text-[#C4AC79] font-medium flex items-center gap-1">
-              <Sparkles className="w-3 h-3 text-[#C4AC79]" />
-              Target Salons:
-            </span>
-            {targetSalons.map((salon, i) => (
-              <span key={salon.name} className="flex items-center space-x-3 text-[#EAE5DC]/80 hover:text-white transition-colors cursor-pointer" title={`Planned Private Salon Corridor: ${salon.role}`}>
-                <span>{salon.name}</span>
-                {i < targetSalons.length - 1 && <span className="text-[#A68A55]/40">•</span>}
-              </span>
-            ))}
+        <div className="max-w-7xl mx-auto flex items-center justify-between">
+          {/* Brand Tagline & Ethos */}
+          <div className="flex items-center space-x-2 text-[11px] tracking-widest uppercase text-[#EAE5DC]/90 font-light">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#C4AC79]"></span>
+            <span>Where Heritage Meets Rarity</span>
+            <span className="text-[#A68A55]/50 hidden sm:inline">•</span>
+            <span className="text-[#C4AC79] hidden sm:inline">Private Advisory & Curatorial House</span>
           </div>
 
           <div className="flex items-center space-x-4 text-[11px] tracking-wider">
-            <span className="text-[#EAE5DC]/70 hidden md:inline">
-              Regional Appointment Corridors
-            </span>
             <button
               onClick={() => openInquiryModal()}
-              className="text-[#C4AC79] hover:text-white transition-colors flex items-center gap-1 font-medium underline underline-offset-4 decoration-[#A68A55]/50"
+              className="text-[#C4AC79] hover:text-white transition-colors flex items-center gap-1.5 font-medium underline underline-offset-4 decoration-[#A68A55]/50"
             >
               <Shield className="w-3 h-3" />
-              Private Appointment
+              <span>Private Appointment</span>
             </button>
           </div>
         </div>
