@@ -45,22 +45,21 @@ body {
   color: #F7F5F0;
 }
 
-/* Custom luxury scrollbar */
+/* Custom subtle luxury scrollbar */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 5px;
+  height: 5px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #F7F5F0;
+  background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #C4AC79;
+  background: #D1D1D6;
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
   background: #A68A55;
 }
-
