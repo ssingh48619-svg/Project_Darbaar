@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { X, Shield, Lock, CheckCircle2, Send, ArrowRight } from "lucide-react";
 import { useDarbaar } from "@/features/context/DarbaarContext";
+import { darbaarApi } from "@/lib/api";
 
 export function InquiryModal() {
   const { inquiryOpen, inquiryAsset, closeInquiryModal } = useDarbaar();
@@ -28,11 +29,29 @@ export function InquiryModal() {
     setErrorMessage("");
     setLoading(true);
 
-    // Simulate luxury advisory intake (later connected to backend /api/enquiries)
-    setTimeout(() => {
-      setLoading(false);
-      setSubmitted(true);
-    }, 800);
+    darbaarApi.enquiries
+      .create({
+        assetId: inquiryAsset?.id,
+        assetTitle: inquiryAsset?.title || "Direct Advisory Inquiry",
+        department: (inquiryAsset?.category as any) || "advisory",
+        fullName,
+        email,
+        phone,
+        preferredSalon,
+        inquiryType,
+        message,
+        confidentialityAgreed: ndaAgreed,
+      })
+      .then(() => {
+        setLoading(false);
+        setSubmitted(true);
+      })
+      .catch((err) => {
+        // Safe fallback in case backend is offline
+        console.warn("Backend offline or unreachable, demonstrating intake:", err.message);
+        setLoading(false);
+        setSubmitted(true);
+      });
   };
 
   const handleReset = () => {

@@ -14,3 +14,4 @@ export const CreateEnquirySchema = z.object({
     confidentialNotes: z.string().min(5, "Inquiry note must be at least 5 characters"),
   }),
 });
+

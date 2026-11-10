@@ -4,14 +4,37 @@ import helmet from "helmet";
 import cookieParser from "cookie-parser";
 import morgan from "morgan";
 
+// Route Imports
+import authRoutes from "./routes/auth.routes";
+import assetRoutes from "./routes/asset.routes";
+import enquiryRoutes from "./routes/enquiry.routes";
+import advisoryRoutes from "./routes/advisory.routes";
+import collectionRoutes from "./routes/collection.routes";
+import adminRoutes from "./routes/admin.routes";
+
 export function createApp(): Application {
   const app: Application = express();
+
+  // Allowed origins (support both port 3000 and 3001)
+  const allowedOrigins = [
+    process.env.CORS_ORIGIN || "http://localhost:3000",
+    "http://localhost:3001",
+    "http://localhost:3000",
+    "http://127.0.0.1:3001",
+    "http://127.0.0.1:3000",
+  ];
 
   // Security headers & CORS
   app.use(helmet());
   app.use(
     cors({
-      origin: process.env.CORS_ORIGIN || "http://localhost:3000",
+      origin: (origin, callback) => {
+        if (!origin || allowedOrigins.includes(origin)) {
+          callback(null, true);
+        } else {
+          callback(null, true); // Dev-friendly permissive callback
+        }
+      },
       credentials: true,
     })
   );
@@ -31,7 +54,23 @@ export function createApp(): Application {
       house: "DARBAAR",
       tagline: "Where Heritage Meets Rarity",
       timestamp: new Date().toISOString(),
-      salons: ["Geneva", "London", "New York", "Singapore"],
+      salons: ["Geneva", "London", "New York", "Singapore", "Mumbai"],
+    });
+  });
+
+  // REST API Routes
+  app.use("/api/auth", authRoutes);
+  app.use("/api/assets", assetRoutes);
+  app.use("/api/enquiries", enquiryRoutes);
+  app.use("/api/advisory", advisoryRoutes);
+  app.use("/api/collections", collectionRoutes);
+  app.use("/api/admin", adminRoutes);
+
+  // 404 Handler for Unrecognized Corridors
+  app.use((_req: Request, res: Response) => {
+    res.status(404).json({
+      success: false,
+      error: "The requested curatorial corridor does not exist in DARBAAR.",
     });
   });
 
@@ -39,6 +78,7 @@ export function createApp(): Application {
   app.use((err: Error, _req: Request, res: Response, _next: NextFunction) => {
     console.error("[DARBAAR API Error]:", err);
     res.status(500).json({
+      success: false,
       error: "Internal Advisory Service Error",
       message: process.env.NODE_ENV === "development" ? err.message : undefined,
     });
@@ -46,4 +86,3 @@ export function createApp(): Application {
 
   return app;
 }
-

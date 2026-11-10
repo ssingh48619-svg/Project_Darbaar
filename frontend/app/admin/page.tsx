@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import {
   ShieldAlert,
@@ -16,11 +16,33 @@ import {
   Search,
 } from "lucide-react";
 import { CURATED_ASSETS } from "@/lib/data";
+import { darbaarApi } from "@/lib/api";
 
 export default function AdminDashboardPage() {
   const [activeSection, setActiveSection] = useState<
     "overview" | "assets" | "enquiries" | "verification" | "audit"
   >("overview");
+  const [liveStats, setLiveStats] = useState<any>(null);
+
+  useEffect(() => {
+    try {
+      const token = localStorage.getItem("darbaar_token") || "";
+      if (token) {
+        darbaarApi.admin
+          .getOverview(token)
+          .then((res) => {
+            if (res.success && res.stats) {
+              setLiveStats(res.stats);
+            }
+          })
+          .catch((err) => {
+            console.warn("Backend admin stats offline, using demonstration telemetry:", err.message);
+          });
+      }
+    } catch {
+      // Safe fallback
+    }
+  }, []);
 
   return (
     <div className="w-full bg-[#F7F5F0] min-h-screen pb-24">
@@ -74,25 +96,35 @@ export default function AdminDashboardPage() {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
               <div className="bg-white p-6 border border-[#E5E5EA] space-y-1">
                 <span className="text-[10px] uppercase text-[#686868]">Active Curated Listings</span>
-                <p className="text-2xl font-serif font-bold text-[#111111]">{CURATED_ASSETS.length}</p>
+                <p className="text-2xl font-serif font-bold text-[#111111]">
+                  {liveStats ? liveStats.totalAssets : CURATED_ASSETS.length}
+                </p>
                 <p className="text-[11px] text-emerald-700">100% Archival Scorecards Complete</p>
               </div>
 
               <div className="bg-white p-6 border border-[#E5E5EA] space-y-1">
                 <span className="text-[10px] uppercase text-[#686868]">Pending Inquiries</span>
-                <p className="text-2xl font-serif font-bold text-[#A68A55]">07 Active</p>
+                <p className="text-2xl font-serif font-bold text-[#A68A55]">
+                  {liveStats ? `${liveStats.pendingEnquiries} Active` : "07 Active"}
+                </p>
                 <p className="text-[11px] text-[#686868]">3 Geneva • 2 London • 2 Singapore</p>
               </div>
 
               <div className="bg-white p-6 border border-[#E5E5EA] space-y-1">
                 <span className="text-[10px] uppercase text-[#686868]">Verified Consignors</span>
-                <p className="text-2xl font-serif font-bold text-[#111111]">14 Principals</p>
+                <p className="text-2xl font-serif font-bold text-[#111111]">
+                  {liveStats ? `${liveStats.totalUsers} Principals` : "14 Principals"}
+                </p>
                 <p className="text-[11px] text-[#686868]">KYC & AML Cleared</p>
               </div>
 
               <div className="bg-white p-6 border border-[#E5E5EA] space-y-1">
                 <span className="text-[10px] uppercase text-[#686868]">Aggregate Private Value</span>
-                <p className="text-2xl font-serif font-bold text-[#263A31]">$1.68M USD</p>
+                <p className="text-2xl font-serif font-bold text-[#263A31]">
+                  {liveStats
+                    ? `$${(liveStats.assetsUnderManagementUSD / 1000000).toFixed(2)}M USD`
+                    : "$1.68M USD"}
+                </p>
                 <p className="text-[11px] text-[#A68A55]">Mid-Range Valuation</p>
               </div>
             </div>

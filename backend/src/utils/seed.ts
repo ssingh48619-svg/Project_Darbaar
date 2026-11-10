@@ -27,26 +27,24 @@ async function runSeed() {
     const demoPasswordHash = await bcrypt.hash("Darbaar@2026", salt);
 
     const adminUser = await User.create({
-      firstName: "Curatorial",
-      lastName: "Directorate",
+      fullName: "Curatorial Directorate",
       email: "admin@darbaar.luxury",
-      password: demoPasswordHash,
+      passwordHash: demoPasswordHash,
       role: "admin",
-      isVerified: true,
-      kycStatus: "approved",
+      isKycVerified: true,
       preferredCurrency: "USD",
+      preferredSalon: "Geneva",
       phone: "+91 98765 00000",
     });
 
     const collectorUser = await User.create({
-      firstName: "Maharaja",
-      lastName: "Collector",
+      fullName: "Maharaja Collector",
       email: "collector@darbaar.luxury",
-      password: demoPasswordHash,
+      passwordHash: demoPasswordHash,
       role: "client",
-      isVerified: true,
-      kycStatus: "approved",
+      isKycVerified: true,
       preferredCurrency: "USD",
+      preferredSalon: "London",
       phone: "+91 98765 11111",
     });
 

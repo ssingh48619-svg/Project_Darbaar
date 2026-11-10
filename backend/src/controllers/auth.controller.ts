@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import jwt from "jsonwebtoken";
+import bcrypt from "bcryptjs";
 import { User } from "../models/User";
 import { AuthenticatedRequest } from "../middleware/auth";
 
@@ -23,7 +24,7 @@ function setAuthCookie(res: Response, token: string): void {
 
 export async function register(req: Request, res: Response): Promise<void> {
   try {
-    const { firstName, lastName, email, password, phone, role, preferredCurrency } = req.body;
+    const { firstName, lastName, fullName, email, password, phone, role, preferredCurrency } = req.body;
 
     const existingUser = await User.findOne({ email: email.toLowerCase() });
     if (existingUser) {
@@ -34,15 +35,18 @@ export async function register(req: Request, res: Response): Promise<void> {
       return;
     }
 
+    const salt = await bcrypt.genSalt(10);
+    const passwordHash = await bcrypt.hash(password, salt);
+    const displayName = fullName || `${firstName || ""} ${lastName || ""}`.trim() || "Private Collector";
+
     const newUser = await User.create({
-      firstName,
-      lastName,
+      fullName: displayName,
       email: email.toLowerCase(),
-      password,
+      passwordHash,
       phone,
       role: role || "client",
       preferredCurrency: preferredCurrency || "USD",
-      isVerified: true,
+      isKycVerified: false,
     });
 
     const token = signToken(newUser._id.toString(), newUser.role);
@@ -54,11 +58,10 @@ export async function register(req: Request, res: Response): Promise<void> {
       token,
       user: {
         id: newUser._id,
-        firstName: newUser.firstName,
-        lastName: newUser.lastName,
+        fullName: newUser.fullName,
         email: newUser.email,
         role: newUser.role,
-        kycStatus: newUser.kycStatus,
+        isKycVerified: newUser.isKycVerified,
         preferredCurrency: newUser.preferredCurrency,
       },
     });
@@ -75,7 +78,7 @@ export async function login(req: Request, res: Response): Promise<void> {
   try {
     const { email, password } = req.body;
 
-    const user = await User.findOne({ email: email.toLowerCase() });
+    const user = await User.findOne({ email: email.toLowerCase() }).select("+passwordHash");
     if (!user) {
       res.status(401).json({
         success: false,
@@ -102,11 +105,10 @@ export async function login(req: Request, res: Response): Promise<void> {
       token,
       user: {
         id: user._id,
-        firstName: user.firstName,
-        lastName: user.lastName,
+        fullName: user.fullName,
         email: user.email,
         role: user.role,
-        kycStatus: user.kycStatus,
+        isKycVerified: user.isKycVerified,
         preferredCurrency: user.preferredCurrency,
       },
     });
@@ -136,11 +138,10 @@ export async function getMe(req: AuthenticatedRequest, res: Response): Promise<v
     success: true,
     user: {
       id: req.user._id,
-      firstName: req.user.firstName,
-      lastName: req.user.lastName,
+      fullName: req.user.fullName,
       email: req.user.email,
       role: req.user.role,
-      kycStatus: req.user.kycStatus,
+      isKycVerified: req.user.isKycVerified,
       preferredCurrency: req.user.preferredCurrency,
       phone: req.user.phone,
     },

@@ -32,3 +32,4 @@ export const CreateAssetSchema = z.object({
     salonLocation: z.enum(["Geneva", "London", "New York", "Singapore", "Mumbai"]).optional(),
   }),
 });
+

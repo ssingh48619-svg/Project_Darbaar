@@ -1,4 +1,3 @@
-import mongoose, { Document, Schema } from "mongoose";
 
 export interface IProvenanceRecord extends Document {
   assetId: mongoose.Types.ObjectId;
@@ -67,4 +66,3 @@ export const ProvenanceRecord = mongoose.model<IProvenanceRecord>(
   "ProvenanceRecord",
   ProvenanceRecordSchema
 );
-

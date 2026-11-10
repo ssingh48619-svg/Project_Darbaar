@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import {
   User,
@@ -18,12 +18,26 @@ import {
 import { useDarbaar } from "@/features/context/DarbaarContext";
 import { CURATED_ASSETS } from "@/lib/data";
 import { LuxuryImage } from "@/components/LuxuryImage";
+import { darbaarApi } from "@/lib/api";
 
 export default function DashboardPage() {
   const { formatAmount, formatRange, openSpecimenModal, openInquiryModal } = useDarbaar();
   const [activeTab, setActiveTab] = useState<
     "overview" | "collection" | "saved" | "enquiries" | "documents"
   >("overview");
+  const [userName, setUserName] = useState("Lord Alistair Vance");
+  const [accountRef, setAccountRef] = useState("DARBAAR-PVT-8821");
+
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem("darbaar_user");
+      if (stored) {
+        const u = JSON.parse(stored);
+        if (u.fullName) setUserName(u.fullName);
+        if (u.id) setAccountRef(`DARBAAR-PVT-${u.id.slice(-4).toUpperCase()}`);
+      }
+    } catch {}
+  }, []);
 
   // Demonstration Client Portfolio Assets
   const clientCollection = [CURATED_ASSETS[0], CURATED_ASSETS[1]];
@@ -45,7 +59,7 @@ export default function DashboardPage() {
               Private Collection & Advisory Desk
             </h1>
             <p className="text-xs text-[#EAE5DC]/80 font-light">
-              Client Principal: <span className="text-white font-medium">Lord Alistair Vance</span> • Account Reference: <span className="font-mono text-[#C4AC79]">DARBAAR-PVT-8821</span>
+              Client Principal: <span className="text-white font-medium">{userName}</span> • Account Reference: <span className="font-mono text-[#C4AC79]">{accountRef}</span>
             </p>
           </div>
 

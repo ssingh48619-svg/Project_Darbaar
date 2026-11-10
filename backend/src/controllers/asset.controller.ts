@@ -142,3 +142,4 @@ export async function deleteAsset(req: AuthenticatedRequest, res: Response): Pro
     });
   }
 }
+

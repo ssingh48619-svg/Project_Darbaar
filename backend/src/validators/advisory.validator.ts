@@ -22,3 +22,4 @@ export const CreateAdvisorySchema = z.object({
     specificMandateDetails: z.string().min(10, "Please provide mandate details"),
   }),
 });
+

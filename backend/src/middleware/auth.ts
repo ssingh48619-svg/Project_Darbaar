@@ -69,3 +69,4 @@ export function authorize(...roles: Array<"client" | "dealer" | "advisor" | "adm
     next();
   };
 }
+
