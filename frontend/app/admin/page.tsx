@@ -17,6 +17,14 @@ import {
   ExternalLink,
   Shield,
   Eye,
+  ShieldCheck,
+  UserCheck,
+  UserX,
+  Award,
+  AlertCircle,
+  RefreshCw,
+  Lock,
+  Unlock,
 } from "lucide-react";
 import { useDarbaar } from "@/features/context/DarbaarContext";
 import { darbaarApi } from "@/lib/api";
@@ -25,11 +33,21 @@ import { CreateAssetModal } from "@/components/admin/CreateAssetModal";
 export default function AdminDashboardPage() {
   const { assets, refreshAssets, openSpecimenModal } = useDarbaar();
   const [activeSection, setActiveSection] = useState<
-    "overview" | "assets" | "enquiries" | "verification" | "audit"
+    "overview" | "assets" | "permissions" | "enquiries" | "verification" | "audit"
   >("overview");
   const [liveStats, setLiveStats] = useState<any>(null);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [enquiriesList, setEnquiriesList] = useState<any[]>([]);
+
+  // Curator Permissions State
+  const [usersList, setUsersList] = useState<any[]>([]);
+  const [loadingUsers, setLoadingUsers] = useState(false);
+  const [updatingUserId, setUpdatingUserId] = useState<string | null>(null);
+  const [userSearchTerm, setUserSearchTerm] = useState("");
+  const [actionNotification, setActionNotification] = useState<{
+    type: "success" | "error";
+    message: string;
+  } | null>(null);
 
   const fetchOverview = () => {
     try {
@@ -60,9 +78,68 @@ export default function AdminDashboardPage() {
     }
   };
 
+  const fetchUsers = async () => {
+    try {
+      setLoadingUsers(true);
+      const token = localStorage.getItem("darbaar_token") || "";
+      if (token) {
+        const res = await darbaarApi.admin.getUsers(token);
+        if (res.success && Array.isArray(res.users)) {
+          setUsersList(res.users);
+        }
+      }
+    } catch (err: any) {
+      console.warn("Could not load users:", err.message);
+    } finally {
+      setLoadingUsers(false);
+    }
+  };
+
   useEffect(() => {
     fetchOverview();
+    fetchUsers();
   }, []);
+
+  const handleUpdatePermission = async (
+    userId: string,
+    role: "client" | "dealer" | "advisor" | "admin",
+    isKycVerified: boolean
+  ) => {
+    try {
+      setUpdatingUserId(userId);
+      setActionNotification(null);
+      const token = localStorage.getItem("darbaar_token") || "";
+      const res = await darbaarApi.admin.updateUserPermissions(userId, { role, isKycVerified }, token);
+
+      if (res.success) {
+        setActionNotification({
+          type: "success",
+          message: res.message || "Permissions updated successfully.",
+        });
+        await fetchUsers();
+        fetchOverview();
+      }
+    } catch (err: any) {
+      setActionNotification({
+        type: "error",
+        message: err.message || "Failed to update permissions.",
+      });
+    } finally {
+      setUpdatingUserId(null);
+      setTimeout(() => {
+        setActionNotification(null);
+      }, 5000);
+    }
+  };
+
+  const filteredUsers = usersList.filter((u) => {
+    const q = userSearchTerm.toLowerCase();
+    return (
+      u.fullName?.toLowerCase().includes(q) ||
+      u.email?.toLowerCase().includes(q) ||
+      u.role?.toLowerCase().includes(q)
+    );
+  });
 
   return (
     <div className="w-full bg-[#F7F5F0] min-h-screen pb-24">
@@ -90,13 +167,17 @@ export default function AdminDashboardPage() {
           {[
             { id: "overview", label: "Executive Overview" },
             { id: "assets", label: "Asset Management" },
+            { id: "permissions", label: "Curator Permissions & Consignors" },
             { id: "enquiries", label: "Enquiries & Advisory" },
             { id: "verification", label: "Specialist Reports" },
             { id: "audit", label: "Audit Logs & Security" },
           ].map((tab) => (
             <button
               key={tab.id}
-              onClick={() => setActiveSection(tab.id as any)}
+              onClick={() => {
+                setActiveSection(tab.id as any);
+                if (tab.id === "permissions") fetchUsers();
+              }}
               className={`py-4 border-b-2 font-medium whitespace-nowrap transition-colors ${
                 activeSection === tab.id
                   ? "border-[#263A31] text-[#263A31]"
@@ -111,6 +192,24 @@ export default function AdminDashboardPage() {
 
       {/* Admin Content Area */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
+        {/* Toast / Notification Banner */}
+        {actionNotification && (
+          <div
+            className={`mb-6 p-4 rounded-sm border flex items-center space-x-3 text-xs transition-all ${
+              actionNotification.type === "success"
+                ? "bg-emerald-50 border-emerald-300 text-emerald-900"
+                : "bg-red-50 border-red-300 text-red-900"
+            }`}
+          >
+            {actionNotification.type === "success" ? (
+              <CheckCircle className="w-4 h-4 text-emerald-700 flex-shrink-0" />
+            ) : (
+              <AlertCircle className="w-4 h-4 text-red-700 flex-shrink-0" />
+            )}
+            <span className="font-medium">{actionNotification.message}</span>
+          </div>
+        )}
+
         {/* OVERVIEW SECTION */}
         {activeSection === "overview" && (
           <div className="space-y-8">
@@ -132,11 +231,11 @@ export default function AdminDashboardPage() {
               </div>
 
               <div className="bg-white p-6 border border-[#E5E5EA] space-y-1">
-                <span className="text-[10px] uppercase text-[#686868]">Verified Consignors</span>
+                <span className="text-[10px] uppercase text-[#686868]">Registered Collectors & Curators</span>
                 <p className="text-2xl font-serif font-bold text-[#111111]">
-                  {liveStats ? `${liveStats.totalUsers} Principals` : "14 Principals"}
+                  {liveStats ? `${liveStats.totalUsers} Principals` : `${usersList.length || 4} Principals`}
                 </p>
-                <p className="text-[11px] text-[#686868]">KYC & AML Cleared</p>
+                <p className="text-[11px] text-[#686868]">MongoDB Atlas User Registry</p>
               </div>
 
               <div className="bg-white p-6 border border-[#E5E5EA] space-y-1">
@@ -162,7 +261,7 @@ export default function AdminDashboardPage() {
                   className="inline-flex items-center space-x-1.5 px-4 py-2 text-xs uppercase tracking-wider font-medium text-white bg-[#263A31] hover:bg-[#1B2A23] transition-colors"
                 >
                   <Plus className="w-3.5 h-3.5 text-[#C4AC79]" />
-                  <span>Curate Specimen</span>
+                  <span>Inscribe Specimen</span>
                 </button>
               </div>
 
@@ -220,6 +319,7 @@ export default function AdminDashboardPage() {
                 <h2 className="text-xl font-serif text-[#111111]">Curatorial Specimen Registry</h2>
                 <p className="text-xs text-[#686868] mt-1">
                   Manage museum-grade holdings, archival condition scorecards, and high-resolution plates.
+                  Publishing is protected: only users authorized in the Curator Permissions console may add specimens.
                 </p>
               </div>
               <button
@@ -271,6 +371,176 @@ export default function AdminDashboardPage() {
                   </div>
                 </div>
               ))}
+            </div>
+          </div>
+        )}
+
+        {/* CURATOR PERMISSIONS & CONSIGNORS TAB (NEW) */}
+        {activeSection === "permissions" && (
+          <div className="bg-white border border-[#E5E5EA] p-6 space-y-6">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-[#E5E5EA] pb-5">
+              <div>
+                <div className="flex items-center space-x-2.5">
+                  <ShieldCheck className="w-5 h-5 text-[#A68A55]" />
+                  <h2 className="text-xl font-serif text-[#111111]">
+                    Curatorial Accreditations & Consignor Permissions
+                  </h2>
+                </div>
+                <p className="text-xs text-[#686868] mt-1 max-w-2xl leading-relaxed">
+                  Only accredited personnel and consignors approved by the Curatorial Directorate can publish or
+                  inscribe items into the catalogue. Grant or revoke publishing clearance for collectors below with a single click.
+                </p>
+              </div>
+
+              <button
+                onClick={fetchUsers}
+                disabled={loadingUsers}
+                className="inline-flex items-center space-x-1.5 px-3 py-1.5 text-xs text-[#263A31] border border-[#263A31]/30 hover:bg-[#F7F5F0] transition-colors"
+              >
+                <RefreshCw className={`w-3.5 h-3.5 ${loadingUsers ? "animate-spin" : ""}`} />
+                <span>Refresh Registry</span>
+              </button>
+            </div>
+
+            {/* Search Filter Bar */}
+            <div className="flex items-center justify-between gap-4">
+              <div className="relative flex-1 max-w-md">
+                <Search className="w-4 h-4 text-[#686868] absolute left-3 top-2.5" />
+                <input
+                  type="text"
+                  value={userSearchTerm}
+                  onChange={(e) => setUserSearchTerm(e.target.value)}
+                  placeholder="Search by principal name, email, or role..."
+                  className="w-full pl-9 pr-3 py-2 text-xs border border-[#E5E5EA] focus:border-[#A68A55] focus:outline-none bg-white text-[#111111]"
+                />
+              </div>
+              <span className="text-xs font-mono text-[#A68A55]">
+                {filteredUsers.length} Principals Registered
+              </span>
+            </div>
+
+            {/* Users / Curators Table */}
+            <div className="overflow-x-auto">
+              <table className="w-full text-left text-xs">
+                <thead className="bg-[#F7F5F0] text-[#686868] uppercase text-[10px] tracking-wider">
+                  <tr>
+                    <th className="p-3">Principal / Curator</th>
+                    <th className="p-3">System Role</th>
+                    <th className="p-3">KYC & Identity</th>
+                    <th className="p-3">Publishing Rights</th>
+                    <th className="p-3 text-right">Directorate Actions</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-[#E5E5EA]">
+                  {filteredUsers.map((user) => {
+                    const hasPublishingRights =
+                      user.role === "admin" ||
+                      user.role === "advisor" ||
+                      (user.role === "dealer" && user.isKycVerified);
+
+                    const isUpdating = updatingUserId === user._id;
+
+                    return (
+                      <tr key={user._id} className="hover:bg-[#F7F5F0]/50 transition-colors">
+                        <td className="p-3">
+                          <p className="font-medium text-[#111111]">{user.fullName}</p>
+                          <span className="text-[11px] text-[#686868] font-mono">{user.email}</span>
+                          {user.preferredSalon && (
+                            <span className="block text-[10px] text-[#A68A55]">Salon: {user.preferredSalon}</span>
+                          )}
+                        </td>
+
+                        <td className="p-3">
+                          <span
+                            className={`px-2 py-0.5 rounded text-[10px] font-mono uppercase tracking-wider font-semibold ${
+                              user.role === "admin"
+                                ? "bg-purple-50 text-purple-800 border border-purple-200"
+                                : user.role === "advisor"
+                                ? "bg-blue-50 text-blue-800 border border-blue-200"
+                                : user.role === "dealer"
+                                ? "bg-amber-50 text-amber-800 border border-amber-200"
+                                : "bg-gray-100 text-gray-700 border border-gray-200"
+                            }`}
+                          >
+                            {user.role === "admin"
+                              ? "Superadmin"
+                              : user.role === "advisor"
+                              ? "Senior Curator"
+                              : user.role === "dealer"
+                              ? "Consignor / Dealer"
+                              : "Collector (Client)"}
+                          </span>
+                        </td>
+
+                        <td className="p-3">
+                          {user.isKycVerified ? (
+                            <span className="inline-flex items-center space-x-1 text-emerald-800 font-medium text-[11px]">
+                              <CheckCircle className="w-3.5 h-3.5 text-emerald-600" />
+                              <span>Verified ✓</span>
+                            </span>
+                          ) : (
+                            <span className="inline-flex items-center space-x-1 text-[#686868] text-[11px]">
+                              <XCircle className="w-3.5 h-3.5 text-gray-400" />
+                              <span>Pending KYC</span>
+                            </span>
+                          )}
+                        </td>
+
+                        <td className="p-3">
+                          {hasPublishingRights ? (
+                            <span className="inline-flex items-center space-x-1.5 px-2 py-0.5 rounded bg-emerald-50 text-emerald-800 border border-emerald-200 text-[10px] font-medium uppercase tracking-wider">
+                              <Unlock className="w-3 h-3 text-emerald-700" />
+                              <span>Active Clearance</span>
+                            </span>
+                          ) : (
+                            <span className="inline-flex items-center space-x-1.5 px-2 py-0.5 rounded bg-amber-50 text-amber-800 border border-amber-200 text-[10px] font-medium uppercase tracking-wider">
+                              <Lock className="w-3 h-3 text-amber-700" />
+                              <span>Restricted (No Inscription)</span>
+                            </span>
+                          )}
+                        </td>
+
+                        <td className="p-3 text-right">
+                          {user.role === "admin" ? (
+                            <span className="text-[10px] text-[#686868] italic">Superadmin (All Privileges)</span>
+                          ) : (
+                            <div className="flex items-center justify-end space-x-2">
+                              {!hasPublishingRights ? (
+                                <button
+                                  disabled={isUpdating}
+                                  onClick={() => handleUpdatePermission(user._id, "dealer", true)}
+                                  className="px-2.5 py-1 text-[10px] uppercase tracking-wider font-semibold bg-[#263A31] text-[#C4AC79] hover:bg-[#1B2A23] transition-colors rounded-xs disabled:opacity-50"
+                                >
+                                  {isUpdating ? "Granting..." : "Grant Publishing Clearance"}
+                                </button>
+                              ) : (
+                                <button
+                                  disabled={isUpdating}
+                                  onClick={() => handleUpdatePermission(user._id, "client", false)}
+                                  className="px-2.5 py-1 text-[10px] uppercase tracking-wider font-semibold bg-red-50 text-red-700 border border-red-200 hover:bg-red-100 transition-colors rounded-xs disabled:opacity-50"
+                                >
+                                  {isUpdating ? "Revoking..." : "Revoke Clearance"}
+                                </button>
+                              )}
+
+                              {user.role !== "advisor" && (
+                                <button
+                                  disabled={isUpdating}
+                                  onClick={() => handleUpdatePermission(user._id, "advisor", true)}
+                                  className="px-2 py-1 text-[10px] uppercase tracking-wider font-medium text-[#263A31] hover:underline disabled:opacity-50"
+                                  title="Promote to Curatorial Directorate Advisory"
+                                >
+                                  Accredit Curator
+                                </button>
+                              )}
+                            </div>
+                          )}
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
             </div>
           </div>
         )}
@@ -429,6 +699,7 @@ export default function AdminDashboardPage() {
                 </thead>
                 <tbody className="divide-y divide-[#E5E5EA] font-mono text-[11px]">
                   {[
+                    { time: "Nov 11, 2026 - 13:15:08", action: "CURATOR_PERMISSIONS_ENDPOINT", res: "PATCH /api/admin/users/:id/permissions", status: "ACTIVE" },
                     { time: "Nov 11, 2026 - 12:54:22", action: "DATABASE_CONNECTED", res: "MongoDB Atlas / darbaar", status: "SUCCESS" },
                     { time: "Nov 11, 2026 - 12:53:49", action: "MEDIA_VAULT_PING", res: "Cloudinary ebnwmsqd", status: "VERIFIED" },
                     { time: "Nov 11, 2026 - 12:44:11", action: "JWT_SECURITY_AUDIT", res: "256-bit Cryptographic Salt", status: "ACTIVE" },

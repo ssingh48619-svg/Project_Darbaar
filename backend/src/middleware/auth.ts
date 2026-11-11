@@ -62,10 +62,20 @@ export function authorize(...roles: Array<"client" | "dealer" | "advisor" | "adm
     if (!req.user || !roles.includes(req.user.role)) {
       res.status(403).json({
         success: false,
-        error: "Access restricted. Insufficient privileges for this royal corridor.",
+        error: "Access restricted. Insufficient privileges for this royal corridor. Only authorized curatorial personnel may publish or modify assets.",
       });
       return;
     }
+
+    // Strict authorization gate: only KYC-verified authorized consignors/dealers or admins can publish
+    if ((req.user.role === "dealer" || req.user.role === "client") && !req.user.isKycVerified) {
+      res.status(403).json({
+        success: false,
+        error: "Publishing privileges withheld. Your account requires explicit accreditation and approval from the Curatorial Directorate.",
+      });
+      return;
+    }
+
     next();
   };
 }

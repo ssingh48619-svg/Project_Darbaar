@@ -14,22 +14,25 @@ import {
   Lock,
   ArrowRight,
   ZoomIn,
+  Award,
 } from "lucide-react";
 import { useDarbaar } from "@/features/context/DarbaarContext";
 import { CURATED_ASSETS } from "@/lib/data";
 import { LuxuryImage } from "@/components/LuxuryImage";
+import { ArchivalDossierModal } from "@/components/ArchivalDossierModal";
 
 export default function AssetDetailPage() {
   const params = useParams();
   const slugOrId = params?.id as string;
-  const { formatRange, openSpecimenModal, openInquiryModal } = useDarbaar();
+  const { assets, formatRange, openSpecimenModal, openInquiryModal } = useDarbaar();
 
-  const asset = CURATED_ASSETS.find(
-    (a) => a.slug === slugOrId || a.id === slugOrId
-  );
+  const asset =
+    assets.find((a) => a.slug === slugOrId || a.id === slugOrId) ||
+    CURATED_ASSETS.find((a) => a.slug === slugOrId || a.id === slugOrId);
 
   const [activeImageIndex, setActiveImageIndex] = useState(0);
   const [isZoomed, setIsZoomed] = useState(false);
+  const [dossierModalOpen, setDossierModalOpen] = useState(false);
 
   if (!asset) {
     return (
@@ -221,6 +224,15 @@ export default function AssetDetailPage() {
                 <Eye className="w-3.5 h-3.5 text-[#A68A55]" />
                 <span>Inspect Specimen Scorecard & Timeline</span>
               </button>
+
+              <button
+                type="button"
+                onClick={() => setDossierModalOpen(true)}
+                className="w-full inline-flex items-center justify-center space-x-2 py-3.5 px-6 text-xs uppercase tracking-[0.2em] font-medium text-[#263A31] hover:text-[#111111] hover:bg-[#F7F5F0] border border-[#A68A55]/50 transition-all"
+              >
+                <Award className="w-4 h-4 text-[#A68A55]" />
+                <span>Print Certified Archival Dossier (PDF)</span>
+              </button>
             </div>
 
             {/* Independent Inspection Guarantee Note */}
@@ -235,6 +247,12 @@ export default function AssetDetailPage() {
           </div>
         </div>
       </div>
+
+      <ArchivalDossierModal
+        asset={asset}
+        isOpen={dossierModalOpen}
+        onClose={() => setDossierModalOpen(false)}
+      />
     </div>
   );
 }

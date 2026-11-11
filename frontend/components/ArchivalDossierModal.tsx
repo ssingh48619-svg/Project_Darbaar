@@ -181,3 +181,4 @@ export function ArchivalDossierModal({ asset, isOpen, onClose }: ArchivalDossier
     </div>
   );
 }
+

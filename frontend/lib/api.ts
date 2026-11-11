@@ -109,6 +109,19 @@ export const darbaarApi = {
       }),
     getUsers: (token: string) =>
       request<{ success: boolean; users: any[] }>("/admin/users", { token }),
+    updateUserPermissions: (
+      userId: string,
+      data: { role?: string; isKycVerified?: boolean },
+      token: string
+    ) =>
+      request<{ success: boolean; message: string; user: any }>(
+        `/admin/users/${userId}/permissions`,
+        {
+          method: "PATCH",
+          body: JSON.stringify(data),
+          token,
+        }
+      ),
   },
 
   // Media Vault & Artwork Upload (Cloudinary)

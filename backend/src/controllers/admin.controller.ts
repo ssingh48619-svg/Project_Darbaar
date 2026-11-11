@@ -69,3 +69,70 @@ export async function getUsers(_req: AuthenticatedRequest, res: Response): Promi
   }
 }
 
+export async function updateUserPermissions(req: AuthenticatedRequest, res: Response): Promise<void> {
+  try {
+    const { id } = req.params;
+    const { role, isKycVerified } = req.body;
+
+    const user = await User.findById(id);
+    if (!user) {
+      res.status(404).json({
+        success: false,
+        error: "Collector or curator profile not found in DARBAAR registry.",
+      });
+      return;
+    }
+
+    if (role !== undefined) {
+      user.role = role;
+    }
+    if (isKycVerified !== undefined) {
+      user.isKycVerified = Boolean(isKycVerified);
+    }
+
+    await user.save();
+
+    // Create Audit Log
+    try {
+      await AuditLog.create({
+        action: "CURATOR_PERMISSIONS_UPDATED",
+        userId: req.user?._id,
+        entityType: "User",
+        entityId: user._id.toString(),
+        changes: {
+          role: user.role,
+          isKycVerified: user.isKycVerified,
+        },
+      });
+    } catch {
+      // Audit log non-blocking
+    }
+
+    const hasPublishingRights =
+      user.role === "admin" ||
+      user.role === "advisor" ||
+      (user.role === "dealer" && user.isKycVerified);
+
+    res.status(200).json({
+      success: true,
+      message: `Permissions updated successfully for ${user.fullName}. Publishing rights: ${
+        hasPublishingRights ? "ACTIVE" : "RESTRICTED"
+      }`,
+      user: {
+        _id: user._id,
+        fullName: user.fullName,
+        email: user.email,
+        role: user.role,
+        isKycVerified: user.isKycVerified,
+        hasPublishingRights,
+      },
+    });
+  } catch (err: any) {
+    res.status(500).json({
+      success: false,
+      error: "Failed to update curator permissions.",
+      details: process.env.NODE_ENV === "development" ? err.message : undefined,
+    });
+  }
+}
+

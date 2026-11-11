@@ -243,28 +243,45 @@ export function SpecimenModal() {
                   Receive high-resolution microscopic condition files, laboratory spectrography, and full ownership records under NDA.
                 </p>
               </div>
-              <button
-                type="button"
-                onClick={handleRequestDossier}
-                disabled={dossierRequested}
-                className="w-full sm:w-auto inline-flex items-center justify-center space-x-2 px-6 py-3 text-xs uppercase tracking-[0.2em] font-medium text-white bg-[#263A31] hover:bg-[#1B2A23] transition-colors flex-shrink-0"
-              >
-                {dossierRequested ? (
-                  <>
-                    <CheckCircle2 className="w-4 h-4 text-[#C4AC79]" />
-                    <span>Preparing Private Dossier...</span>
-                  </>
-                ) : (
-                  <>
-                    <Send className="w-3.5 h-3.5 text-[#C4AC79]" />
-                    <span>Request Confidential Dossier</span>
-                  </>
-                )}
-              </button>
+              <div className="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto">
+                <button
+                  type="button"
+                  onClick={() => setDossierModalOpen(true)}
+                  className="w-full sm:w-auto inline-flex items-center justify-center space-x-2 px-5 py-3 text-xs uppercase tracking-[0.18em] font-medium text-[#263A31] hover:text-[#111111] hover:bg-[#EAE5DC] border border-[#A68A55]/60 transition-colors flex-shrink-0"
+                >
+                  <Award className="w-4 h-4 text-[#A68A55]" />
+                  <span>View Archival Certificate</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={handleRequestDossier}
+                  disabled={dossierRequested}
+                  className="w-full sm:w-auto inline-flex items-center justify-center space-x-2 px-6 py-3 text-xs uppercase tracking-[0.2em] font-medium text-white bg-[#263A31] hover:bg-[#1B2A23] transition-colors flex-shrink-0"
+                >
+                  {dossierRequested ? (
+                    <>
+                      <CheckCircle2 className="w-4 h-4 text-[#C4AC79]" />
+                      <span>Preparing Private Dossier...</span>
+                    </>
+                  ) : (
+                    <>
+                      <Send className="w-3.5 h-3.5 text-[#C4AC79]" />
+                      <span>Request Confidential Dossier</span>
+                    </>
+                  )}
+                </button>
+              </div>
             </div>
           </div>
         </div>
       </div>
+
+      <ArchivalDossierModal
+        asset={specimenAsset}
+        isOpen={dossierModalOpen}
+        onClose={() => setDossierModalOpen(false)}
+      />
     </div>
   );
 }

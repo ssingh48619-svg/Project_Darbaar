@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getOverviewStats, getUsers } from "../controllers/admin.controller";
+import { getOverviewStats, getUsers, updateUserPermissions } from "../controllers/admin.controller";
 import { authenticate, authorize } from "../middleware/auth";
 
 const router = Router();
@@ -9,6 +9,7 @@ router.use(authorize("admin"));
 
 router.get("/overview", getOverviewStats);
 router.get("/users", getUsers);
+router.patch("/users/:id/permissions", updateUserPermissions);
 
 export default router;
 
