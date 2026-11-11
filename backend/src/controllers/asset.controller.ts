@@ -4,30 +4,27 @@ import { AuthenticatedRequest } from "../middleware/auth";
 
 export async function getAssets(req: Request, res: Response): Promise<void> {
   try {
-    const { department, category, search, salon, status } = req.query;
+    const { department, category, search, isFeatured, isPrivateSale } = req.query;
 
     const filter: any = {};
-    if (department && department !== "all") {
-      filter.department = department;
+    const cat = category || department;
+    if (cat && cat !== "all") {
+      filter.category = cat;
     }
-    if (category) {
-      filter.category = category;
+    if (isFeatured !== undefined) {
+      filter.isFeatured = isFeatured === "true";
     }
-    if (salon) {
-      filter.salonLocation = salon;
-    }
-    if (status) {
-      filter.availability = status;
-    } else {
-      filter.curatorialStatus = "curated";
+    if (isPrivateSale !== undefined) {
+      filter.isPrivateSale = isPrivateSale === "true";
     }
 
     if (search && typeof search === "string") {
       filter.$or = [
         { title: { $regex: search, $options: "i" } },
-        { subtitle: { $regex: search, $options: "i" } },
-        { artistOrMaker: { $regex: search, $options: "i" } },
+        { makerOrArtist: { $regex: search, $options: "i" } },
+        { summary: { $regex: search, $options: "i" } },
         { provenanceSummary: { $regex: search, $options: "i" } },
+        { referenceNumber: { $regex: search, $options: "i" } },
       ];
     }
 
