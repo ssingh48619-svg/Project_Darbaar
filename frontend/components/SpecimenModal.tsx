@@ -1,15 +1,17 @@
 "use client";
 
 import React, { useState } from "react";
-import { X, ShieldCheck, CheckCircle2, FileText, Calendar, MapPin, ZoomIn, Eye, Sparkles, Send } from "lucide-react";
+import { X, ShieldCheck, CheckCircle2, FileText, Calendar, MapPin, ZoomIn, Eye, Sparkles, Send, Award } from "lucide-react";
 import { useDarbaar } from "@/features/context/DarbaarContext";
 import { LuxuryImage } from "@/components/LuxuryImage";
+import { ArchivalDossierModal } from "@/components/ArchivalDossierModal";
 
 export function SpecimenModal() {
   const { specimenAsset, closeSpecimenModal, openInquiryModal, formatRange } = useDarbaar();
   const [activeImageIndex, setActiveImageIndex] = useState(0);
   const [isZoomed, setIsZoomed] = useState(false);
   const [dossierRequested, setDossierRequested] = useState(false);
+  const [dossierModalOpen, setDossierModalOpen] = useState(false);
 
   if (!specimenAsset) return null;
 

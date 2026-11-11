@@ -31,6 +31,26 @@ export function CreateAssetModal({ isOpen, onClose, onAssetCreated }: CreateAsse
   const [summary, setSummary] = useState("");
   const [historicalContext, setHistoricalContext] = useState("");
   const [imageUrl, setImageUrl] = useState("https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&w=1200&q=85");
+  const [uploadingImage, setUploadingImage] = useState(false);
+
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    try {
+      setUploadingImage(true);
+      setError("");
+      const token = localStorage.getItem("darbaar_token") || "";
+      const res = await darbaarApi.media.uploadArtwork(file, token);
+      if (res.success && res.media?.url) {
+        setImageUrl(res.media.url);
+      }
+    } catch (err: any) {
+      console.error("Cloudinary upload failed:", err);
+      setError("Failed to upload photograph to Cloudinary: " + err.message);
+    } finally {
+      setUploadingImage(false);
+    }
+  };
 
   if (!isOpen) return null;
 
@@ -291,17 +311,39 @@ export function CreateAssetModal({ isOpen, onClose, onAssetCreated }: CreateAsse
                 />
               </div>
 
-              <div className="space-y-1 sm:col-span-2">
-                <label className="text-[10px] uppercase tracking-wider text-[#686868] font-medium">
-                  Primary Artwork Plate Image URL
+              <div className="space-y-2 sm:col-span-2">
+                <label className="text-[10px] uppercase tracking-wider text-[#686868] font-medium block">
+                  Artwork Photograph (Cloudinary Media Vault)
                 </label>
-                <input
-                  type="url"
-                  value={imageUrl}
-                  onChange={(e) => setImageUrl(e.target.value)}
-                  placeholder="https://..."
-                  className="w-full px-3 py-2 text-xs border border-[#E5E5EA] focus:border-[#A68A55] focus:outline-none bg-white text-[#111111]"
-                />
+                <div className="flex flex-col sm:flex-row items-center gap-4 p-4 bg-[#F7F5F0] border border-[#E5E5EA]">
+                  <div className="relative w-24 h-24 bg-white border border-[#E5E5EA] flex-shrink-0 overflow-hidden flex items-center justify-center">
+                    {imageUrl ? (
+                      <img src={imageUrl} alt="Plate preview" className="w-full h-full object-cover" />
+                    ) : (
+                      <ImageIcon className="w-8 h-8 text-[#A68A55]" />
+                    )}
+                  </div>
+                  <div className="flex-1 space-y-2 w-full">
+                    <label className="inline-flex items-center space-x-2 px-4 py-2 text-xs uppercase tracking-wider font-medium text-white bg-[#263A31] hover:bg-[#1B2A23] cursor-pointer transition-colors">
+                      <Plus className="w-3.5 h-3.5 text-[#C4AC79]" />
+                      <span>{uploadingImage ? "Securing to Cloudinary..." : "Upload from Device to Cloudinary"}</span>
+                      <input
+                        type="file"
+                        accept="image/jpeg,image/png,image/webp"
+                        onChange={handleFileUpload}
+                        disabled={uploadingImage}
+                        className="hidden"
+                      />
+                    </label>
+                    <input
+                      type="url"
+                      value={imageUrl}
+                      onChange={(e) => setImageUrl(e.target.value)}
+                      placeholder="Or paste secure image URL (https://...)"
+                      className="w-full px-3 py-1.5 text-xs border border-[#E5E5EA] focus:border-[#A68A55] focus:outline-none bg-white text-[#111111]"
+                    />
+                  </div>
+                </div>
               </div>
 
               <div className="space-y-1 sm:col-span-2">
@@ -353,3 +395,4 @@ export function CreateAssetModal({ isOpen, onClose, onAssetCreated }: CreateAsse
     </div>
   );
 }
+
