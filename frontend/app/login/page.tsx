@@ -37,7 +37,7 @@ export default function LoginPage() {
     setIsNotRegistered(false);
 
     if (!email.trim() || !password) {
-      setError("Kripya email aur password dono enter karein (Please enter both email and password).");
+      setError("Please enter both your email address and password.");
       return;
     }
 
@@ -60,25 +60,24 @@ export default function LoginPage() {
           }
         }, 1200);
       } else {
-        setError(res.error || "Login nahi ho paya. Kripya check karein.");
+        setError(res.error || "Authentication failed. Please verify your credentials.");
       }
     } catch (err: any) {
       const msg = err.message || "";
       if (
         msg.toLowerCase().includes("no account found") ||
-        msg.toLowerCase().includes("nahi mila") ||
-        msg.toLowerCase().includes("404")
+        msg.toLowerCase().includes("404") ||
+        msg.toLowerCase().includes("not registered")
       ) {
         setIsNotRegistered(true);
-        setError("Is email se koi account nahi mila. Pehle naya account banana hoga.");
+        setError("No account found matching this email. Please create a new account first.");
       } else if (
         msg.toLowerCase().includes("incorrect password") ||
-        msg.toLowerCase().includes("galat password") ||
         msg.toLowerCase().includes("invalid security")
       ) {
-        setError("Galat password! Kripya apna sahi password dalein.");
+        setError("Incorrect password. Please verify your credentials and try again.");
       } else {
-        setError(msg || "Login me samasya aayi. Kripya apna email aur password check karein.");
+        setError(msg || "Unable to sign in. Please check your credentials and try again.");
       }
     } finally {
       setLoading(false);
@@ -106,10 +105,10 @@ export default function LoginPage() {
           </Link>
           <div className="pt-2 border-t border-[#E5E5EA]">
             <h1 className="text-xl sm:text-2xl font-serif text-[#111111]">
-              Apne Account me Login Karein
+              Sign In to Your Account
             </h1>
             <p className="text-xs text-[#686868] mt-1">
-              Sign In with your registered Email ID & Password
+              Enter your registered Email Address & Password
             </p>
           </div>
         </div>
@@ -119,8 +118,8 @@ export default function LoginPage() {
           <div className="p-4 bg-emerald-50 border border-emerald-200 text-emerald-900 text-xs rounded-xs flex items-center space-x-2.5">
             <CheckCircle2 className="w-5 h-5 text-emerald-700 flex-shrink-0" />
             <div>
-              <p className="font-semibold text-emerald-800">Login Kamyab Raha!</p>
-              <p className="text-[11px] text-emerald-700">Aapko account me le jaya jaa raha hai...</p>
+              <p className="font-semibold text-emerald-800">Authentication Successful</p>
+              <p className="text-[11px] text-emerald-700">Redirecting to your private portal...</p>
             </div>
           </div>
         )}
@@ -139,7 +138,7 @@ export default function LoginPage() {
                   className="inline-flex items-center space-x-1.5 px-3 py-1.5 bg-[#263A31] text-white text-[11px] uppercase tracking-wider font-semibold rounded-xs hover:bg-[#1B2A23] transition-colors"
                 >
                   <UserPlus className="w-3.5 h-3.5 text-[#C4AC79]" />
-                  <span>Yaha Naya Account Banayein →</span>
+                  <span>Create a New Account →</span>
                 </Link>
               </div>
             )}
@@ -150,7 +149,7 @@ export default function LoginPage() {
           {/* Email Field */}
           <div className="space-y-1.5">
             <label className="text-xs font-semibold text-[#111111] block">
-              Aapka Registered Email ID *
+              Registered Email Address *
             </label>
             <div className="flex items-center border border-[#E5E5EA] bg-white rounded-xs focus-within:border-[#A68A55] px-3 py-2.5 gap-3 transition-colors shadow-2xs">
               <Mail className="w-4 h-4 text-[#A68A55] flex-shrink-0" />
@@ -159,7 +158,7 @@ export default function LoginPage() {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="Jaise: aapka.naam@gmail.com"
+                placeholder="e.g. collector@darbaar.luxury"
                 className="w-full bg-transparent text-sm text-[#111111] focus:outline-none placeholder:text-[#686868]/60 border-0 p-0 m-0"
               />
             </div>
@@ -177,7 +176,7 @@ export default function LoginPage() {
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="Apna password dalein"
+                placeholder="Enter your confidential password"
                 className="w-full bg-transparent text-sm text-[#111111] focus:outline-none placeholder:text-[#686868]/60 border-0 p-0 m-0"
               />
               <button
@@ -198,7 +197,7 @@ export default function LoginPage() {
               disabled={loading || success}
               className="w-full py-3.5 bg-[#263A31] text-white hover:bg-[#1B2A23] font-medium text-xs uppercase tracking-[0.2em] transition-all shadow-md flex items-center justify-center space-x-2 disabled:opacity-50"
             >
-              <span>{loading ? "Checking Credentials..." : "Login Karein (Sign In)"}</span>
+              <span>{loading ? "Verifying Credentials..." : "Sign In to DARBAAR"}</span>
               <ArrowRight className="w-4 h-4 text-[#C4AC79]" />
             </button>
           </div>
@@ -207,10 +206,10 @@ export default function LoginPage() {
         {/* Big Visible Box for First-Time Users */}
         <div className="p-4 bg-[#F7F5F0] border border-[#E5E5EA] text-center space-y-2 rounded-xs">
           <p className="text-xs text-[#111111] font-medium">
-            Pehli baar DARBAAR par aaye hain?
+            First time visiting DARBAAR?
           </p>
           <p className="text-[11px] text-[#686868] leading-tight">
-            Pehle apna account banana zaroori hai, tabhi aap login kar payenge.
+            Create an account to view restricted valuations, participate in private acquisitions, and access archival scorecards.
           </p>
           <div className="pt-1">
             <Link
@@ -218,7 +217,7 @@ export default function LoginPage() {
               className="inline-flex items-center space-x-1.5 px-4 py-2 bg-white border border-[#263A31] text-[#263A31] hover:bg-[#263A31] hover:text-white transition-all text-xs font-semibold uppercase tracking-wider rounded-xs"
             >
               <UserPlus className="w-3.5 h-3.5 text-[#A68A55]" />
-              <span>Naya Account Banayein (Create Account) →</span>
+              <span>Create an Account →</span>
             </Link>
           </div>
         </div>

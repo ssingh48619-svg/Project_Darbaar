@@ -29,7 +29,7 @@ export async function register(req: Request, res: Response): Promise<void> {
     if (!email || !password) {
       res.status(400).json({
         success: false,
-        error: "Email and password are required. Kripya email aur password dono dalein.",
+        error: "Please provide both email address and password.",
       });
       return;
     }
@@ -37,7 +37,7 @@ export async function register(req: Request, res: Response): Promise<void> {
     if (password.length < 6) {
       res.status(400).json({
         success: false,
-        error: "Password must be at least 6 characters long. Password kam se kam 6 akshar ka hona chahiye.",
+        error: "Password must be at least 6 characters in length.",
       });
       return;
     }
@@ -47,7 +47,7 @@ export async function register(req: Request, res: Response): Promise<void> {
     if (existingUser) {
       res.status(409).json({
         success: false,
-        error: "An account with this email already exists. Ye email pehle se registered hai, kripya login karein.",
+        error: "An account with this email address is already registered. Please sign in.",
       });
       return;
     }
@@ -85,7 +85,7 @@ export async function register(req: Request, res: Response): Promise<void> {
   } catch (err: any) {
     res.status(500).json({
       success: false,
-      error: "Unable to create account. Kripya thodi der baad dobara koshish karein.",
+      error: "Unable to create account at this time. Please try again shortly.",
       details: process.env.NODE_ENV === "development" ? err.message : undefined,
     });
   }
@@ -98,7 +98,7 @@ export async function login(req: Request, res: Response): Promise<void> {
     if (!email || !password) {
       res.status(400).json({
         success: false,
-        error: "Please provide both email and password. Email aur password dono zaroori hain.",
+        error: "Please provide both your registered email address and password.",
       });
       return;
     }
@@ -108,7 +108,7 @@ export async function login(req: Request, res: Response): Promise<void> {
     if (!user) {
       res.status(404).json({
         success: false,
-        error: "No account found with this email. Is email se koi account nahi mila, pehle naya account banayein.",
+        error: "No account found matching this email address. Please create an account first.",
       });
       return;
     }
@@ -117,7 +117,7 @@ export async function login(req: Request, res: Response): Promise<void> {
     if (!isMatch) {
       res.status(401).json({
         success: false,
-        error: "Incorrect password. Galat password! Kripya sahi password dalein.",
+        error: "Incorrect password. Please verify your credentials and try again.",
       });
       return;
     }

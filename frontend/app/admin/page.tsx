@@ -178,11 +178,11 @@ export default function AdminDashboardPage() {
               Directorate Access Restricted
             </span>
             <h2 className="text-2xl font-serif text-[#111111]">
-              Curatorial Administration Login Required
+              Curatorial Administration Sign In Required
             </h2>
             <p className="text-xs text-[#686868] leading-relaxed">
-              Yeh corridor sirf authorized Superadmin aur Client dwara approve kiye gaye Curators ke liye hai.
-              Product / Asset add karne ya permissions badalne ke liye authorized account se login karein.
+              This secure corridor is restricted to the authorized Superadmin and accredited Curators approved by the Directorate.
+              Please sign in with authorized credentials to publish specimens or modify curatorial permissions.
             </p>
           </div>
 
@@ -197,7 +197,7 @@ export default function AdminDashboardPage() {
               href="/login?redirect=/admin"
               className="w-full py-3.5 bg-[#263A31] text-white hover:bg-[#1B2A23] font-medium text-xs uppercase tracking-[0.2em] transition-all shadow-md flex items-center justify-center space-x-2 block"
             >
-              <span>Login Karein (Sign In) →</span>
+              <span>Sign In to Directorate →</span>
             </Link>
           </div>
         </div>
@@ -221,8 +221,8 @@ export default function AdminDashboardPage() {
               Authorized Curatorial Role Required
             </h2>
             <p className="text-xs text-[#686868] leading-relaxed">
-              Aap logged in hain as <strong className="text-[#111111]">{currentUser.email}</strong> (Role: <span className="uppercase font-mono text-[#A68A55]">{currentUser.role}</span>).
-              Is account ke paas Admin panel ya product add karne ki permission nahi hai. Client se permission lene ke baad hi ye open hoga.
+              You are signed in as <strong className="text-[#111111]">{currentUser.email}</strong> (Role: <span className="uppercase font-mono text-[#A68A55]">{currentUser.role}</span>).
+              This account does not possess curatorial administrative permissions. Please sign in with the Directorate Master Account or request accreditation.
             </p>
           </div>
 

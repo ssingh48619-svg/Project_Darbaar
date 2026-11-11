@@ -324,13 +324,13 @@ export function CreateAssetModal({ isOpen, onClose, onAssetCreated }: CreateAsse
                       href="/login"
                       className="w-full sm:w-auto px-5 py-2.5 bg-[#263A31] text-white hover:bg-[#1B2A23] text-xs font-semibold uppercase tracking-wider rounded-xs transition-colors"
                     >
-                      Login Karein (Sign In) →
+                      Sign In to Account →
                     </a>
                     <a
                       href="/register"
                       className="w-full sm:w-auto px-5 py-2.5 bg-white border border-[#263A31] text-[#263A31] hover:bg-[#F7F5F0] text-xs font-semibold uppercase tracking-wider rounded-xs transition-colors"
                     >
-                      Naya Account Banayein →
+                      Create Collector Account →
                     </a>
                   </div>
 

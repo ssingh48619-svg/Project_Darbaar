@@ -40,25 +40,25 @@ export default function RegisterPage() {
     e.preventDefault();
     setError("");
 
-    // Simple validation that anyone can understand
+    // Simple validation in English
     if (!fullName.trim()) {
-      setError("Kripya apna pura naam likhein (Please enter your full name).");
+      setError("Please enter your full name.");
       return;
     }
     if (!email.trim()) {
-      setError("Kripya apna email ID dalein (Please enter your email ID).");
+      setError("Please enter a valid email address.");
       return;
     }
     if (!password) {
-      setError("Kripya apna password banayein (Please create a password).");
+      setError("Please create a confidential password.");
       return;
     }
     if (password.length < 6) {
-      setError("Password kam se kam 6 akshar ka hona chahiye (Password must be at least 6 characters).");
+      setError("Password must be at least 6 characters in length.");
       return;
     }
     if (password !== confirmPassword) {
-      setError("Dono password match nahi ho rahe hain! Kripya dono jagah same password dalein.");
+      setError("Passwords do not match. Please ensure both fields are identical.");
       return;
     }
 
@@ -80,12 +80,12 @@ export default function RegisterPage() {
           router.push("/dashboard");
         }, 1800);
       } else {
-        setError(res.error || "Account create nahi ho paya. Kripya dobara koshish karein.");
+        setError(res.error || "Unable to create account. Please verify your details and try again.");
       }
     } catch (err: any) {
       setError(
         err.message ||
-          "Registration me error aaya. Agar ye email pehle se registered hai to kripya Login karein."
+          "Registration encountered an issue. If this email is already registered, please sign in."
       );
     } finally {
       setLoading(false);
@@ -113,10 +113,10 @@ export default function RegisterPage() {
           </Link>
           <div className="pt-2 border-t border-[#E5E5EA]">
             <h1 className="text-xl sm:text-2xl font-serif text-[#111111]">
-              Naya Account Banayein
+              Create Your Collector Account
             </h1>
             <p className="text-xs text-[#686868] mt-1">
-              Create Your Collector Account (Pehli baar yaha account banana zaroori hai)
+              Register for verified provenance records and confidential acquisition mandates
             </p>
           </div>
         </div>
@@ -126,11 +126,11 @@ export default function RegisterPage() {
           <div className="py-8 text-center space-y-4 bg-emerald-50 border border-emerald-200 p-6 rounded-sm">
             <CheckCircle2 className="w-14 h-14 text-emerald-700 mx-auto animate-bounce" />
             <h2 className="text-xl font-serif text-emerald-900 font-semibold">
-              Aapka Account Kamyabi Se Ban Gaya!
+              Account Created Successfully
             </h2>
             <p className="text-xs text-emerald-800 leading-relaxed max-w-sm mx-auto">
-              Shukriya <strong>{fullName}</strong>. Aapka password aur account MongoDB Atlas me surakshit save ho chuka hai.
-              Aapko Dashboard par le jaya jaa raha hai...
+              Welcome, <strong>{fullName}</strong>. Your collector profile and security credentials have been inscribed into the DARBAAR vault.
+              Redirecting to your portfolio...
             </p>
             <div className="pt-2">
               <button
@@ -149,12 +149,12 @@ export default function RegisterPage() {
                 <AlertCircle className="w-4 h-4 text-red-600 flex-shrink-0 mt-0.5" />
                 <div className="space-y-1">
                   <p className="font-medium">{error}</p>
-                  {error.includes("pehle se registered") && (
+                  {error.toLowerCase().includes("already registered") && (
                     <Link
                       href="/login"
                       className="inline-block text-[11px] text-[#263A31] font-semibold underline underline-offset-2"
                     >
-                      Pehle se account hai? Yaha click karke Login karein →
+                      Already have an account? Sign in here →
                     </Link>
                   )}
                 </div>
@@ -164,8 +164,8 @@ export default function RegisterPage() {
             {/* Full Name Field */}
             <div className="space-y-1.5">
               <label className="text-xs font-semibold text-[#111111] flex items-center justify-between">
-                <span>1. Aapka Pura Naam (Full Name) *</span>
-                <span className="text-[10px] text-[#686868] font-normal">Zaroori hai</span>
+                <span>1. Full Name *</span>
+                <span className="text-[10px] text-[#686868] font-normal">Required</span>
               </label>
               <div className="flex items-center border border-[#E5E5EA] bg-white rounded-xs focus-within:border-[#A68A55] px-3 py-2.5 gap-3 transition-colors shadow-2xs">
                 <User className="w-4 h-4 text-[#A68A55] flex-shrink-0" />
@@ -174,7 +174,7 @@ export default function RegisterPage() {
                   required
                   value={fullName}
                   onChange={(e) => setFullName(e.target.value)}
-                  placeholder="Jaise: Satyam Kumar"
+                  placeholder="e.g. Satyam Kumar or Lord Alistair Vance"
                   className="w-full bg-transparent text-sm text-[#111111] focus:outline-none placeholder:text-[#686868]/60 border-0 p-0 m-0"
                 />
               </div>
@@ -183,8 +183,8 @@ export default function RegisterPage() {
             {/* Email Field */}
             <div className="space-y-1.5">
               <label className="text-xs font-semibold text-[#111111] flex items-center justify-between">
-                <span>2. Email ID (Login ID) *</span>
-                <span className="text-[10px] text-[#686868] font-normal">Isi se login hoga</span>
+                <span>2. Confidential Email Address *</span>
+                <span className="text-[10px] text-[#686868] font-normal">Primary Sign-In Identity</span>
               </label>
               <div className="flex items-center border border-[#E5E5EA] bg-white rounded-xs focus-within:border-[#A68A55] px-3 py-2.5 gap-3 transition-colors shadow-2xs">
                 <Mail className="w-4 h-4 text-[#A68A55] flex-shrink-0" />
@@ -193,7 +193,7 @@ export default function RegisterPage() {
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Jaise: aapka.naam@gmail.com"
+                  placeholder="e.g. collector@darbaar.luxury"
                   className="w-full bg-transparent text-sm text-[#111111] focus:outline-none placeholder:text-[#686868]/60 border-0 p-0 m-0"
                 />
               </div>
@@ -202,7 +202,7 @@ export default function RegisterPage() {
             {/* Mobile Number Field (Optional) */}
             <div className="space-y-1.5">
               <label className="text-xs font-semibold text-[#111111] flex items-center justify-between">
-                <span>3. Mobile / Phone Number</span>
+                <span>3. Direct Telephone / Mobile</span>
                 <span className="text-[10px] text-[#686868] font-normal">(Optional)</span>
               </label>
               <div className="flex items-center border border-[#E5E5EA] bg-white rounded-xs focus-within:border-[#A68A55] px-3 py-2.5 gap-3 transition-colors shadow-2xs">
@@ -211,7 +211,7 @@ export default function RegisterPage() {
                   type="tel"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
-                  placeholder="Jaise: +91 98765 43210"
+                  placeholder="e.g. +91 98765 43210 or +44 20 7946 0912"
                   className="w-full bg-transparent text-sm text-[#111111] focus:outline-none placeholder:text-[#686868]/60 border-0 p-0 m-0"
                 />
               </div>
@@ -220,8 +220,8 @@ export default function RegisterPage() {
             {/* Password Field */}
             <div className="space-y-1.5">
               <label className="text-xs font-semibold text-[#111111] flex items-center justify-between">
-                <span>4. Password Banayein (Create Password) *</span>
-                <span className="text-[10px] text-[#686868] font-normal">Kam se kam 6 akshar</span>
+                <span>4. Create Confidential Password *</span>
+                <span className="text-[10px] text-[#686868] font-normal">Minimum 6 characters</span>
               </label>
               <div className="flex items-center border border-[#E5E5EA] bg-white rounded-xs focus-within:border-[#A68A55] px-3 py-2.5 gap-3 transition-colors shadow-2xs">
                 <Lock className="w-4 h-4 text-[#A68A55] flex-shrink-0" />
@@ -231,7 +231,7 @@ export default function RegisterPage() {
                   minLength={6}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Apna secret password dalein"
+                  placeholder="Create your confidential password"
                   className="w-full bg-transparent text-sm text-[#111111] focus:outline-none placeholder:text-[#686868]/60 border-0 p-0 m-0"
                 />
                 <button
@@ -248,8 +248,8 @@ export default function RegisterPage() {
             {/* Confirm Password Field */}
             <div className="space-y-1.5">
               <label className="text-xs font-semibold text-[#111111] flex items-center justify-between">
-                <span>5. Password Dobara Likhein (Confirm Password) *</span>
-                <span className="text-[10px] text-[#686868] font-normal">Dono same hone chahiye</span>
+                <span>5. Confirm Confidential Password *</span>
+                <span className="text-[10px] text-[#686868] font-normal">Must match above</span>
               </label>
               <div className="flex items-center border border-[#E5E5EA] bg-white rounded-xs focus-within:border-[#A68A55] px-3 py-2.5 gap-3 transition-colors shadow-2xs">
                 <Lock className="w-4 h-4 text-[#A68A55] flex-shrink-0" />
@@ -259,7 +259,7 @@ export default function RegisterPage() {
                   minLength={6}
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
-                  placeholder="Wahi password dobara dalein"
+                  placeholder="Re-enter your password to confirm"
                   className="w-full bg-transparent text-sm text-[#111111] focus:outline-none placeholder:text-[#686868]/60 border-0 p-0 m-0"
                 />
                 <button
@@ -273,7 +273,7 @@ export default function RegisterPage() {
               </div>
               {confirmPassword && password !== confirmPassword && (
                 <p className="text-[11px] text-red-600 font-medium pt-0.5">
-                  ⚠️ Dono password alag hain, please same password likhein.
+                  ⚠️ Passwords do not match. Please verify both entries.
                 </p>
               )}
             </div>
@@ -285,7 +285,7 @@ export default function RegisterPage() {
                 disabled={loading}
                 className="w-full py-3.5 bg-[#263A31] text-white hover:bg-[#1B2A23] font-medium text-xs uppercase tracking-[0.2em] transition-all shadow-md flex items-center justify-center space-x-2 disabled:opacity-50"
               >
-                <span>{loading ? "Account Banaya Jaa Raha Hai..." : "Account Banayein (Create Account)"}</span>
+                <span>{loading ? "Inscribing Account..." : "Complete Registration"}</span>
                 <ArrowRight className="w-4 h-4 text-[#C4AC79]" />
               </button>
             </div>
@@ -293,12 +293,12 @@ export default function RegisterPage() {
             {/* Link to Login */}
             <div className="pt-4 border-t border-[#E5E5EA] text-center">
               <p className="text-xs text-[#686868]">
-                Pehle se account bana hua hai?{" "}
+                Already have a registered account?{" "}
                 <Link
                   href="/login"
                   className="text-[#263A31] font-bold hover:underline ml-1 uppercase tracking-wider text-[11px]"
                 >
-                  Yaha Login Karein (Sign In) →
+                  Sign In Here →
                 </Link>
               </p>
             </div>
