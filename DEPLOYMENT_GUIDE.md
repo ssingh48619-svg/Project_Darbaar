@@ -92,3 +92,4 @@ Once live:
 * [ ] Visit `https://darbaar.vercel.app/login` — sign in with Superadmin `darbaar3001@gmail.com` / `1234@Darbaar`.
 * [ ] Visit `https://darbaar.vercel.app/admin` — verify the live AUM valuation and Curatorial Registry.
 * [ ] Submit a test inquiry on any specimen — verify the alert email lands in `darbaar3001@gmail.com`.
+
