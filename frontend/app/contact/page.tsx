@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { Mail, Globe, MapPin, Send, CheckCircle2, Shield } from "lucide-react";
 import { useDarbaar } from "@/features/context/DarbaarContext";
+import { darbaarApi } from "@/lib/api";
 
 export default function ContactPage() {
   const { openInquiryModal } = useDarbaar();

@@ -32,3 +32,4 @@ export function isCloudinaryConfigured(): boolean {
 }
 
 export { cloudinary };
+

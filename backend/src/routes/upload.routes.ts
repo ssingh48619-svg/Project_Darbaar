@@ -35,3 +35,4 @@ router.delete("/image/:publicId", authenticate, authorize("admin", "advisor", "d
 router.delete("/image", authenticate, authorize("admin", "advisor", "dealer"), deleteArtwork);
 
 export default router;
+

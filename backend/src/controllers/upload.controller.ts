@@ -84,3 +84,4 @@ export async function deleteArtwork(req: AuthenticatedRequest, res: Response): P
     });
   }
 }
+

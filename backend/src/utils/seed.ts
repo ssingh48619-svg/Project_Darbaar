@@ -50,87 +50,207 @@ async function runSeed() {
 
     console.log(`[DARBAAR] Seeded 2 Users: admin@darbaar.luxury, collector@darbaar.luxury (Password: Darbaar@2026)`);
 
-    // 3. Seed Curated Assets
+    // 3. Seed Curated Assets matching Asset schema
     const demoAssets = [
       {
-        title: "The Coronation Durbar of Maharana Fateh Singh (Demonstration Catalog)",
-        subtitle: "A monumental archival tempera and gold leaf composition depicting the Mewar court ceremony",
-        department: "fine-art",
-        category: "Historical Painting",
-        origin: "Udaipur, Rajasthan",
-        year: 1894,
-        period: "Late 19th Century",
-        medium: "Natural pigments and gold leaf on hand-burnished wasli paper",
-        dimensions: { height: 112, width: 178, unit: "cm" },
-        indicativeValuation: { min: 450000, max: 620000, currency: "USD" },
-        curatorialStatus: "curated",
-        availability: "private-treaty",
-        provenanceStatus: "verified",
-        provenanceSummary: "Preserved in private Mewar estate collection until 1974; acquired by private Geneva collector; documented in 1989 Royal Court Retrospective.",
-        conditionScore: 94,
-        conditionSummary: "Exceptional museum-grade preservation. Pure gold leaf retains high luminescence with zero flaking.",
-        images: [
-          {
-            url: "https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&q=80&w=1600",
-            caption: "Primary archival plate",
-            isPrimary: true,
-          },
+        slug: "patek-philippe-perpetual-calendar-chronograph-3970",
+        title: "Perpetual Calendar Chronograph in 18k Pink Gold",
+        makerOrArtist: "Patek Philippe",
+        year: "1991",
+        category: "timepieces",
+        categoryLabel: "Rare Timepieces",
+        referenceNumber: "Ref. 3970E-002",
+        dimensionsOrSpecs: "36mm Case, Calibre CH 27-70 Q, 24-Hour Indicator",
+        conditionSummary: "Pristine, crisp hallmarks with factory geometry intact",
+        provenanceSummary: "Single-owner private Swiss collection, complete with archive certificate",
+        provenanceStatus: "Archival Verified",
+        valuationMinUSD: 145000,
+        valuationMaxUSD: 175000,
+        isFeatured: true,
+        isPrivateSale: false,
+        isDemonstration: true,
+        image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=1200&q=85",
+        galleryImages: [
+          "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=1200&q=85",
+          "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=1200&q=85",
         ],
-        salonLocation: "Geneva",
+        summary:
+          "An immaculate demonstration exemplar of late-20th-century Haute Horlogerie, combining a perpetual calendar with column-wheel chronograph. Housed in warm 18-carat pink gold with double stepped lugs.",
+        historicalContext:
+          "Introduced in 1986 to succeed the legendary Reference 2499, the 3970 represents the golden era of neo-vintage complications. Preserved with unpolished case bevels and deep Swiss gold hallmarks on the reverse of the lugs.",
+        specimenDetails: {
+          conditionScorecard: {
+            overallGrade: "Grade I (Exceptional Museum Grade)",
+            preservationScore: 98,
+            caseOrSupport: "18k Rose Gold, zero mechanical polishing, all 4 lug hallmarks razor-sharp",
+            dialOrSurface: "Original opaline-silver dial with applied pink gold baton hour markers",
+            movementOrStructure: "Calibre CH 27-70 Q, adjusted to heat/cold and isochronism, amplitude 298°",
+            originalityRating: "100% Period-Correct Components, original signed buckle and presentation box",
+            inspectionLocation: "Geneva Free Port Vault Inspection Chamber",
+          },
+          provenanceTimeline: [
+            {
+              year: "1991",
+              location: "Geneva, Switzerland",
+              description: "Commissioned and acquired from official Geneva boutique.",
+              documentationType: "Original Certificate of Origin & Bill of Sale",
+              isVerified: true,
+            },
+            {
+              year: "2012",
+              location: "Zurich, Switzerland",
+              description: "Recorded in private Swiss horological trust inventory.",
+              documentationType: "Patek Philippe Extract from the Archives",
+              isVerified: true,
+            },
+            {
+              year: "2024",
+              location: "DARBAAR Inspection Vault",
+              description: "Physical inspection and condition verification completed.",
+              documentationType: "Independent Specialist Condition Dossier",
+              isVerified: true,
+            },
+          ],
+          independentInspector: "Cabinet d'Horlogerie Ancienne, Geneva",
+          inspectionDate: "14 October 2024",
+          dossierReference: "DARBAAR-CHA-GVA-9921",
+          availableReports: [
+            "Full Calibre Micro-Photography Assessment",
+            "Archive Extract Verification (Patek Philippe)",
+            "Spectrometric Alloy Purity Certificate",
+          ],
+        },
         createdBy: adminUser._id,
       },
       {
-        title: "Reference 2499 Perpetual Calendar Chronograph (Demonstration Catalog)",
-        subtitle: "Third Series in 18k Yellow Gold with moon phases and archival extract",
-        department: "timepieces",
-        category: "Haute Horlogerie",
-        origin: "Geneva, Switzerland",
-        year: 1972,
-        period: "Vintage Mechanical Era",
-        medium: "18k Yellow Gold, Caliber 13''' manual-wind movement, Silvered opaline dial",
-        dimensions: { height: 37.5, width: 37.5, depth: 13, unit: "mm" },
-        indicativeValuation: { min: 850000, max: 1200000, currency: "USD" },
-        curatorialStatus: "curated",
-        availability: "private-treaty",
-        provenanceStatus: "verified",
-        provenanceSummary: "Commissioned by European industrial dynasty in 1972; preserved unworn in vault; accompanied by Patek Philippe Archival Extract.",
-        conditionScore: 98,
-        conditionSummary: "Crisp hallmarks on lugs, unpolished case edges, mint opaline dial with raised hard enamel lettering.",
-        images: [
-          {
-            url: "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&q=80&w=1600",
-            caption: "Dial and bezel specimen view",
-            isPrimary: true,
-          },
+        slug: "fp-journe-chronometre-a-resonance-platinum",
+        title: "Chronomètre à Résonance Dual Resonance in Platinum",
+        makerOrArtist: "F.P. Journe",
+        year: "2004",
+        category: "timepieces",
+        categoryLabel: "Rare Timepieces",
+        referenceNumber: "Calibre 1499.2",
+        dimensionsOrSpecs: "38mm Case, 18k Rose Gold Movement, Dual Symmetrical Dials",
+        conditionSummary: "Flawless unpolished platinum case, warm rose gold movement patina",
+        provenanceSummary: "Acquired directly from early private Geneva collection; original brass-era box",
+        provenanceStatus: "Private Estate",
+        valuationMinUSD: 290000,
+        valuationMaxUSD: 340000,
+        isFeatured: true,
+        isPrivateSale: false,
+        isDemonstration: true,
+        image: "https://images.unsplash.com/photo-1524805444758-089113d48a6d?auto=format&fit=crop&w=1200&q=85",
+        galleryImages: [
+          "https://images.unsplash.com/photo-1524805444758-089113d48a6d?auto=format&fit=crop&w=1200&q=85",
         ],
-        salonLocation: "London",
+        summary:
+          "A masterpiece of contemporary horological chronometry utilizing the physical phenomenon of resonance through two balance wheels beating in natural synchronization.",
+        historicalContext:
+          "First manufactured in 2000, the early 38mm brass-movement iterations are among the most revered independent creations of the 21st century.",
+        specimenDetails: {
+          conditionScorecard: {
+            overallGrade: "Grade I (Flawless Preservation)",
+            preservationScore: 97,
+            caseOrSupport: "Platinum 950, 38mm case diameter, pristine hallmarks and original crown",
+            dialOrSurface: "Dual white gold dials with guilloché centers, blued steel hands",
+            movementOrStructure: "Calibre 1499.2 in solid 18k rose gold, dual resonance synchronization verified",
+            originalityRating: "100% Factory Correct, complete with wooden presentation case and warranty card",
+            inspectionLocation: "Zurich Private Deposit Vault",
+          },
+          provenanceTimeline: [
+            {
+              year: "2004",
+              location: "Geneva, Switzerland",
+              description: "Direct atelier delivery to European private patron.",
+              documentationType: "Original F.P. Journe Warranty Certificate",
+              isVerified: true,
+            },
+            {
+              year: "2024",
+              location: "DARBAAR Inspection Facility",
+              description: "Complete resonance amplitude verification and movement service check.",
+              documentationType: "Horological Laboratory Diagnostic Report",
+              isVerified: true,
+            },
+          ],
+          independentInspector: "Swiss Independent Watchmaking Institute",
+          inspectionDate: "02 November 2024",
+          dossierReference: "DARBAAR-SIWI-ZRH-8832",
+          availableReports: [
+            "Harmonic Resonance Synchronization Certificate",
+            "Atelier Origin Verification",
+            "High-Resolution Micro-Radiography",
+          ],
+        },
         createdBy: adminUser._id,
       },
       {
-        title: "The Royal Toshakhana Emerald-Hilted Peshkabz (Demonstration Catalog)",
-        subtitle: "Ceremonial court dagger forged in Wootz crucible steel with single carved Colombian emerald pommel",
-        department: "collectibles",
-        category: "Royal Armory",
-        origin: "Hyderabad Deccan",
-        year: 1740,
-        period: "18th Century Asaf Jahi Dynasty",
-        medium: "Damascus crystalline wootz steel, carved natural emerald, pure gold inlay",
-        dimensions: { height: 38, width: 5.2, unit: "cm" },
-        indicativeValuation: { min: 650000, max: 900000, currency: "USD" },
-        curatorialStatus: "curated",
-        availability: "private-treaty",
-        provenanceStatus: "archived",
-        provenanceSummary: "Listed in the 1898 Hyderabad Treasury inventory; presented as diplomatic gift in 1911; private Swiss trust.",
-        conditionScore: 91,
-        conditionSummary: "Crystalline steel water pattern intact without oxidation. Emerald hilt unblemished.",
-        images: [
-          {
-            url: "https://images.unsplash.com/photo-1582560475093-ba66accbc424?auto=format&fit=crop&q=80&w=1600",
-            caption: "Wootz blade and emerald pommel",
-            isPrimary: true,
-          },
+        slug: "coronation-durbar-maharana-fateh-singh",
+        title: "The Royal Coronation Durbar of Udaipur (Demonstration Catalog)",
+        makerOrArtist: "Attributed to Master Painter Shivalal of Udaipur",
+        year: "1894",
+        category: "fine-art",
+        categoryLabel: "Fine Art & Paintings",
+        referenceNumber: "DARBAAR-FA-MEW-1894",
+        dimensionsOrSpecs: "112 cm × 178 cm (Framed: 135 cm × 201 cm)",
+        conditionSummary: "Museum grade; luminous mineral pigments with raised gold foil intact",
+        provenanceSummary: "Royal Court of Mewar until 1952; private London family trust; private acquisition",
+        provenanceStatus: "Palace Heritage",
+        valuationMinUSD: 450000,
+        valuationMaxUSD: 620000,
+        isFeatured: true,
+        isPrivateSale: false,
+        isDemonstration: true,
+        image: "https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&w=1200&q=85",
+        galleryImages: [
+          "https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&w=1200&q=85",
         ],
-        salonLocation: "New York",
+        summary:
+          "A monumental royal court composition executed on burnished wasli paper with pure gold leaf and lapis lazuli pigments, capturing the regal ceremonial grandeur of the Mewar Durbar.",
+        historicalContext:
+          "Commissioned to commemorate the state assembly of 1894. The painting documents the intricate hierarchy of nobles, royal regalia, and ceremonial courtesies.",
+        specimenDetails: {
+          conditionScorecard: {
+            overallGrade: "Grade I (Imperial Museum Condition)",
+            preservationScore: 95,
+            caseOrSupport: "Multi-layered handmade wasli paper, minimal edge discoloration, zero tears",
+            dialOrSurface: "Natural gouache and gold leaf, no flaking, vivid mineral luminescence",
+            movementOrStructure: "Archival teak backing with museum-grade UV-filtering museum glass",
+            originalityRating: "100% Original late-19th-century court pigments and gold leaf application",
+            inspectionLocation: "London Mayfair Conservation Laboratory",
+          },
+          provenanceTimeline: [
+            {
+              year: "1894",
+              location: "Udaipur, Rajasthan",
+              description: "Court commission for the Royal Palace Toshakhana archives.",
+              documentationType: "Palace Inventory Register Entry",
+              isVerified: true,
+            },
+            {
+              year: "1952",
+              location: "London, United Kingdom",
+              description: "Transferred to private British diplomatic collection.",
+              documentationType: "Diplomatic Export Certificate",
+              isVerified: true,
+            },
+            {
+              year: "2024",
+              location: "DARBAAR London Curatorial Salon",
+              description: "Pigment spectroscopy and archival documentation verified.",
+              documentationType: "Art Conservation Laboratory Dossier",
+              isVerified: true,
+            },
+          ],
+          independentInspector: "British Institute of Fine Art Preservation",
+          inspectionDate: "18 September 2024",
+          dossierReference: "DARBAAR-BIAP-LDN-4421",
+          availableReports: [
+            "Pigment Raman Spectroscopy Analysis",
+            "Wasli Paper Carbon Verification",
+            "Archival Provenance Chain Dossier",
+          ],
+        },
         createdBy: adminUser._id,
       },
     ];
@@ -138,7 +258,7 @@ async function runSeed() {
     await Asset.insertMany(demoAssets);
     console.log(`[DARBAAR] Successfully seeded ${demoAssets.length} Curatorial Demonstration Assets!`);
 
-    console.log("\n[DARBAAR] ✅ Database seeding finished successfully!");
+    console.log("\n[DARBAAR] ✅ Database seeding finished successfully into MongoDB Atlas!");
     process.exit(0);
   } catch (error) {
     console.error("[DARBAAR] Seed failed with error:", error);
@@ -147,4 +267,3 @@ async function runSeed() {
 }
 
 runSeed();
-
