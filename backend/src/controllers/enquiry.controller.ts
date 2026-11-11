@@ -2,6 +2,7 @@ import { Response } from "express";
 import { Enquiry } from "../models/Enquiry";
 import { AuthenticatedRequest } from "../middleware/auth";
 import { AuditLog } from "../models/AuditLog";
+import { emailService } from "../services/email.service";
 
 export async function createEnquiry(req: AuthenticatedRequest, res: Response): Promise<void> {
   try {
@@ -43,6 +44,20 @@ export async function createEnquiry(req: AuthenticatedRequest, res: Response): P
     } catch {
       // Non-blocking
     }
+
+    // Trigger instant email alert to Directorate (darbaar3001@gmail.com)
+    emailService
+      .notifyNewEnquiry({
+        fullName,
+        email,
+        phone,
+        assetTitle,
+        preferredSalon: newEnquiry.preferredSalon,
+        inquiryType: newEnquiry.inquiryType,
+        message: newEnquiry.message,
+        referenceNumber: newEnquiry._id.toString().slice(-8).toUpperCase(),
+      })
+      .catch((e) => console.warn("[Enquiry Alert Error]", e.message));
 
     res.status(201).json({
       success: true,

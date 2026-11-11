@@ -121,8 +121,8 @@ export function CreateAssetModal({ isOpen, onClose, onAssetCreated }: CreateAsse
       // If user inputs the Directorate Passkey or clicks "Unlock as Superadmin"
       if (keyToUse === "DARBAAR-DIRECTORATE-2026" || !keyToUse) {
         const loginRes = await darbaarApi.auth.login({
-          email: "admin@darbaar.luxury",
-          password: "Darbaar@2026",
+          email: "darbaar3001@gmail.com",
+          password: "1234@Darbaar",
         });
         if (loginRes.success && loginRes.token) {
           localStorage.setItem("darbaar_token", loginRes.token);
@@ -339,7 +339,7 @@ export function CreateAssetModal({ isOpen, onClose, onAssetCreated }: CreateAsse
                       className="text-[11px] uppercase tracking-wider text-[#A68A55] font-semibold hover:underline flex items-center justify-center space-x-1.5 mx-auto"
                     >
                       <UserCheck className="w-3.5 h-3.5" />
-                      <span>{passkeyLoading ? "Verifying..." : "Directorate Superadmin Quick Access (admin@darbaar.luxury)"}</span>
+                      <span>{passkeyLoading ? "Verifying..." : "Directorate Superadmin Quick Access (darbaar3001@gmail.com)"}</span>
                     </button>
                   </div>
                 </div>

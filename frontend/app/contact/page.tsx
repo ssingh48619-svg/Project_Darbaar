@@ -160,10 +160,10 @@ export default function ContactPage() {
                 Central Advisory Communications
               </h4>
               <div className="space-y-2 text-xs text-[#111111]">
-                <p className="flex items-center space-x-2">
-                  <Mail className="w-4 h-4 text-[#263A31]" />
-                  <span>advisory@darbaar.luxury</span>
-                </p>
+                <a href="mailto:darbaar3001@gmail.com" className="flex items-center space-x-2 text-[#263A31] hover:underline font-medium">
+                  <Mail className="w-4 h-4 text-[#A68A55]" />
+                  <span>darbaar3001@gmail.com</span>
+                </a>
                 <p className="flex items-center space-x-2">
                   <Globe className="w-4 h-4 text-[#263A31]" />
                   <span>Encrypted Client Communication Portal</span>

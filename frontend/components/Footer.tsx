@@ -160,8 +160,8 @@ export function Footer() {
               <span className="text-white/80">London • Geneva • New York • Singapore • Mumbai • Dubai</span>
             </div>
             <div className="flex items-center space-x-4 text-[11px]">
-              <a href="mailto:advisory@darbaar.luxury" className="hover:text-white flex items-center gap-1">
-                <Mail className="w-3 h-3 text-[#A68A55]" /> advisory@darbaar.luxury
+              <a href="mailto:darbaar3001@gmail.com" className="hover:text-white flex items-center gap-1 font-medium">
+                <Mail className="w-3.5 h-3.5 text-[#C4AC79]" /> darbaar3001@gmail.com
               </a>
             </div>
           </div>

@@ -2,6 +2,7 @@ import { Response } from "express";
 import { AdvisoryRequest } from "../models/AdvisoryRequest";
 import { AuthenticatedRequest } from "../middleware/auth";
 import { AuditLog } from "../models/AuditLog";
+import { emailService } from "../services/email.service";
 
 export async function createAdvisoryRequest(req: AuthenticatedRequest, res: Response): Promise<void> {
   try {
@@ -40,6 +41,18 @@ export async function createAdvisoryRequest(req: AuthenticatedRequest, res: Resp
     } catch {
       // Non-blocking
     }
+
+    // Trigger instant email alert to Directorate (darbaar3001@gmail.com)
+    emailService
+      .notifyNewAdvisoryMandate({
+        fullName: newMandate.fullName,
+        email: newMandate.email,
+        phone,
+        serviceType: newMandate.serviceType,
+        preferredSalon: newMandate.preferredSalon,
+        description: newMandate.description,
+      })
+      .catch((e) => console.warn("[Advisory Alert Error]", e.message));
 
     res.status(201).json({
       success: true,

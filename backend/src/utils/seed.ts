@@ -24,23 +24,34 @@ async function runSeed() {
 
     // 2. Seed Users
     const salt = await bcrypt.genSalt(10);
-    const demoPasswordHash = await bcrypt.hash("Darbaar@2026", salt);
+    const masterPasswordHash = await bcrypt.hash("1234@Darbaar", salt);
+
+    const masterAdmin = await User.create({
+      fullName: "DARBAAR Directorate (Master)",
+      email: "darbaar3001@gmail.com",
+      passwordHash: masterPasswordHash,
+      role: "admin",
+      isKycVerified: true,
+      preferredCurrency: "INR",
+      preferredSalon: "Mumbai",
+      phone: "+91 98765 00000",
+    });
 
     const adminUser = await User.create({
       fullName: "Curatorial Directorate",
       email: "admin@darbaar.luxury",
-      passwordHash: demoPasswordHash,
+      passwordHash: masterPasswordHash,
       role: "admin",
       isKycVerified: true,
       preferredCurrency: "USD",
       preferredSalon: "Geneva",
-      phone: "+91 98765 00000",
+      phone: "+91 98765 00001",
     });
 
     const collectorUser = await User.create({
       fullName: "Maharaja Collector",
       email: "collector@darbaar.luxury",
-      passwordHash: demoPasswordHash,
+      passwordHash: masterPasswordHash,
       role: "client",
       isKycVerified: true,
       preferredCurrency: "USD",
@@ -48,7 +59,7 @@ async function runSeed() {
       phone: "+91 98765 11111",
     });
 
-    console.log(`[DARBAAR] Seeded 2 Users: admin@darbaar.luxury, collector@darbaar.luxury (Password: Darbaar@2026)`);
+    console.log(`[DARBAAR] Seeded 3 Users: darbaar3001@gmail.com, admin@darbaar.luxury, collector@darbaar.luxury (Password: 1234@Darbaar)`);
 
     // 3. Seed Curated Assets matching Asset schema
     const demoAssets = [
