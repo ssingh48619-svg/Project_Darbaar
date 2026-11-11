@@ -4,6 +4,9 @@
   "private": true,
   "description": "DARBAAR - A Global House of Fine Art, Rare Timepieces and Collectible Assets",
   "scripts": {
+    "build": "cd frontend && npm run build",
+    "start": "cd frontend && npm run start",
+    "dev": "cd frontend && npm run dev",
     "dev:frontend": "cd frontend && npm run dev",
     "build:frontend": "cd frontend && npm run build",
     "start:frontend": "cd frontend && npm run start",
