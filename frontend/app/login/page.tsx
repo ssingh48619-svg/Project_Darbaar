@@ -148,44 +148,42 @@ export default function LoginPage() {
 
         <form onSubmit={handleSubmit} className="space-y-4">
           {/* Email Field */}
-          <div className="space-y-1">
-            <label className="text-xs font-semibold text-[#111111] flex items-center justify-between">
-              <span>Aapka Registered Email ID *</span>
+          <div className="space-y-1.5">
+            <label className="text-xs font-semibold text-[#111111] block">
+              Aapka Registered Email ID *
             </label>
-            <div className="relative">
-              <Mail className="w-4 h-4 text-[#A68A55] absolute left-3 top-3" />
+            <div className="flex items-center border border-[#E5E5EA] bg-white rounded-xs focus-within:border-[#A68A55] px-3 py-2.5 gap-3 transition-colors shadow-2xs">
+              <Mail className="w-4 h-4 text-[#A68A55] flex-shrink-0" />
               <input
                 type="email"
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Jaise: aapka.naam@gmail.com"
-                className="w-full pl-10 pr-3 py-2.5 text-sm border border-[#E5E5EA] bg-white text-[#111111] focus:outline-none focus:border-[#A68A55] rounded-xs"
+                className="w-full bg-transparent text-sm text-[#111111] focus:outline-none placeholder:text-[#686868]/60 border-0 p-0 m-0"
               />
             </div>
           </div>
 
           {/* Password Field */}
-          <div className="space-y-1">
-            <div className="flex items-center justify-between">
-              <label className="text-xs font-semibold text-[#111111]">
-                <span>Password *</span>
-              </label>
-            </div>
-            <div className="relative">
-              <Lock className="w-4 h-4 text-[#A68A55] absolute left-3 top-3" />
+          <div className="space-y-1.5">
+            <label className="text-xs font-semibold text-[#111111] block">
+              Password *
+            </label>
+            <div className="flex items-center border border-[#E5E5EA] bg-white rounded-xs focus-within:border-[#A68A55] px-3 py-2.5 gap-3 transition-colors shadow-2xs">
+              <Lock className="w-4 h-4 text-[#A68A55] flex-shrink-0" />
               <input
                 type={showPassword ? "text" : "password"}
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Apna password dalein"
-                className="w-full pl-10 pr-10 py-2.5 text-sm border border-[#E5E5EA] bg-white text-[#111111] focus:outline-none focus:border-[#A68A55] rounded-xs"
+                className="w-full bg-transparent text-sm text-[#111111] focus:outline-none placeholder:text-[#686868]/60 border-0 p-0 m-0"
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-3 text-[#686868] hover:text-[#111111]"
+                className="text-[#686868] hover:text-[#111111] flex-shrink-0 p-1"
                 title={showPassword ? "Hide password" : "Show password"}
               >
                 {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}

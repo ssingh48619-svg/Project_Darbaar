@@ -20,7 +20,9 @@ import { LuxuryImage } from "@/components/LuxuryImage";
 import { AssetCategory } from "@/lib/types";
 
 export default function MarketplacePage() {
-  const { formatRange, formatAmount, openSpecimenModal, openInquiryModal } = useDarbaar();
+  const { assets, formatRange, formatAmount, openSpecimenModal, openInquiryModal } = useDarbaar();
+
+  const activeCatalog = assets && assets.length > 0 ? assets : CURATED_ASSETS;
 
   // Filter States
   const [searchQuery, setSearchQuery] = useState("");
@@ -35,13 +37,13 @@ export default function MarketplacePage() {
   // Unique makers list
   const uniqueMakers = useMemo(() => {
     const set = new Set<string>();
-    CURATED_ASSETS.forEach((a) => set.add(a.makerOrArtist));
+    activeCatalog.forEach((a) => set.add(a.makerOrArtist));
     return Array.from(set).sort();
-  }, []);
+  }, [activeCatalog]);
 
   // Filtered and Sorted Assets
   const filteredAssets = useMemo(() => {
-    let result = CURATED_ASSETS.filter((asset) => {
+    let result = activeCatalog.filter((asset) => {
       // Category Match
       if (categoryFilter !== "all" && asset.category !== categoryFilter) {
         return false;
@@ -96,7 +98,7 @@ export default function MarketplacePage() {
     });
 
     return result;
-  }, [categoryFilter, provenanceFilter, makerFilter, searchQuery, sortBy]);
+  }, [activeCatalog, categoryFilter, provenanceFilter, makerFilter, searchQuery, sortBy]);
 
   const handleResetFilters = () => {
     setSearchQuery("");
@@ -137,14 +139,14 @@ export default function MarketplacePage() {
         <div className="bg-[#F7F5F0] border border-[#E5E5EA] p-5 space-y-4 rounded-xs shadow-xs">
           {/* Top Search Input & View Toggles */}
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-            <div className="relative w-full sm:max-w-md">
-              <Search className="w-4 h-4 text-[#A68A55] absolute left-3 top-3" />
+            <div className="flex items-center border border-[#E5E5EA] bg-white px-3 py-2 gap-2.5 w-full sm:max-w-md focus-within:border-[#A68A55] rounded-xs shadow-2xs">
+              <Search className="w-4 h-4 text-[#A68A55] flex-shrink-0" />
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search by maison, artist, reference number, or provenance..."
-                className="w-full pl-9 pr-3 py-2 text-xs border border-[#E5E5EA] bg-white text-[#111111] focus:outline-none focus:border-[#A68A55]"
+                className="w-full bg-transparent text-xs text-[#111111] focus:outline-none placeholder:text-[#686868]/60 border-0 p-0 m-0"
               />
             </div>
 

@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import {
   ShieldAlert,
   Package,
@@ -25,13 +26,24 @@ import {
   RefreshCw,
   Lock,
   Unlock,
+  LogOut,
 } from "lucide-react";
 import { useDarbaar } from "@/features/context/DarbaarContext";
 import { darbaarApi } from "@/lib/api";
 import { CreateAssetModal } from "@/components/admin/CreateAssetModal";
 
 export default function AdminDashboardPage() {
-  const { assets, refreshAssets, openSpecimenModal } = useDarbaar();
+  const {
+    assets,
+    refreshAssets,
+    openSpecimenModal,
+    formatRange,
+    formatAmount,
+    currency,
+    currentUser,
+    loadingAuth,
+    logoutUser,
+  } = useDarbaar();
   const [activeSection, setActiveSection] = useState<
     "overview" | "assets" | "permissions" | "enquiries" | "verification" | "audit"
   >("overview");
@@ -141,6 +153,101 @@ export default function AdminDashboardPage() {
     );
   });
 
+  if (loadingAuth) {
+    return (
+      <div className="w-full bg-[#F7F5F0] min-h-screen flex items-center justify-center p-6">
+        <div className="bg-white p-8 border border-[#E5E5EA] text-center space-y-4 max-w-md shadow-xs">
+          <RefreshCw className="w-8 h-8 text-[#A68A55] animate-spin mx-auto" />
+          <h2 className="text-lg font-serif text-[#111111]">Verifying Curatorial Credentials...</h2>
+          <p className="text-xs text-[#686868]">Connecting to DARBAAR Sovereign Vault Gateway</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Security Gate 1: Unauthenticated Users
+  if (!currentUser) {
+    return (
+      <div className="w-full bg-[#F7F5F0] min-h-screen flex items-center justify-center p-4 sm:p-6">
+        <div className="bg-white p-8 sm:p-10 border border-[#E5E5EA] text-center space-y-6 max-w-lg shadow-md rounded-xs">
+          <div className="w-14 h-14 mx-auto rounded-full bg-[#263A31] text-[#C4AC79] flex items-center justify-center shadow-inner">
+            <Lock className="w-7 h-7" />
+          </div>
+          <div className="space-y-2">
+            <span className="text-[10px] uppercase tracking-[0.25em] text-[#A68A55] font-semibold block">
+              Directorate Access Restricted
+            </span>
+            <h2 className="text-2xl font-serif text-[#111111]">
+              Curatorial Administration Login Required
+            </h2>
+            <p className="text-xs text-[#686868] leading-relaxed">
+              Yeh corridor sirf authorized Superadmin aur Client dwara approve kiye gaye Curators ke liye hai.
+              Product / Asset add karne ya permissions badalne ke liye authorized account se login karein.
+            </p>
+          </div>
+
+          <div className="p-4 bg-[#F7F5F0] border border-[#E5E5EA] text-left text-xs space-y-1.5 rounded-xs">
+            <p className="font-semibold text-[#111111]">Authorized Superadmin Account:</p>
+            <p className="font-mono text-[#263A31] text-[11px]">Email: darbaar3001@gmail.com</p>
+            <p className="text-[11px] text-[#686868]">Password: 1234@Darbaar</p>
+          </div>
+
+          <div className="pt-2">
+            <Link
+              href="/login?redirect=/admin"
+              className="w-full py-3.5 bg-[#263A31] text-white hover:bg-[#1B2A23] font-medium text-xs uppercase tracking-[0.2em] transition-all shadow-md flex items-center justify-center space-x-2 block"
+            >
+              <span>Login Karein (Sign In) →</span>
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Security Gate 2: Users without Admin or Advisor role
+  if (currentUser.role !== "admin" && currentUser.role !== "advisor") {
+    return (
+      <div className="w-full bg-[#F7F5F0] min-h-screen flex items-center justify-center p-4 sm:p-6">
+        <div className="bg-white p-8 sm:p-10 border border-[#E5E5EA] text-center space-y-6 max-w-lg shadow-md rounded-xs">
+          <div className="w-14 h-14 mx-auto rounded-full bg-amber-50 text-[#A68A55] border border-amber-200 flex items-center justify-center">
+            <ShieldAlert className="w-7 h-7" />
+          </div>
+          <div className="space-y-2">
+            <span className="text-[10px] uppercase tracking-[0.25em] text-[#A68A55] font-semibold block">
+              Insufficient Clearances
+            </span>
+            <h2 className="text-2xl font-serif text-[#111111]">
+              Authorized Curatorial Role Required
+            </h2>
+            <p className="text-xs text-[#686868] leading-relaxed">
+              Aap logged in hain as <strong className="text-[#111111]">{currentUser.email}</strong> (Role: <span className="uppercase font-mono text-[#A68A55]">{currentUser.role}</span>).
+              Is account ke paas Admin panel ya product add karne ki permission nahi hai. Client se permission lene ke baad hi ye open hoga.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-2 gap-3 pt-2">
+            <button
+              onClick={() => {
+                logoutUser();
+                window.location.href = "/login?redirect=/admin";
+              }}
+              className="py-3 bg-[#263A31] text-white hover:bg-[#1B2A23] text-xs uppercase tracking-wider font-semibold transition-all"
+            >
+              Switch Account
+            </button>
+            <Link
+              href="/marketplace"
+              className="py-3 bg-white border border-[#E5E5EA] text-[#111111] hover:bg-[#F7F5F0] text-xs uppercase tracking-wider font-semibold transition-all block text-center"
+            >
+              View Gallery
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="w-full bg-[#F7F5F0] min-h-screen pb-24">
       {/* Top Admin Bar */}
@@ -155,9 +262,22 @@ export default function AdminDashboardPage() {
               Superadmin Mode
             </span>
           </div>
-          <span className="text-xs text-[#EAE5DC]/60 font-mono hidden sm:inline">
-            Node: Zurich Vault API Gateway • MongoDB Atlas Live
-          </span>
+          <div className="flex items-center space-x-4">
+            <span className="text-xs text-[#EAE5DC]/80 font-mono hidden sm:inline">
+              Logged in: <strong className="text-white">{currentUser.fullName}</strong> ({currentUser.email})
+            </span>
+            <button
+              onClick={() => {
+                logoutUser();
+                window.location.href = "/login";
+              }}
+              className="inline-flex items-center space-x-1.5 px-3 py-1.5 text-xs text-[#EAE5DC] hover:text-white border border-[#EAE5DC]/30 hover:border-white transition-colors"
+              title="Logout from Admin"
+            >
+              <LogOut className="w-3.5 h-3.5 text-[#C4AC79]" />
+              <span>Logout</span>
+            </button>
+          </div>
         </div>
       </div>
 
@@ -239,13 +359,13 @@ export default function AdminDashboardPage() {
               </div>
 
               <div className="bg-white p-6 border border-[#E5E5EA] space-y-1">
-                <span className="text-[10px] uppercase text-[#686868]">Aggregate Private Value</span>
-                <p className="text-2xl font-serif font-bold text-[#263A31]">
+                <span className="text-[10px] uppercase text-[#686868]">Aggregate Private Value ({currency})</span>
+                <p className="text-xl font-serif font-bold text-[#263A31]">
                   {liveStats
-                    ? `$${(liveStats.assetsUnderManagementUSD / 1000000).toFixed(2)}M USD`
-                    : "$1.68M USD"}
+                    ? formatAmount(liveStats.assetsUnderManagementUSD)
+                    : formatAmount(24500000)}
                 </p>
-                <p className="text-[11px] text-[#A68A55]">Mid-Range Valuation</p>
+                <p className="text-[11px] text-[#A68A55]">Live Portfolio Valuation</p>
               </div>
             </div>
 
@@ -272,7 +392,7 @@ export default function AdminDashboardPage() {
                       <th className="p-3">Reference</th>
                       <th className="p-3">Title & Maison</th>
                       <th className="p-3">Category</th>
-                      <th className="p-3">Valuation (USD)</th>
+                      <th className="p-3">Valuation ({currency})</th>
                       <th className="p-3">Status</th>
                       <th className="p-3 text-right">Actions</th>
                     </tr>
@@ -287,7 +407,7 @@ export default function AdminDashboardPage() {
                         </td>
                         <td className="p-3 uppercase text-[10px] text-[#A68A55]">{asset.categoryLabel}</td>
                         <td className="p-3 font-serif font-semibold text-[#263A31]">
-                          ${(asset.valuationMinUSD / 1000).toFixed(0)}k - ${(asset.valuationMaxUSD / 1000).toFixed(0)}k
+                          {formatRange(asset.valuationMinUSD, asset.valuationMaxUSD)}
                         </td>
                         <td className="p-3">
                           <span className="px-2 py-0.5 rounded text-[10px] bg-emerald-50 text-emerald-800 border border-emerald-200">
@@ -359,7 +479,7 @@ export default function AdminDashboardPage() {
 
                     <div className="pt-3 border-t border-[#E5E5EA] flex items-center justify-between text-xs">
                       <span className="font-serif font-semibold text-[#263A31]">
-                        ${(asset.valuationMinUSD / 1000).toFixed(0)}k - ${(asset.valuationMaxUSD / 1000).toFixed(0)}k
+                        {formatRange(asset.valuationMinUSD, asset.valuationMaxUSD)}
                       </span>
                       <button
                         onClick={() => openSpecimenModal(asset)}
@@ -404,14 +524,14 @@ export default function AdminDashboardPage() {
 
             {/* Search Filter Bar */}
             <div className="flex items-center justify-between gap-4">
-              <div className="relative flex-1 max-w-md">
-                <Search className="w-4 h-4 text-[#686868] absolute left-3 top-2.5" />
+              <div className="flex items-center border border-[#E5E5EA] bg-white px-3 py-2 gap-2.5 flex-1 max-w-md focus-within:border-[#A68A55] rounded-xs shadow-2xs">
+                <Search className="w-4 h-4 text-[#686868] flex-shrink-0" />
                 <input
                   type="text"
                   value={userSearchTerm}
                   onChange={(e) => setUserSearchTerm(e.target.value)}
                   placeholder="Search by principal name, email, or role..."
-                  className="w-full pl-9 pr-3 py-2 text-xs border border-[#E5E5EA] focus:border-[#A68A55] focus:outline-none bg-white text-[#111111]"
+                  className="w-full bg-transparent text-xs text-[#111111] focus:outline-none placeholder:text-[#686868]/60 border-0 p-0 m-0"
                 />
               </div>
               <span className="text-xs font-mono text-[#A68A55]">

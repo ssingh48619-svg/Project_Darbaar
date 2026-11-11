@@ -1,6 +1,7 @@
 import React from "react";
 import { Hero } from "@/components/home/Hero";
 import { FeaturedCategories } from "@/components/home/FeaturedCategories";
+import { CuratedHoldingsShowcase } from "@/components/home/CuratedHoldingsShowcase";
 import { CuratedAssetsGrid } from "@/components/home/CuratedAssetsGrid";
 import { AdvisoryPillars } from "@/components/home/AdvisoryPillars";
 import { PrivateSales } from "@/components/home/PrivateSales";
@@ -11,6 +12,7 @@ export default function HomePage() {
     <div className="flex flex-col w-full">
       <Hero />
       <FeaturedCategories />
+      <CuratedHoldingsShowcase />
       <CuratedAssetsGrid />
       <AdvisoryPillars />
       <PrivateSales />

@@ -162,69 +162,69 @@ export default function RegisterPage() {
             )}
 
             {/* Full Name Field */}
-            <div className="space-y-1">
+            <div className="space-y-1.5">
               <label className="text-xs font-semibold text-[#111111] flex items-center justify-between">
                 <span>1. Aapka Pura Naam (Full Name) *</span>
                 <span className="text-[10px] text-[#686868] font-normal">Zaroori hai</span>
               </label>
-              <div className="relative">
-                <User className="w-4 h-4 text-[#A68A55] absolute left-3 top-3" />
+              <div className="flex items-center border border-[#E5E5EA] bg-white rounded-xs focus-within:border-[#A68A55] px-3 py-2.5 gap-3 transition-colors shadow-2xs">
+                <User className="w-4 h-4 text-[#A68A55] flex-shrink-0" />
                 <input
                   type="text"
                   required
                   value={fullName}
                   onChange={(e) => setFullName(e.target.value)}
                   placeholder="Jaise: Satyam Kumar"
-                  className="w-full pl-10 pr-3 py-2.5 text-sm border border-[#E5E5EA] bg-white text-[#111111] focus:outline-none focus:border-[#A68A55] rounded-xs"
+                  className="w-full bg-transparent text-sm text-[#111111] focus:outline-none placeholder:text-[#686868]/60 border-0 p-0 m-0"
                 />
               </div>
             </div>
 
             {/* Email Field */}
-            <div className="space-y-1">
+            <div className="space-y-1.5">
               <label className="text-xs font-semibold text-[#111111] flex items-center justify-between">
                 <span>2. Email ID (Login ID) *</span>
                 <span className="text-[10px] text-[#686868] font-normal">Isi se login hoga</span>
               </label>
-              <div className="relative">
-                <Mail className="w-4 h-4 text-[#A68A55] absolute left-3 top-3" />
+              <div className="flex items-center border border-[#E5E5EA] bg-white rounded-xs focus-within:border-[#A68A55] px-3 py-2.5 gap-3 transition-colors shadow-2xs">
+                <Mail className="w-4 h-4 text-[#A68A55] flex-shrink-0" />
                 <input
                   type="email"
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="Jaise: aapka.naam@gmail.com"
-                  className="w-full pl-10 pr-3 py-2.5 text-sm border border-[#E5E5EA] bg-white text-[#111111] focus:outline-none focus:border-[#A68A55] rounded-xs"
+                  className="w-full bg-transparent text-sm text-[#111111] focus:outline-none placeholder:text-[#686868]/60 border-0 p-0 m-0"
                 />
               </div>
             </div>
 
             {/* Mobile Number Field (Optional) */}
-            <div className="space-y-1">
+            <div className="space-y-1.5">
               <label className="text-xs font-semibold text-[#111111] flex items-center justify-between">
                 <span>3. Mobile / Phone Number</span>
                 <span className="text-[10px] text-[#686868] font-normal">(Optional)</span>
               </label>
-              <div className="relative">
-                <Phone className="w-4 h-4 text-[#A68A55] absolute left-3 top-3" />
+              <div className="flex items-center border border-[#E5E5EA] bg-white rounded-xs focus-within:border-[#A68A55] px-3 py-2.5 gap-3 transition-colors shadow-2xs">
+                <Phone className="w-4 h-4 text-[#A68A55] flex-shrink-0" />
                 <input
                   type="tel"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
                   placeholder="Jaise: +91 98765 43210"
-                  className="w-full pl-10 pr-3 py-2.5 text-sm border border-[#E5E5EA] bg-white text-[#111111] focus:outline-none focus:border-[#A68A55] rounded-xs"
+                  className="w-full bg-transparent text-sm text-[#111111] focus:outline-none placeholder:text-[#686868]/60 border-0 p-0 m-0"
                 />
               </div>
             </div>
 
             {/* Password Field */}
-            <div className="space-y-1">
+            <div className="space-y-1.5">
               <label className="text-xs font-semibold text-[#111111] flex items-center justify-between">
                 <span>4. Password Banayein (Create Password) *</span>
                 <span className="text-[10px] text-[#686868] font-normal">Kam se kam 6 akshar</span>
               </label>
-              <div className="relative">
-                <Lock className="w-4 h-4 text-[#A68A55] absolute left-3 top-3" />
+              <div className="flex items-center border border-[#E5E5EA] bg-white rounded-xs focus-within:border-[#A68A55] px-3 py-2.5 gap-3 transition-colors shadow-2xs">
+                <Lock className="w-4 h-4 text-[#A68A55] flex-shrink-0" />
                 <input
                   type={showPassword ? "text" : "password"}
                   required
@@ -232,12 +232,12 @@ export default function RegisterPage() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Apna secret password dalein"
-                  className="w-full pl-10 pr-10 py-2.5 text-sm border border-[#E5E5EA] bg-white text-[#111111] focus:outline-none focus:border-[#A68A55] rounded-xs"
+                  className="w-full bg-transparent text-sm text-[#111111] focus:outline-none placeholder:text-[#686868]/60 border-0 p-0 m-0"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-3 text-[#686868] hover:text-[#111111]"
+                  className="text-[#686868] hover:text-[#111111] flex-shrink-0 p-1"
                   title={showPassword ? "Hide password" : "Show password"}
                 >
                   {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
@@ -246,13 +246,13 @@ export default function RegisterPage() {
             </div>
 
             {/* Confirm Password Field */}
-            <div className="space-y-1">
+            <div className="space-y-1.5">
               <label className="text-xs font-semibold text-[#111111] flex items-center justify-between">
                 <span>5. Password Dobara Likhein (Confirm Password) *</span>
                 <span className="text-[10px] text-[#686868] font-normal">Dono same hone chahiye</span>
               </label>
-              <div className="relative">
-                <Lock className="w-4 h-4 text-[#A68A55] absolute left-3 top-3" />
+              <div className="flex items-center border border-[#E5E5EA] bg-white rounded-xs focus-within:border-[#A68A55] px-3 py-2.5 gap-3 transition-colors shadow-2xs">
+                <Lock className="w-4 h-4 text-[#A68A55] flex-shrink-0" />
                 <input
                   type={showConfirmPassword ? "text" : "password"}
                   required
@@ -260,12 +260,12 @@ export default function RegisterPage() {
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   placeholder="Wahi password dobara dalein"
-                  className="w-full pl-10 pr-10 py-2.5 text-sm border border-[#E5E5EA] bg-white text-[#111111] focus:outline-none focus:border-[#A68A55] rounded-xs"
+                  className="w-full bg-transparent text-sm text-[#111111] focus:outline-none placeholder:text-[#686868]/60 border-0 p-0 m-0"
                 />
                 <button
                   type="button"
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                  className="absolute right-3 top-3 text-[#686868] hover:text-[#111111]"
+                  className="text-[#686868] hover:text-[#111111] flex-shrink-0 p-1"
                   title={showConfirmPassword ? "Hide password" : "Show password"}
                 >
                   {showConfirmPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}

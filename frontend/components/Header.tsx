@@ -48,7 +48,9 @@ export function Header() {
                 title="Select Valuation Currency"
               >
                 <Globe className="w-3.5 h-3.5 text-[#C4AC79]" />
-                <span className="font-medium tracking-wide">{currency}</span>
+                <span className="font-semibold tracking-wide text-white">
+                  {CURRENCIES[currency]?.flag} {currency} ({CURRENCIES[currency]?.symbol})
+                </span>
                 <ChevronDown className="w-3 h-3 text-[#C4AC79]" />
               </button>
 
@@ -311,7 +313,17 @@ export function Header() {
             </div>
             <div className="flex items-center justify-between text-xs text-[#686868] pt-1">
               <span>Valuation Currency:</span>
-              <span className="font-semibold text-[#111111]">{currency}</span>
+              <select
+                value={currency}
+                onChange={(e) => setCurrency(e.target.value as any)}
+                className="bg-white border border-[#E5E5EA] px-2.5 py-1 text-xs font-semibold text-[#111111] rounded-xs focus:outline-none focus:border-[#A68A55]"
+              >
+                {(Object.keys(CURRENCIES) as SupportedCurrency[]).map((currKey) => (
+                  <option key={currKey} value={currKey}>
+                    {CURRENCIES[currKey].flag} {currKey} ({CURRENCIES[currKey].symbol})
+                  </option>
+                ))}
+              </select>
             </div>
             {currentUser ? (
               <div className="p-3 bg-white border border-[#E5E5EA] space-y-2">

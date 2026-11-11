@@ -4,6 +4,7 @@ import React, { createContext, useContext, useState, useEffect } from "react";
 import {
   SupportedCurrency,
   DEFAULT_RATES,
+  CURRENCIES,
   formatCurrencyAmount,
   formatPriceRange,
 } from "@/lib/currency";
@@ -50,10 +51,34 @@ interface DarbaarContextType {
 const DarbaarContext = createContext<DarbaarContextType | undefined>(undefined);
 
 export function DarbaarProvider({ children }: { children: React.ReactNode }) {
-  const [currency, setCurrency] = useState<SupportedCurrency>("USD");
+  const [currency, setCurrencyState] = useState<SupportedCurrency>("INR");
   const [rates, setRates] = useState<Record<SupportedCurrency, number>>(DEFAULT_RATES);
   const [ratesLastUpdated, setRatesLastUpdated] = useState<string>("Nov 2026 Live Interbank");
   const [ratesSource, setRatesSource] = useState<string>("Global Interbank Reference");
+
+  // Load saved currency from localStorage on mount
+  useEffect(() => {
+    try {
+      if (typeof window !== "undefined") {
+        const saved = localStorage.getItem("darbaar_currency") as SupportedCurrency;
+        if (saved && CURRENCIES[saved]) {
+          setCurrencyState(saved);
+        } else {
+          // Default to INR for royal heritage Indian patrons
+          setCurrencyState("INR");
+        }
+      }
+    } catch {}
+  }, []);
+
+  const setCurrency = (c: SupportedCurrency) => {
+    setCurrencyState(c);
+    try {
+      if (typeof window !== "undefined") {
+        localStorage.setItem("darbaar_currency", c);
+      }
+    } catch {}
+  };
 
   const [specimenAsset, setSpecimenAsset] = useState<CuratedAsset | null>(null);
   const [inquiryOpen, setInquiryOpen] = useState(false);

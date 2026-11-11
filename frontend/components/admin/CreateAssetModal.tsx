@@ -17,6 +17,7 @@ import {
   LogOut,
 } from "lucide-react";
 import { darbaarApi } from "@/lib/api";
+import { useDarbaar } from "@/features/context/DarbaarContext";
 
 interface CreateAssetModalProps {
   isOpen: boolean;
@@ -25,6 +26,8 @@ interface CreateAssetModalProps {
 }
 
 export function CreateAssetModal({ isOpen, onClose, onAssetCreated }: CreateAssetModalProps) {
+  const { formatAmount, currency } = useDarbaar();
+
   // Authorization State
   const [authChecking, setAuthChecking] = useState(true);
   const [isAuthorized, setIsAuthorized] = useState(false);
@@ -474,8 +477,9 @@ export function CreateAssetModal({ isOpen, onClose, onAssetCreated }: CreateAsse
                   </div>
 
                   <div className="space-y-1">
-                    <label className="text-[10px] uppercase tracking-wider text-[#686868] font-medium">
-                      Indicative Valuation Min (USD)
+                    <label className="text-[10px] uppercase tracking-wider text-[#686868] font-medium flex items-center justify-between">
+                      <span>Indicative Valuation Min (USD)</span>
+                      <span className="text-[#A68A55] font-mono">≈ {formatAmount(valuationMinUSD || 0)}</span>
                     </label>
                     <input
                       type="number"
@@ -486,8 +490,9 @@ export function CreateAssetModal({ isOpen, onClose, onAssetCreated }: CreateAsse
                   </div>
 
                   <div className="space-y-1">
-                    <label className="text-[10px] uppercase tracking-wider text-[#686868] font-medium">
-                      Indicative Valuation Max (USD)
+                    <label className="text-[10px] uppercase tracking-wider text-[#686868] font-medium flex items-center justify-between">
+                      <span>Indicative Valuation Max (USD)</span>
+                      <span className="text-[#A68A55] font-mono">≈ {formatAmount(valuationMaxUSD || 0)}</span>
                     </label>
                     <input
                       type="number"

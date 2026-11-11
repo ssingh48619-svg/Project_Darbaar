@@ -48,33 +48,38 @@ export interface ExchangeRatesState {
 
 export function formatCurrencyAmount(
   amountInUSD: number,
-  currency: SupportedCurrency,
+  currency: SupportedCurrency = "INR",
   rates: Record<SupportedCurrency, number> = DEFAULT_RATES
 ): string {
-  const rate = rates[currency] || 1;
-  const converted = amountInUSD * rate;
-  const meta = CURRENCIES[currency];
+  if (typeof amountInUSD !== "number" || isNaN(amountInUSD) || amountInUSD <= 0) {
+    return "Valuation Upon Request";
+  }
+
+  const rate = rates[currency] || DEFAULT_RATES[currency] || 1;
+  const converted = Math.round(amountInUSD * rate);
+  const meta = CURRENCIES[currency] || CURRENCIES.INR;
 
   try {
-    return new Intl.NumberFormat(meta.locale, {
+    return new Intl.NumberFormat(meta.locale || "en-IN", {
       style: "currency",
       currency: meta.code,
       maximumFractionDigits: 0,
       minimumFractionDigits: 0,
     }).format(converted);
   } catch {
-    return `${meta.symbol}${Math.round(converted).toLocaleString()}`;
+    return `${meta.symbol}${converted.toLocaleString("en-IN")}`;
   }
 }
 
 export function formatPriceRange(
   minUSD: number,
   maxUSD: number,
-  currency: SupportedCurrency,
+  currency: SupportedCurrency = "INR",
   rates: Record<SupportedCurrency, number> = DEFAULT_RATES
 ): string {
-  const minFormatted = formatCurrencyAmount(minUSD, currency, rates);
-  const maxFormatted = formatCurrencyAmount(maxUSD, currency, rates);
+  if (!minUSD && !maxUSD) return "Estimate Upon Private Consultation";
+  const minFormatted = formatCurrencyAmount(minUSD || 0, currency, rates);
+  const maxFormatted = formatCurrencyAmount(maxUSD || minUSD || 0, currency, rates);
   return `${minFormatted} – ${maxFormatted}`;
 }
 
