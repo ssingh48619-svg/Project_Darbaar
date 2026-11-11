@@ -16,13 +16,14 @@ import uploadRoutes from "./routes/upload.routes";
 export function createApp(): Application {
   const app: Application = express();
 
-  // Allowed origins (support both port 3000 and 3001)
+  // Allowed origins (support localhost, Vercel deployments and custom origins)
   const allowedOrigins = [
     process.env.CORS_ORIGIN || "http://localhost:3000",
     "http://localhost:3001",
     "http://localhost:3000",
     "http://127.0.0.1:3001",
     "http://127.0.0.1:3000",
+    "https://project-darbaar.vercel.app",
   ];
 
   // Security headers & CORS
@@ -30,10 +31,10 @@ export function createApp(): Application {
   app.use(
     cors({
       origin: (origin, callback) => {
-        if (!origin || allowedOrigins.includes(origin)) {
+        if (!origin || allowedOrigins.includes(origin) || origin.endsWith(".vercel.app")) {
           callback(null, true);
         } else {
-          callback(null, true); // Dev-friendly permissive callback
+          callback(null, true); // Permissive callback for client apps
         }
       },
       credentials: true,
