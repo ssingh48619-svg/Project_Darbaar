@@ -8,6 +8,8 @@ import {
   formatPriceRange,
 } from "@/lib/currency";
 import { CuratedAsset } from "@/lib/types";
+import { CURATED_ASSETS } from "@/lib/data";
+import { darbaarApi } from "@/lib/api";
 
 interface DarbaarContextType {
   currency: SupportedCurrency;
@@ -17,6 +19,10 @@ interface DarbaarContextType {
   ratesSource: string;
   formatAmount: (amountUSD: number) => string;
   formatRange: (minUSD: number, maxUSD: number) => string;
+  // Live Curated Assets
+  assets: CuratedAsset[];
+  loadingAssets: boolean;
+  refreshAssets: () => Promise<void>;
   // Theme: Light / Dark Mode
   theme: "light" | "dark";
   toggleTheme: () => void;
@@ -48,6 +54,67 @@ export function DarbaarProvider({ children }: { children: React.ReactNode }) {
   const [inquiryAsset, setInquiryAsset] = useState<CuratedAsset | null>(null);
   const [searchOpen, setSearchOpen] = useState(false);
   const [theme, setTheme] = useState<"light" | "dark">("light");
+
+  // Dynamic Live Assets from MongoDB Atlas (with baseline fallback)
+  const [assets, setAssets] = useState<CuratedAsset[]>(CURATED_ASSETS);
+  const [loadingAssets, setLoadingAssets] = useState(false);
+
+  const refreshAssets = async () => {
+    try {
+      setLoadingAssets(true);
+      const res = await darbaarApi.assets.list();
+      if (res.success && Array.isArray(res.assets) && res.assets.length > 0) {
+        const mapped: CuratedAsset[] = res.assets.map((item: any) => ({
+          id: item._id || item.id,
+          slug: item.slug || item.referenceNumber?.toLowerCase().replace(/[^a-z0-9]+/g, "-"),
+          title: item.title,
+          makerOrArtist: item.makerOrArtist,
+          year: item.year,
+          category: item.category,
+          categoryLabel: item.categoryLabel || "Curated Asset",
+          referenceNumber: item.referenceNumber,
+          dimensionsOrSpecs: item.dimensionsOrSpecs || "",
+          conditionSummary: item.conditionSummary || "",
+          provenanceSummary: item.provenanceSummary || "",
+          provenanceStatus: item.provenanceStatus || "Documented",
+          valuationMinUSD: item.valuationMinUSD || 0,
+          valuationMaxUSD: item.valuationMaxUSD || 0,
+          isFeatured: item.isFeatured ?? true,
+          isPrivateSale: item.isPrivateSale ?? false,
+          isDemonstration: item.isDemonstration ?? true,
+          image: item.image || item.galleryImages?.[0] || "",
+          galleryImages: item.galleryImages?.length ? item.galleryImages : [item.image || ""],
+          summary: item.summary || "",
+          historicalContext: item.historicalContext || "",
+          specimenDetails: item.specimenDetails || {
+            conditionScorecard: {
+              overallGrade: "Grade I — Imperial Standard",
+              preservationScore: 95,
+              caseOrSupport: "Verified museum conservation",
+              dialOrSurface: "Original surface luminescence",
+              movementOrStructure: "Period-authentic assembly",
+              originalityRating: "100% Period-Correct Components",
+              inspectionLocation: "Geneva Vault Inspection Facility",
+            },
+            provenanceTimeline: [],
+            independentInspector: "DARBAAR Curatorial Directorate",
+            inspectionDate: "Autumn 2026",
+            dossierReference: `DARBAAR-REF-${item._id?.slice(-4) || "01"}`,
+            availableReports: ["Archival Authentication Dossier"],
+          },
+        }));
+        setAssets(mapped);
+      }
+    } catch (err: any) {
+      console.warn("Using baseline curated inventory:", err.message);
+    } finally {
+      setLoadingAssets(false);
+    }
+  };
+
+  useEffect(() => {
+    refreshAssets();
+  }, []);
 
   // Sync theme with localStorage & document element on mount
   useEffect(() => {
@@ -172,6 +239,9 @@ export function DarbaarProvider({ children }: { children: React.ReactNode }) {
         closeSearch,
         theme,
         toggleTheme,
+        assets,
+        loadingAssets,
+        refreshAssets,
       }}
     >
       {children}
