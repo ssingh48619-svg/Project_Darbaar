@@ -728,7 +728,15 @@ export default function AdminDashboardPage() {
                     <tr key={enq._id} className="hover:bg-[#F7F5F0]/50">
                       <td className="p-3">
                         <p className="font-medium text-[#111111]">{enq.fullName}</p>
-                        <span className="text-[10px] text-[#686868]">{enq.email}</span>
+                        <span className="text-[10px] text-[#686868] block">{enq.email}</span>
+                        {enq.phone && (
+                          <span className="text-[10px] text-[#A68A55] block font-mono">{enq.phone}</span>
+                        )}
+                        {enq.message && (
+                          <p className="text-[11px] text-[#686868] italic mt-1 line-clamp-2 max-w-xs">
+                            &quot;{enq.message}&quot;
+                          </p>
+                        )}
                       </td>
                       <td className="p-3 font-medium text-[#111111]">{enq.assetTitle || "General Advisory Mandate"}</td>
                       <td className="p-3 uppercase text-[10px] text-[#A68A55]">{enq.preferredSalon || "Geneva"}</td>
@@ -739,9 +747,12 @@ export default function AdminDashboardPage() {
                         </span>
                       </td>
                       <td className="p-3 text-right">
-                        <button className="text-[10px] uppercase tracking-wider text-[#263A31] font-semibold hover:underline">
-                          Assign Partner
-                        </button>
+                        <a
+                          href={`mailto:${enq.email}?subject=DARBAAR Curatorial Follow-Up&body=Dear ${enq.fullName},%0D%0A%0D%0AThank you for contacting DARBAAR Private Advisory.`}
+                          className="px-2.5 py-1 text-[10px] uppercase tracking-wider font-semibold bg-[#263A31] text-[#C4AC79] hover:bg-[#1B2A23] transition-colors rounded-xs inline-block"
+                        >
+                          Reply Email
+                        </a>
                       </td>
                     </tr>
                   ))}

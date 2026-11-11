@@ -76,6 +76,12 @@ export const darbaarApi = {
       request<{ success: boolean; enquiries: any[] }>("/enquiries/my", { token }),
     getAll: (token: string) =>
       request<{ success: boolean; enquiries: any[] }>("/enquiries", { token }),
+    updateStatus: (id: string, status: string, token: string) =>
+      request<{ success: boolean; message: string; enquiry: any }>(`/enquiries/${id}`, {
+        method: "PATCH",
+        body: JSON.stringify({ status }),
+        token,
+      }),
   },
 
   // Private Advisory
