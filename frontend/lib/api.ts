@@ -32,12 +32,12 @@ export const darbaarApi = {
   // Authentication
   auth: {
     login: (credentials: { email: string; password: string }) =>
-      request<{ success: boolean; token: string; user: any }>("/auth/login", {
+      request<{ success: boolean; token: string; user: any; error?: string; message?: string }>("/auth/login", {
         method: "POST",
         body: JSON.stringify(credentials),
       }),
     register: (userData: any) =>
-      request<{ success: boolean; token: string; user: any }>("/auth/register", {
+      request<{ success: boolean; token: string; user: any; error?: string; message?: string }>("/auth/register", {
         method: "POST",
         body: JSON.stringify(userData),
       }),

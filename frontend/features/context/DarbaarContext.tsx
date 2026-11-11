@@ -39,6 +39,12 @@ interface DarbaarContextType {
   searchOpen: boolean;
   openSearch: () => void;
   closeSearch: () => void;
+  // User Authentication Session
+  currentUser: any | null;
+  loadingAuth: boolean;
+  loginUser: (token: string, user: any) => void;
+  logoutUser: () => void;
+  refreshCurrentUser: () => Promise<void>;
 }
 
 const DarbaarContext = createContext<DarbaarContextType | undefined>(undefined);
@@ -54,6 +60,64 @@ export function DarbaarProvider({ children }: { children: React.ReactNode }) {
   const [inquiryAsset, setInquiryAsset] = useState<CuratedAsset | null>(null);
   const [searchOpen, setSearchOpen] = useState(false);
   const [theme, setTheme] = useState<"light" | "dark">("light");
+
+  // User Authentication State
+  const [currentUser, setCurrentUser] = useState<any | null>(null);
+  const [loadingAuth, setLoadingAuth] = useState(true);
+
+  const refreshCurrentUser = async () => {
+    try {
+      if (typeof window === "undefined") return;
+      const token = localStorage.getItem("darbaar_token");
+      if (!token) {
+        setCurrentUser(null);
+        setLoadingAuth(false);
+        return;
+      }
+      const cached = localStorage.getItem("darbaar_user");
+      if (cached) {
+        try {
+          setCurrentUser(JSON.parse(cached));
+        } catch {}
+      }
+      const res = await darbaarApi.auth.getMe(token);
+      if (res.success && res.user) {
+        setCurrentUser(res.user);
+        localStorage.setItem("darbaar_user", JSON.stringify(res.user));
+      } else {
+        localStorage.removeItem("darbaar_token");
+        localStorage.removeItem("darbaar_user");
+        setCurrentUser(null);
+      }
+    } catch {
+      // Keep cached if offline
+    } finally {
+      setLoadingAuth(false);
+    }
+  };
+
+  const loginUser = (token: string, user: any) => {
+    if (typeof window !== "undefined") {
+      localStorage.setItem("darbaar_token", token);
+      localStorage.setItem("darbaar_user", JSON.stringify(user));
+    }
+    setCurrentUser(user);
+  };
+
+  const logoutUser = () => {
+    try {
+      darbaarApi.auth.logout().catch(() => {});
+    } catch {}
+    if (typeof window !== "undefined") {
+      localStorage.removeItem("darbaar_token");
+      localStorage.removeItem("darbaar_user");
+    }
+    setCurrentUser(null);
+  };
+
+  useEffect(() => {
+    refreshCurrentUser();
+  }, []);
 
   // Dynamic Live Assets from MongoDB Atlas (with baseline fallback)
   const [assets, setAssets] = useState<CuratedAsset[]>(CURATED_ASSETS);
@@ -242,6 +306,11 @@ export function DarbaarProvider({ children }: { children: React.ReactNode }) {
         assets,
         loadingAssets,
         refreshAssets,
+        currentUser,
+        loadingAuth,
+        loginUser,
+        logoutUser,
+        refreshCurrentUser,
       }}
     >
       {children}

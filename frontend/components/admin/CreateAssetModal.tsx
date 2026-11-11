@@ -314,48 +314,32 @@ export function CreateAssetModal({ isOpen, onClose, onAssetCreated }: CreateAsse
                   </div>
                 )}
 
-                {/* Directorate Verification / Passkey Form */}
-                <div className="pt-4 border-t border-[#E5E5EA] max-w-md mx-auto space-y-3 text-left">
-                  <label className="text-[10px] uppercase tracking-wider text-[#686868] font-semibold block">
-                    Curatorial Directorate Passkey or Direct Superadmin Authorization
-                  </label>
-                  <div className="flex items-center space-x-2">
-                    <div className="relative flex-1">
-                      <Key className="w-4 h-4 text-[#A68A55] absolute left-3 top-2.5" />
-                      <input
-                        type="password"
-                        value={passkey}
-                        onChange={(e) => setPasskey(e.target.value)}
-                        placeholder="Enter passkey: DARBAAR-DIRECTORATE-2026"
-                        className="w-full pl-9 pr-3 py-2 text-xs border border-[#E5E5EA] focus:border-[#A68A55] focus:outline-none bg-white text-[#111111]"
-                      />
-                    </div>
-                    <button
-                      type="button"
-                      onClick={() => handlePasskeyAuth()}
-                      disabled={passkeyLoading}
-                      className="px-4 py-2 text-xs uppercase tracking-wider font-medium text-white bg-[#263A31] hover:bg-[#1B2A23] transition-colors disabled:opacity-50 whitespace-nowrap"
+                {/* Directorate Verification / Authentication Controls */}
+                <div className="pt-4 border-t border-[#E5E5EA] max-w-md mx-auto space-y-4 text-center">
+                  <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+                    <a
+                      href="/login"
+                      className="w-full sm:w-auto px-5 py-2.5 bg-[#263A31] text-white hover:bg-[#1B2A23] text-xs font-semibold uppercase tracking-wider rounded-xs transition-colors"
                     >
-                      {passkeyLoading ? "Verifying..." : "Unlock"}
-                    </button>
+                      Login Karein (Sign In) →
+                    </a>
+                    <a
+                      href="/register"
+                      className="w-full sm:w-auto px-5 py-2.5 bg-white border border-[#263A31] text-[#263A31] hover:bg-[#F7F5F0] text-xs font-semibold uppercase tracking-wider rounded-xs transition-colors"
+                    >
+                      Naya Account Banayein →
+                    </a>
                   </div>
 
-                  <div className="pt-3 flex flex-col sm:flex-row items-center justify-between gap-2">
+                  <div className="pt-3 border-t border-[#E5E5EA]/70">
                     <button
                       type="button"
                       onClick={() => handlePasskeyAuth("DARBAAR-DIRECTORATE-2026")}
                       disabled={passkeyLoading}
-                      className="text-[11px] uppercase tracking-wider text-[#A68A55] font-semibold hover:underline flex items-center space-x-1.5"
+                      className="text-[11px] uppercase tracking-wider text-[#A68A55] font-semibold hover:underline flex items-center justify-center space-x-1.5 mx-auto"
                     >
                       <UserCheck className="w-3.5 h-3.5" />
-                      <span>Authenticate with Directorate Superadmin Credentials</span>
-                    </button>
-                    <button
-                      type="button"
-                      onClick={onClose}
-                      className="text-xs text-[#686868] hover:text-[#111111] uppercase tracking-wider"
-                    >
-                      Close Window
+                      <span>{passkeyLoading ? "Verifying..." : "Directorate Superadmin Quick Access (admin@darbaar.luxury)"}</span>
                     </button>
                   </div>
                 </div>

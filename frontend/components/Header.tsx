@@ -3,13 +3,13 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Search, User, Globe, ChevronDown, Menu, X, Shield, Lock, Sun, Moon } from "lucide-react";
+import { Search, User, Globe, ChevronDown, Menu, X, Shield, Lock, Sun, Moon, LogOut, UserCheck } from "lucide-react";
 import { useDarbaar } from "@/features/context/DarbaarContext";
 import { CURRENCIES, SupportedCurrency } from "@/lib/currency";
 
 export function Header() {
   const pathname = usePathname();
-  const { currency, setCurrency, openSearch, openInquiryModal, theme, toggleTheme } = useDarbaar();
+  const { currency, setCurrency, openSearch, openInquiryModal, theme, toggleTheme, currentUser, logoutUser } = useDarbaar();
   const [currencyDropdownOpen, setCurrencyDropdownOpen] = useState(false);
   const [accountDropdownOpen, setAccountDropdownOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -115,54 +115,77 @@ export function Header() {
               <span className="hidden sm:inline">Search</span>
             </button>
 
-            {/* Client Portal Link */}
-            <div className="relative">
-              <button
-                type="button"
-                onClick={() => setAccountDropdownOpen(!accountDropdownOpen)}
-                className="text-[#EAE5DC] hover:text-white transition-colors flex items-center space-x-1"
-                title="Client Portal & Private Vault"
-              >
-                <User className="w-3.5 h-3.5 text-[#C4AC79]" />
-                <span className="hidden sm:inline">Client Vault</span>
-              </button>
+            {/* Client Portal Link / User Status */}
+            {currentUser ? (
+              <div className="relative">
+                <button
+                  type="button"
+                  onClick={() => setAccountDropdownOpen(!accountDropdownOpen)}
+                  className="text-[#EAE5DC] hover:text-white transition-colors flex items-center space-x-1.5"
+                  title="Your Vault Account"
+                >
+                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                  <span className="font-medium text-white">{currentUser.fullName?.split(" ")[0] || "Account"}</span>
+                  <ChevronDown className="w-3 h-3 text-[#C4AC79]" />
+                </button>
 
-              {accountDropdownOpen && (
-                <div className="absolute right-0 mt-2 w-52 bg-white border border-[#E5E5EA] shadow-xl py-2 z-50 rounded-xs text-[#111111]">
-                  <div className="px-4 py-1.5 border-b border-[#E5E5EA] text-[10px] uppercase tracking-wider text-[#A68A55] font-semibold">
-                    Private Client Portals
+                {accountDropdownOpen && (
+                  <div className="absolute right-0 mt-2 w-56 bg-white border border-[#E5E5EA] shadow-xl py-2 z-50 rounded-xs text-[#111111]">
+                    <div className="px-4 py-2 border-b border-[#E5E5EA] bg-[#F7F5F0]">
+                      <p className="text-xs font-semibold text-[#111111] truncate">{currentUser.fullName}</p>
+                      <p className="text-[10px] text-[#686868] truncate font-mono">{currentUser.email}</p>
+                      <span className="inline-block mt-1 text-[9px] uppercase tracking-wider px-2 py-0.5 bg-[#263A31] text-[#C4AC79] font-medium">
+                        {currentUser.role?.toUpperCase() || "COLLECTOR"}
+                      </span>
+                    </div>
+                    <Link
+                      href="/dashboard"
+                      onClick={() => setAccountDropdownOpen(false)}
+                      className="block px-4 py-2 text-xs text-[#111111] hover:bg-[#F7F5F0] transition-colors"
+                    >
+                      My Collection Portfolio
+                    </Link>
+                    {(currentUser.role === "admin" || currentUser.role === "advisor") && (
+                      <Link
+                        href="/admin"
+                        onClick={() => setAccountDropdownOpen(false)}
+                        className="block px-4 py-2 text-xs text-[#263A31] font-semibold hover:bg-[#F7F5F0] transition-colors border-t border-[#E5E5EA]/60"
+                      >
+                        Curatorial Control Desk →
+                      </Link>
+                    )}
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setAccountDropdownOpen(false);
+                        logoutUser();
+                      }}
+                      className="w-full text-left px-4 py-2 text-xs text-red-700 hover:bg-red-50 flex items-center space-x-1.5 border-t border-[#E5E5EA] transition-colors"
+                    >
+                      <LogOut className="w-3.5 h-3.5 text-red-600" />
+                      <span>Sign Out / Logout</span>
+                    </button>
                   </div>
-                  <Link
-                    href="/login"
-                    onClick={() => setAccountDropdownOpen(false)}
-                    className="block px-4 py-2 text-xs text-[#111111] hover:bg-[#F7F5F0] hover:text-[#A68A55] transition-colors"
-                  >
-                    Sign In to Vault
-                  </Link>
-                  <Link
-                    href="/register"
-                    onClick={() => setAccountDropdownOpen(false)}
-                    className="block px-4 py-2 text-xs text-[#111111] hover:bg-[#F7F5F0] hover:text-[#A68A55] transition-colors"
-                  >
-                    Apply for Private Admission
-                  </Link>
-                  <Link
-                    href="/dashboard"
-                    onClick={() => setAccountDropdownOpen(false)}
-                    className="block px-4 py-2 text-xs text-[#111111] hover:bg-[#F7F5F0] hover:text-[#A68A55] transition-colors border-t border-[#E5E5EA]/60"
-                  >
-                    My Collection Portfolio
-                  </Link>
-                  <Link
-                    href="/admin"
-                    onClick={() => setAccountDropdownOpen(false)}
-                    className="block px-4 py-2 text-[11px] text-[#686868] hover:bg-[#F7F5F0] hover:text-[#111111] transition-colors"
-                  >
-                    Curatorial Control Desk
-                  </Link>
-                </div>
-              )}
-            </div>
+                )}
+              </div>
+            ) : (
+              <div className="flex items-center space-x-2 text-[11px]">
+                <Link
+                  href="/login"
+                  className="text-[#EAE5DC] hover:text-white transition-colors flex items-center space-x-1 font-medium"
+                >
+                  <User className="w-3.5 h-3.5 text-[#C4AC79]" />
+                  <span>Login</span>
+                </Link>
+                <span className="text-[#EAE5DC]/40">/</span>
+                <Link
+                  href="/register"
+                  className="px-2 py-0.5 text-[10px] uppercase tracking-wider bg-[#C4AC79] text-[#111111] font-bold hover:bg-[#d6be8e] transition-colors rounded-xs"
+                >
+                  Sign Up
+                </Link>
+              </div>
+            )}
 
             {/* Private Appointment CTA */}
             <button
@@ -290,14 +313,53 @@ export function Header() {
               <span>Valuation Currency:</span>
               <span className="font-semibold text-[#111111]">{currency}</span>
             </div>
-            <Link
-              href="/dashboard"
-              onClick={() => setMobileMenuOpen(false)}
-              className="text-xs uppercase tracking-wider text-[#686868] flex items-center space-x-2 py-1"
-            >
-              <User className="w-4 h-4 text-[#A68A55]" />
-              <span>Client Vault & Collection</span>
-            </Link>
+            {currentUser ? (
+              <div className="p-3 bg-white border border-[#E5E5EA] space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-semibold text-[#111111]">{currentUser.fullName}</span>
+                  <span className="text-[9px] uppercase px-2 py-0.5 bg-[#263A31] text-[#C4AC79]">
+                    {currentUser.role?.toUpperCase()}
+                  </span>
+                </div>
+                <p className="text-[10px] text-[#686868] font-mono">{currentUser.email}</p>
+                <div className="pt-2 flex items-center justify-between border-t border-[#E5E5EA]">
+                  <Link
+                    href="/dashboard"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="text-xs text-[#263A31] font-semibold hover:underline"
+                  >
+                    My Portfolio →
+                  </Link>
+                  <button
+                    onClick={() => {
+                      setMobileMenuOpen(false);
+                      logoutUser();
+                    }}
+                    className="text-xs text-red-700 font-medium hover:underline flex items-center space-x-1"
+                  >
+                    <LogOut className="w-3 h-3" />
+                    <span>Logout</span>
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <div className="grid grid-cols-2 gap-2 pt-1">
+                <Link
+                  href="/login"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="w-full text-center py-2.5 text-xs uppercase tracking-wider font-semibold text-[#111111] bg-white border border-[#E5E5EA] hover:bg-[#F7F5F0]"
+                >
+                  Login (Sign In)
+                </Link>
+                <Link
+                  href="/register"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="w-full text-center py-2.5 text-xs uppercase tracking-wider font-semibold text-white bg-[#263A31] hover:bg-[#1B2A23]"
+                >
+                  Create Account
+                </Link>
+              </div>
+            )}
             <button
               onClick={() => {
                 setMobileMenuOpen(false);

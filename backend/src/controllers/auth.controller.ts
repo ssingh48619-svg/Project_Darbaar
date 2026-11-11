@@ -26,11 +26,28 @@ export async function register(req: Request, res: Response): Promise<void> {
   try {
     const { firstName, lastName, fullName, email, password, phone, role, preferredCurrency } = req.body;
 
-    const existingUser = await User.findOne({ email: email.toLowerCase() });
+    if (!email || !password) {
+      res.status(400).json({
+        success: false,
+        error: "Email and password are required. Kripya email aur password dono dalein.",
+      });
+      return;
+    }
+
+    if (password.length < 6) {
+      res.status(400).json({
+        success: false,
+        error: "Password must be at least 6 characters long. Password kam se kam 6 akshar ka hona chahiye.",
+      });
+      return;
+    }
+
+    const cleanEmail = email.trim().toLowerCase();
+    const existingUser = await User.findOne({ email: cleanEmail });
     if (existingUser) {
       res.status(409).json({
         success: false,
-        error: "An account with this email address already holds registration with DARBAAR.",
+        error: "An account with this email already exists. Ye email pehle se registered hai, kripya login karein.",
       });
       return;
     }
@@ -41,9 +58,9 @@ export async function register(req: Request, res: Response): Promise<void> {
 
     const newUser = await User.create({
       fullName: displayName,
-      email: email.toLowerCase(),
+      email: cleanEmail,
       passwordHash,
-      phone,
+      phone: phone ? phone.trim() : undefined,
       role: role || "client",
       preferredCurrency: preferredCurrency || "USD",
       isKycVerified: false,
@@ -54,7 +71,7 @@ export async function register(req: Request, res: Response): Promise<void> {
 
     res.status(201).json({
       success: true,
-      message: "Admission granted to DARBAAR Private Vault.",
+      message: "Account created successfully. Welcome to DARBAAR!",
       token,
       user: {
         id: newUser._id,
@@ -68,7 +85,7 @@ export async function register(req: Request, res: Response): Promise<void> {
   } catch (err: any) {
     res.status(500).json({
       success: false,
-      error: "Unable to process admission petition.",
+      error: "Unable to create account. Kripya thodi der baad dobara koshish karein.",
       details: process.env.NODE_ENV === "development" ? err.message : undefined,
     });
   }
@@ -78,11 +95,20 @@ export async function login(req: Request, res: Response): Promise<void> {
   try {
     const { email, password } = req.body;
 
-    const user = await User.findOne({ email: email.toLowerCase() }).select("+passwordHash");
-    if (!user) {
-      res.status(401).json({
+    if (!email || !password) {
+      res.status(400).json({
         success: false,
-        error: "Invalid email credentials or unauthorized account.",
+        error: "Please provide both email and password. Email aur password dono zaroori hain.",
+      });
+      return;
+    }
+
+    const cleanEmail = email.trim().toLowerCase();
+    const user = await User.findOne({ email: cleanEmail }).select("+passwordHash");
+    if (!user) {
+      res.status(404).json({
+        success: false,
+        error: "No account found with this email. Is email se koi account nahi mila, pehle naya account banayein.",
       });
       return;
     }
@@ -91,7 +117,7 @@ export async function login(req: Request, res: Response): Promise<void> {
     if (!isMatch) {
       res.status(401).json({
         success: false,
-        error: "Invalid security passphrase.",
+        error: "Incorrect password. Galat password! Kripya sahi password dalein.",
       });
       return;
     }
@@ -101,7 +127,7 @@ export async function login(req: Request, res: Response): Promise<void> {
 
     res.status(200).json({
       success: true,
-      message: "Credentials accepted. Welcome to DARBAAR.",
+      message: "Login successful. Welcome to DARBAAR!",
       token,
       user: {
         id: user._id,
@@ -115,7 +141,7 @@ export async function login(req: Request, res: Response): Promise<void> {
   } catch (err: any) {
     res.status(500).json({
       success: false,
-      error: "Authentication service unavailable.",
+      error: "Authentication service unavailable. Server connection error.",
       details: process.env.NODE_ENV === "development" ? err.message : undefined,
     });
   }
