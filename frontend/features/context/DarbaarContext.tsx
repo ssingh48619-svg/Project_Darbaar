@@ -144,8 +144,8 @@ export function DarbaarProvider({ children }: { children: React.ReactNode }) {
     refreshCurrentUser();
   }, []);
 
-  // Dynamic Live Assets from MongoDB Atlas (with baseline fallback)
-  const [assets, setAssets] = useState<CuratedAsset[]>(CURATED_ASSETS);
+  // Dynamic Live Assets from MongoDB Atlas (empty by default until genuine specimens are inscribed)
+  const [assets, setAssets] = useState<CuratedAsset[]>([]);
   const [loadingAssets, setLoadingAssets] = useState(false);
 
   const refreshAssets = async () => {
@@ -170,7 +170,7 @@ export function DarbaarProvider({ children }: { children: React.ReactNode }) {
           valuationMaxUSD: item.valuationMaxUSD || 0,
           isFeatured: item.isFeatured ?? true,
           isPrivateSale: item.isPrivateSale ?? false,
-          isDemonstration: item.isDemonstration ?? true,
+          isDemonstration: item.isDemonstration ?? false,
           image: item.image || item.galleryImages?.[0] || "",
           galleryImages: item.galleryImages?.length ? item.galleryImages : [item.image || ""],
           summary: item.summary || "",
@@ -193,9 +193,11 @@ export function DarbaarProvider({ children }: { children: React.ReactNode }) {
           },
         }));
         setAssets(mapped);
+      } else {
+        setAssets([]);
       }
-    } catch (err: any) {
-      console.warn("Using baseline curated inventory:", err.message);
+    } catch {
+      setAssets([]);
     } finally {
       setLoadingAssets(false);
     }

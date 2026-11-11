@@ -3,30 +3,39 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import {
-  User,
   Shield,
-  Layers,
-  Heart,
   FileText,
   Clock,
+  Compass,
   Sparkles,
-  TrendingUp,
   ChevronRight,
-  ArrowUpRight,
+  ExternalLink,
   Plus,
+  TrendingUp,
+  Award,
+  ArrowRight,
+  Inbox,
 } from "lucide-react";
 import { useDarbaar } from "@/features/context/DarbaarContext";
-import { CURATED_ASSETS } from "@/lib/data";
 import { LuxuryImage } from "@/components/LuxuryImage";
 import { darbaarApi } from "@/lib/api";
 
-export default function DashboardPage() {
-  const { formatAmount, formatRange, openSpecimenModal, openInquiryModal } = useDarbaar();
+export default function ClientDashboardPage() {
   const [activeTab, setActiveTab] = useState<
     "overview" | "collection" | "saved" | "enquiries" | "documents"
   >("overview");
-  const [userName, setUserName] = useState("Lord Alistair Vance");
-  const [accountRef, setAccountRef] = useState("DARBAAR-PVT-8821");
+  const [userName, setUserName] = useState("Client Principal");
+  const [accountRef, setAccountRef] = useState("DARBAAR-PVT-001");
+  const [userEnquiries, setUserEnquiries] = useState<any[]>([]);
+
+  const {
+    formatAmount,
+    formatRange,
+    openSpecimenModal,
+    openInquiryModal,
+    currentUser,
+    currency,
+  } = useDarbaar();
 
   useEffect(() => {
     try {
@@ -34,16 +43,29 @@ export default function DashboardPage() {
       if (stored) {
         const u = JSON.parse(stored);
         if (u.fullName) setUserName(u.fullName);
-        if (u.id) setAccountRef(`DARBAAR-PVT-${u.id.slice(-4).toUpperCase()}`);
+        if (u.id || u._id) {
+          const idStr = u.id || u._id;
+          setAccountRef(`DARBAAR-PVT-${idStr.slice(-4).toUpperCase()}`);
+        }
+      }
+      const token = localStorage.getItem("darbaar_token") || "";
+      if (token) {
+        darbaarApi.enquiries
+          .getAll(token)
+          .then((res) => {
+            if (res.success && Array.isArray(res.enquiries)) {
+              setUserEnquiries(res.enquiries);
+            }
+          })
+          .catch(() => {});
       }
     } catch {}
   }, []);
 
-  // Demonstration Client Portfolio Assets
-  const clientCollection = [CURATED_ASSETS[0], CURATED_ASSETS[1]];
-  const savedAssets = [CURATED_ASSETS[2], CURATED_ASSETS[3]];
-
-  const totalPortfolioUSD = 160000 + 315000;
+  // Client vault starts clean and genuine
+  const clientCollection: any[] = [];
+  const savedAssets: any[] = [];
+  const totalPortfolioUSD = 0;
 
   return (
     <div className="w-full bg-[#F7F5F0] min-h-screen pb-24">
@@ -53,13 +75,14 @@ export default function DashboardPage() {
           <div className="space-y-1">
             <div className="flex items-center space-x-2 text-[10px] uppercase tracking-[0.25em] text-[#C4AC79]">
               <Shield className="w-3.5 h-3.5" />
-              <span>DARBAAR Private Client Vault • Tier I Sovereign</span>
+              <span>DARBAAR Private Client Vault • Authenticated Corridor</span>
             </div>
             <h1 className="text-2xl sm:text-3xl font-serif text-white">
               Private Collection & Advisory Desk
             </h1>
             <p className="text-xs text-[#EAE5DC]/80 font-light">
-              Client Principal: <span className="text-white font-medium">{userName}</span> • Account Reference: <span className="font-mono text-[#C4AC79]">{accountRef}</span>
+              Client Principal: <span className="text-white font-medium">{currentUser?.fullName || userName}</span> • Account Reference:{" "}
+              <span className="font-mono text-[#C4AC79]">{accountRef}</span>
             </p>
           </div>
 
@@ -80,9 +103,9 @@ export default function DashboardPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center space-x-8 overflow-x-auto text-xs uppercase tracking-[0.16em]">
           {[
             { id: "overview", label: "Overview & Analytics" },
-            { id: "collection", label: "My Collection (2)" },
-            { id: "saved", label: "Saved Assets (2)" },
-            { id: "enquiries", label: "Active Mandates (3)" },
+            { id: "collection", label: `My Collection (${clientCollection.length})` },
+            { id: "saved", label: `Saved Assets (${savedAssets.length})` },
+            { id: "enquiries", label: `Active Mandates (${userEnquiries.length})` },
             { id: "documents", label: "Documents & Reports" },
           ].map((tab) => (
             <button
@@ -108,14 +131,14 @@ export default function DashboardPage() {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
               <div className="bg-white p-6 border border-[#E5E5EA] space-y-2">
                 <span className="text-[10px] uppercase tracking-wider text-[#686868] block">
-                  Total Vault Portfolio Valuation
+                  Total Vault Portfolio Valuation ({currency})
                 </span>
                 <p className="text-2xl font-serif font-semibold text-[#263A31]">
                   {formatAmount(totalPortfolioUSD)}
                 </p>
                 <div className="flex items-center space-x-1 text-[11px] text-[#A68A55]">
                   <TrendingUp className="w-3.5 h-3.5" />
-                  <span>Verified Archival Valuation</span>
+                  <span>Real-Time Archival Valuation</span>
                 </div>
               </div>
 
@@ -124,7 +147,7 @@ export default function DashboardPage() {
                   Catalogued Heirlooms
                 </span>
                 <p className="text-2xl font-serif font-semibold text-[#111111]">
-                  02 Specimens
+                  {clientCollection.length.toString().padStart(2, "0")} Specimens
                 </p>
                 <p className="text-[11px] text-[#686868]">Geneva & London Freeports</p>
               </div>
@@ -134,9 +157,9 @@ export default function DashboardPage() {
                   Active Advisory Mandates
                 </span>
                 <p className="text-2xl font-serif font-semibold text-[#111111]">
-                  03 Active
+                  {userEnquiries.length.toString().padStart(2, "0")} Active
                 </p>
-                <p className="text-[11px] text-[#686868]">1 Private Sourcing • 2 Valuations</p>
+                <p className="text-[11px] text-[#686868]">Private Sourcing & Inquiries</p>
               </div>
 
               <div className="bg-white p-6 border border-[#E5E5EA] space-y-2">
@@ -144,220 +167,140 @@ export default function DashboardPage() {
                   Archival Condition Dossiers
                 </span>
                 <p className="text-2xl font-serif font-semibold text-[#111111]">
-                  06 Certified
+                  00 Certified
                 </p>
                 <p className="text-[11px] text-[#263A31] font-medium">Encrypted Vault Storage</p>
               </div>
             </div>
 
-            {/* Curated Collection Highlight */}
-            <div className="bg-white border border-[#E5E5EA] p-6 sm:p-8 space-y-6">
-              <div className="flex items-center justify-between border-b border-[#E5E5EA] pb-4">
-                <div>
-                  <h3 className="text-lg font-serif text-[#111111]">
-                    Curated Holdings Under Management
-                  </h3>
-                  <p className="text-xs text-[#686868] font-light">
-                    Physical specimens vaulted under climate control with independent condition scorecards.
-                  </p>
-                </div>
-                <button
-                  onClick={() => setActiveTab("collection")}
-                  className="text-xs uppercase tracking-wider text-[#263A31] hover:underline flex items-center gap-1"
-                >
-                  <span>View All</span>
-                  <ChevronRight className="w-3.5 h-3.5" />
-                </button>
+            {/* Curated Collection Status */}
+            <div className="bg-white border border-[#E5E5EA] p-8 text-center space-y-4">
+              <div className="w-12 h-12 rounded-full bg-[#F7F5F0] border border-[#E5E5EA] flex items-center justify-center mx-auto text-[#A68A55]">
+                <Shield className="w-6 h-6" />
               </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {clientCollection.map((asset) => (
-                  <div
-                    key={asset.id}
-                    className="flex border border-[#E5E5EA] p-4 bg-[#F7F5F0] rounded-sm gap-4 group"
-                  >
-                    <div className="relative w-28 h-28 flex-shrink-0 bg-white border border-[#E5E5EA] overflow-hidden">
-                      <LuxuryImage
-                        src={asset.image}
-                        alt={asset.title}
-                        fallbackTitle={asset.title}
-                        categoryLabel={asset.categoryLabel}
-                        fill
-                        className="object-cover"
-                      />
-                    </div>
-                    <div className="flex flex-col justify-between flex-grow">
-                      <div>
-                        <span className="text-[9px] uppercase tracking-wider text-[#A68A55] font-semibold">
-                          {asset.makerOrArtist} • {asset.year}
-                        </span>
-                        <h4 className="text-sm font-serif text-[#111111] font-medium">
-                          {asset.title}
-                        </h4>
-                        <p className="text-xs font-serif text-[#263A31] font-semibold mt-1">
-                          Indicative: {formatRange(asset.valuationMinUSD, asset.valuationMaxUSD)}
-                        </p>
-                      </div>
-                      <div className="pt-2 flex items-center space-x-3 text-[11px]">
-                        <button
-                          onClick={() => openSpecimenModal(asset)}
-                          className="text-[#263A31] font-medium hover:underline flex items-center gap-1"
-                        >
-                          <FileText className="w-3 h-3 text-[#A68A55]" />
-                          Scorecard ({asset.specimenDetails.conditionScorecard.preservationScore}/100)
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                ))}
+              <div className="space-y-1">
+                <h3 className="text-lg font-serif text-[#111111]">
+                  Vault Collection Ledger
+                </h3>
+                <p className="text-xs text-[#686868] max-w-md mx-auto leading-relaxed">
+                  Your private collection ledger is currently empty. Authenticated acquisitions and museum accession records will appear here upon transfer of custody.
+                </p>
+              </div>
+              <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-3">
+                <button
+                  onClick={() => openInquiryModal()}
+                  className="px-6 py-2.5 text-xs uppercase tracking-wider text-white bg-[#263A31] hover:bg-[#1B2A23] transition-colors"
+                >
+                  Consult Advisory Desk
+                </button>
+                <Link
+                  href="/marketplace"
+                  className="px-6 py-2.5 text-xs uppercase tracking-wider text-[#263A31] bg-white border border-[#263A31] hover:bg-[#F7F5F0] transition-colors"
+                >
+                  Explore Curated Holdings
+                </Link>
               </div>
             </div>
           </div>
         )}
 
         {activeTab === "collection" && (
-          <div className="bg-white p-8 border border-[#E5E5EA] space-y-6">
+          <div className="bg-white p-8 border border-[#E5E5EA] text-center space-y-4">
             <h3 className="text-xl font-serif text-[#111111]">Registered Collection Assets</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {clientCollection.map((asset) => (
-                <div key={asset.id} className="border border-[#E5E5EA] p-6 bg-[#F7F5F0] space-y-4">
-                  <div className="relative h-64 w-full bg-[#EAE5DC]">
-                    <LuxuryImage
-                      src={asset.image}
-                      alt={asset.title}
-                      fallbackTitle={asset.title}
-                      categoryLabel={asset.categoryLabel}
-                      fill
-                      className="object-cover"
-                    />
-                  </div>
-                  <div>
-                    <span className="text-xs text-[#A68A55] uppercase tracking-wider">{asset.makerOrArtist}</span>
-                    <h4 className="text-lg font-serif text-[#111111]">{asset.title}</h4>
-                    <p className="text-xs text-[#686868] mt-1">{asset.dimensionsOrSpecs}</p>
-                    <p className="text-sm font-serif text-[#263A31] font-semibold mt-2">
-                      Est. Valuation: {formatRange(asset.valuationMinUSD, asset.valuationMaxUSD)}
-                    </p>
-                  </div>
-                  <button
-                    onClick={() => openSpecimenModal(asset)}
-                    className="w-full py-2.5 text-xs uppercase tracking-wider bg-[#263A31] text-white"
-                  >
-                    Inspect Physical Dossier
-                  </button>
-                </div>
-              ))}
+            <p className="text-xs text-[#686868] max-w-md mx-auto">
+              No authenticated specimens currently held in your private vault. Once an acquisition mandate clears laboratory spectrometry and archival settlement, its ledger record will appear here.
+            </p>
+            <div className="pt-2">
+              <button
+                onClick={() => openInquiryModal()}
+                className="px-6 py-2.5 text-xs uppercase tracking-wider bg-[#263A31] text-white"
+              >
+                Initiate Private Acquisition
+              </button>
             </div>
           </div>
         )}
 
         {activeTab === "saved" && (
-          <div className="bg-white p-8 border border-[#E5E5EA] space-y-6">
+          <div className="bg-white p-8 border border-[#E5E5EA] text-center space-y-4">
             <h3 className="text-xl font-serif text-[#111111]">Saved Private Catalogue Records</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {savedAssets.map((asset) => (
-                <div key={asset.id} className="border border-[#E5E5EA] p-4 bg-[#F7F5F0] flex gap-4">
-                  <div className="relative w-32 h-32 flex-shrink-0 bg-white">
-                    <LuxuryImage
-                      src={asset.image}
-                      alt={asset.title}
-                      fallbackTitle={asset.title}
-                      categoryLabel={asset.categoryLabel}
-                      fill
-                      className="object-cover"
-                    />
-                  </div>
-                  <div className="flex flex-col justify-between flex-grow">
-                    <div>
-                      <span className="text-xs text-[#A68A55]">{asset.makerOrArtist}</span>
-                      <h4 className="text-sm font-serif text-[#111111] font-medium">{asset.title}</h4>
-                      <p className="text-xs font-serif text-[#263A31] font-semibold mt-1">
-                        {formatRange(asset.valuationMinUSD, asset.valuationMaxUSD)}
-                      </p>
-                    </div>
-                    <div className="flex space-x-2">
-                      <button
-                        onClick={() => openInquiryModal(asset)}
-                        className="py-1.5 px-3 text-[10px] uppercase tracking-wider bg-[#263A31] text-white"
-                      >
-                        Enquire Privately
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              ))}
+            <p className="text-xs text-[#686868] max-w-md mx-auto">
+              No specimens saved to your private acquisition watchlist. Explore the curatorial catalogue or commission a bespoke acquisition through our private advisory desk.
+            </p>
+            <div className="pt-2">
+              <Link
+                href="/marketplace"
+                className="inline-block px-6 py-2.5 text-xs uppercase tracking-wider bg-[#263A31] text-white"
+              >
+                Browse Curated Gallery
+              </Link>
             </div>
           </div>
         )}
 
         {activeTab === "enquiries" && (
           <div className="bg-white p-8 border border-[#E5E5EA] space-y-6">
-            <h3 className="text-xl font-serif text-[#111111]">Active Advisory & Sourcing Mandates</h3>
-            <div className="space-y-4">
-              {[
-                {
-                  id: "MND-2024-081",
-                  title: "Private Sourcing: Patek Philippe Ref. 2499 First Series",
-                  status: "Off-Market Research in Progress",
-                  lead: "Senior Horological Partner, Geneva",
-                  updated: "Nov 02, 2024",
-                },
-                {
-                  id: "MND-2024-074",
-                  title: "Provenance Due Diligence: 17th Century Rajput Miniature",
-                  status: "Archival Translation Cleared",
-                  lead: "Indic Art Specialist, London",
-                  updated: "Oct 28, 2024",
-                },
-                {
-                  id: "MND-2024-069",
-                  title: "Vault Liaison & Freeport Insurance Appraisal Coordination",
-                  status: "Completed — Dossier Dispatched",
-                  lead: "Client Custody Liaison, Zurich",
-                  updated: "Oct 15, 2024",
-                },
-              ].map((m) => (
-                <div key={m.id} className="p-4 border border-[#E5E5EA] bg-[#F7F5F0] flex items-center justify-between">
-                  <div>
-                    <span className="text-[10px] font-mono text-[#A68A55]">{m.id}</span>
-                    <h4 className="text-sm font-serif text-[#111111] font-medium">{m.title}</h4>
-                    <p className="text-xs text-[#686868]">Lead: {m.lead} • Last Update: {m.updated}</p>
-                  </div>
-                  <span className="text-xs px-3 py-1 bg-white border border-[#E5E5EA] text-[#263A31] font-medium">
-                    {m.status}
-                  </span>
-                </div>
-              ))}
+            <div className="flex items-center justify-between border-b border-[#E5E5EA] pb-4">
+              <div>
+                <h3 className="text-xl font-serif text-[#111111]">Active Advisory & Sourcing Mandates</h3>
+                <p className="text-xs text-[#686868] mt-0.5">
+                  Direct communication channels with the DARBAAR Curatorial Directorate.
+                </p>
+              </div>
+              <button
+                onClick={() => openInquiryModal()}
+                className="px-4 py-2 text-xs uppercase tracking-wider text-white bg-[#263A31] hover:bg-[#1B2A23] transition-colors"
+              >
+                + New Mandate
+              </button>
             </div>
+
+            {userEnquiries.length === 0 ? (
+              <div className="py-12 text-center space-y-3 bg-[#F7F5F0] border border-[#E5E5EA] p-6">
+                <Inbox className="w-8 h-8 text-[#A68A55] mx-auto" />
+                <h4 className="text-base font-serif text-[#111111]">No Active Mandates on File</h4>
+                <p className="text-xs text-[#686868] max-w-md mx-auto">
+                  When you submit an acquisition inquiry or advisory mandate, status updates and curatorial correspondence will appear here.
+                </p>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {userEnquiries.map((m: any) => (
+                  <div key={m._id || m.id} className="p-4 border border-[#E5E5EA] bg-[#F7F5F0] flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                    <div className="space-y-1">
+                      <span className="text-[10px] font-mono text-[#A68A55]">
+                        {m._id ? `REF-${m._id.slice(-6).toUpperCase()}` : "DARBAAR-MND"}
+                      </span>
+                      <h4 className="text-sm font-serif text-[#111111] font-medium">
+                        {m.assetTitle || m.inquiryType || "Confidential Advisory Mandate"}
+                      </h4>
+                      <p className="text-xs text-[#686868]">
+                        Salon: {m.preferredSalon || "Geneva / Mumbai"} • Date: {new Date(m.createdAt || Date.now()).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
+                      </p>
+                    </div>
+                    <span className="text-xs px-3 py-1 bg-white border border-[#E5E5EA] text-[#263A31] font-medium self-start sm:self-auto uppercase tracking-wider text-[10px]">
+                      {m.status || "Under Review"}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         )}
 
         {activeTab === "documents" && (
-          <div className="bg-white p-8 border border-[#E5E5EA] space-y-6">
+          <div className="bg-white p-8 border border-[#E5E5EA] text-center space-y-4">
             <h3 className="text-xl font-serif text-[#111111]">Certified Archival Documents & Reports</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {[
-                { name: "Patek Philippe Extract from the Archives (Ref. 3970E)", date: "Sep 2024", size: "4.2 MB PDF" },
-                { name: "City Palace Atelier Udaipur Devanagari Translation Dossier", date: "Oct 2024", size: "8.1 MB PDF" },
-                { name: "Metallurgical Wootz Damascus Analysis Certificate", date: "Aug 2024", size: "3.5 MB PDF" },
-                { name: "Freeport Geneva Vault Storage Inspection Receipt", date: "Nov 2024", size: "1.2 MB PDF" },
-              ].map((doc, idx) => (
-                <div key={idx} className="p-4 border border-[#E5E5EA] bg-[#F7F5F0] flex items-center justify-between">
-                  <div className="flex items-center space-x-3">
-                    <FileText className="w-5 h-5 text-[#A68A55]" />
-                    <div>
-                      <p className="text-xs font-serif font-medium text-[#111111]">{doc.name}</p>
-                      <span className="text-[10px] text-[#686868]">{doc.date} • {doc.size}</span>
-                    </div>
-                  </div>
-                  <button
-                    onClick={() => alert(`Accessing certified encrypted document: ${doc.name}`)}
-                    className="text-[10px] uppercase tracking-wider text-[#263A31] font-semibold hover:underline"
-                  >
-                    Download
-                  </button>
-                </div>
-              ))}
+            <p className="text-xs text-[#686868] max-w-md mx-auto">
+              Certified provenance certificates, laboratory spectrometry reports, and Swiss freeport storage receipts will be issued directly to your account upon verified specimen acquisition.
+            </p>
+            <div className="pt-2">
+              <button
+                onClick={() => openInquiryModal()}
+                className="px-6 py-2.5 text-xs uppercase tracking-wider bg-[#263A31] text-white"
+              >
+                Request Archival Verification
+              </button>
             </div>
           </div>
         )}
@@ -365,4 +308,3 @@ export default function DashboardPage() {
     </div>
   );
 }
-

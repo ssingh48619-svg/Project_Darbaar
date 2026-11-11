@@ -361,9 +361,11 @@ export default function AdminDashboardPage() {
               <div className="bg-white p-6 border border-[#E5E5EA] space-y-1">
                 <span className="text-[10px] uppercase text-[#686868]">Aggregate Private Value ({currency})</span>
                 <p className="text-xl font-serif font-bold text-[#263A31]">
-                  {liveStats
+                  {liveStats?.assetsUnderManagementUSD !== undefined
                     ? formatAmount(liveStats.assetsUnderManagementUSD)
-                    : formatAmount(24500000)}
+                    : formatAmount(
+                        assets.reduce((sum, a) => sum + (a.valuationMaxUSD || 0), 0)
+                      )}
                 </p>
                 <p className="text-[11px] text-[#A68A55]">Live Portfolio Valuation</p>
               </div>
@@ -398,32 +400,43 @@ export default function AdminDashboardPage() {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-[#E5E5EA]">
-                    {assets.map((asset) => (
-                      <tr key={asset.id} className="hover:bg-[#F7F5F0]/50">
-                        <td className="p-3 font-mono text-[#111111]">{asset.referenceNumber}</td>
-                        <td className="p-3">
-                          <p className="font-medium text-[#111111]">{asset.title}</p>
-                          <span className="text-[#686868]">{asset.makerOrArtist} ({asset.year})</span>
-                        </td>
-                        <td className="p-3 uppercase text-[10px] text-[#A68A55]">{asset.categoryLabel}</td>
-                        <td className="p-3 font-serif font-semibold text-[#263A31]">
-                          {formatRange(asset.valuationMinUSD, asset.valuationMaxUSD)}
-                        </td>
-                        <td className="p-3">
-                          <span className="px-2 py-0.5 rounded text-[10px] bg-emerald-50 text-emerald-800 border border-emerald-200">
-                            {asset.provenanceStatus}
-                          </span>
-                        </td>
-                        <td className="p-3 text-right space-x-2">
-                          <button
-                            onClick={() => openSpecimenModal(asset)}
-                            className="text-[10px] uppercase tracking-wider text-[#263A31] font-semibold hover:underline"
-                          >
-                            Inspect
-                          </button>
+                    {assets.length === 0 ? (
+                      <tr>
+                        <td colSpan={6} className="p-8 text-center text-[#686868] bg-[#F7F5F0]">
+                          <p className="text-sm font-serif text-[#111111]">No Specimens Inscribed in Active Catalogue</p>
+                          <p className="text-xs text-[#686868] mt-1">
+                            Click &ldquo;Inscribe Specimen&rdquo; above to publish your first genuine asset to MongoDB Atlas.
+                          </p>
                         </td>
                       </tr>
-                    ))}
+                    ) : (
+                      assets.map((asset) => (
+                        <tr key={asset.id} className="hover:bg-[#F7F5F0]/50">
+                          <td className="p-3 font-mono text-[#111111]">{asset.referenceNumber}</td>
+                          <td className="p-3">
+                            <p className="font-medium text-[#111111]">{asset.title}</p>
+                            <span className="text-[#686868]">{asset.makerOrArtist} ({asset.year})</span>
+                          </td>
+                          <td className="p-3 uppercase text-[10px] text-[#A68A55]">{asset.categoryLabel}</td>
+                          <td className="p-3 font-serif font-semibold text-[#263A31]">
+                            {formatRange(asset.valuationMinUSD, asset.valuationMaxUSD)}
+                          </td>
+                          <td className="p-3">
+                            <span className="px-2 py-0.5 rounded text-[10px] bg-emerald-50 text-emerald-800 border border-emerald-200">
+                              {asset.provenanceStatus}
+                            </span>
+                          </td>
+                          <td className="p-3 text-right space-x-2">
+                            <button
+                              onClick={() => openSpecimenModal(asset)}
+                              className="text-[10px] uppercase tracking-wider text-[#263A31] font-semibold hover:underline"
+                            >
+                              Inspect
+                            </button>
+                          </td>
+                        </tr>
+                      ))
+                    )}
                   </tbody>
                 </table>
               </div>
@@ -451,47 +464,66 @@ export default function AdminDashboardPage() {
               </button>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {assets.map((asset) => (
-                <div key={asset.id} className="bg-white border border-[#E5E5EA] overflow-hidden flex flex-col group">
-                  <div className="relative h-48 w-full bg-[#EAE5DC]">
-                    <img
-                      src={asset.image}
-                      alt={asset.title}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                    />
-                    <div className="absolute top-3 left-3 bg-black/70 text-white text-[9px] uppercase tracking-wider px-2 py-0.5">
-                      {asset.categoryLabel}
-                    </div>
-                  </div>
-                  <div className="p-5 flex-1 flex flex-col justify-between space-y-4">
-                    <div>
-                      <span className="text-[10px] uppercase tracking-wider text-[#A68A55] font-semibold">
-                        {asset.makerOrArtist} • {asset.year}
-                      </span>
-                      <h3 className="text-base font-serif text-[#111111] font-normal mt-1 leading-snug line-clamp-2">
-                        {asset.title}
-                      </h3>
-                      <p className="text-xs text-[#686868] mt-2 font-mono">
-                        Ref: {asset.referenceNumber}
-                      </p>
-                    </div>
-
-                    <div className="pt-3 border-t border-[#E5E5EA] flex items-center justify-between text-xs">
-                      <span className="font-serif font-semibold text-[#263A31]">
-                        {formatRange(asset.valuationMinUSD, asset.valuationMaxUSD)}
-                      </span>
-                      <button
-                        onClick={() => openSpecimenModal(asset)}
-                        className="text-[11px] uppercase tracking-wider text-[#A68A55] font-semibold hover:underline"
-                      >
-                        Scorecard →
-                      </button>
-                    </div>
-                  </div>
+            {assets.length === 0 ? (
+              <div className="bg-white border border-[#E5E5EA] p-12 text-center space-y-4">
+                <Package className="w-10 h-10 text-[#A68A55] mx-auto" />
+                <div className="space-y-1">
+                  <h3 className="text-lg font-serif text-[#111111]">Curatorial Specimen Registry is Clear</h3>
+                  <p className="text-xs text-[#686868] max-w-md mx-auto leading-relaxed">
+                    No specimen records currently exist in the database. Use the button below to upload genuine high-resolution images, set valuation parameters, and publish real holdings.
+                  </p>
                 </div>
-              ))}
-            </div>
+                <button
+                  onClick={() => setIsCreateModalOpen(true)}
+                  className="inline-flex items-center space-x-2 px-6 py-3 text-xs uppercase tracking-[0.2em] font-medium text-white bg-[#263A31] hover:bg-[#1B2A23] transition-colors"
+                >
+                  <Plus className="w-4 h-4 text-[#C4AC79]" />
+                  <span>Publish First Genuine Asset</span>
+                </button>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {assets.map((asset) => (
+                  <div key={asset.id} className="bg-white border border-[#E5E5EA] overflow-hidden flex flex-col group">
+                    <div className="relative h-48 w-full bg-[#EAE5DC]">
+                      <img
+                        src={asset.image}
+                        alt={asset.title}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      />
+                      <div className="absolute top-3 left-3 bg-black/70 text-white text-[9px] uppercase tracking-wider px-2 py-0.5">
+                        {asset.categoryLabel}
+                      </div>
+                    </div>
+                    <div className="p-5 flex-1 flex flex-col justify-between space-y-4">
+                      <div>
+                        <span className="text-[10px] uppercase tracking-wider text-[#A68A55] font-semibold">
+                          {asset.makerOrArtist} • {asset.year}
+                        </span>
+                        <h3 className="text-base font-serif text-[#111111] font-normal mt-1 leading-snug line-clamp-2">
+                          {asset.title}
+                        </h3>
+                        <p className="text-xs text-[#686868] mt-2 font-mono">
+                          Ref: {asset.referenceNumber}
+                        </p>
+                      </div>
+
+                      <div className="pt-3 border-t border-[#E5E5EA] flex items-center justify-between text-xs">
+                        <span className="font-serif font-semibold text-[#263A31]">
+                          {formatRange(asset.valuationMinUSD, asset.valuationMaxUSD)}
+                        </span>
+                        <button
+                          onClick={() => openSpecimenModal(asset)}
+                          className="text-[11px] uppercase tracking-wider text-[#A68A55] font-semibold hover:underline"
+                        >
+                          Scorecard →
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         )}
 
@@ -676,7 +708,7 @@ export default function AdminDashboardPage() {
                 </p>
               </div>
               <span className="text-xs font-mono text-[#A68A55] font-semibold">
-                Total: {enquiriesList.length || 3} Petitions
+                Total: {enquiriesList.length} Petitions
               </span>
             </div>
 
@@ -693,69 +725,49 @@ export default function AdminDashboardPage() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-[#E5E5EA]">
-                  {(enquiriesList.length > 0
-                    ? enquiriesList
-                    : [
-                        {
-                          _id: "enq-01",
-                          fullName: "Lord Alistair Vance",
-                          email: "principal@vance-holdings.ch",
-                          assetTitle: "Patek Philippe Ref. 3970E",
-                          preferredSalon: "Geneva",
-                          inquiryType: "Acquisition",
-                          status: "pending",
-                        },
-                        {
-                          _id: "enq-02",
-                          fullName: "Mayfair Family Trust",
-                          email: "trustee@mayfair-advisors.co.uk",
-                          assetTitle: "Mewar Royal Court Durbar (1894)",
-                          preferredSalon: "London",
-                          inquiryType: "Private Viewing",
-                          status: "under_review",
-                        },
-                        {
-                          _id: "enq-03",
-                          fullName: "Sovereign Collector HK",
-                          email: "hk.private@sovereign-vault.hk",
-                          assetTitle: "F.P. Journe Chronomètre à Résonance",
-                          preferredSalon: "Singapore",
-                          inquiryType: "Valuation Request",
-                          status: "contacted",
-                        },
-                      ]
-                  ).map((enq: any) => (
-                    <tr key={enq._id} className="hover:bg-[#F7F5F0]/50">
-                      <td className="p-3">
-                        <p className="font-medium text-[#111111]">{enq.fullName}</p>
-                        <span className="text-[10px] text-[#686868] block">{enq.email}</span>
-                        {enq.phone && (
-                          <span className="text-[10px] text-[#A68A55] block font-mono">{enq.phone}</span>
-                        )}
-                        {enq.message && (
-                          <p className="text-[11px] text-[#686868] italic mt-1 line-clamp-2 max-w-xs">
-                            &quot;{enq.message}&quot;
-                          </p>
-                        )}
-                      </td>
-                      <td className="p-3 font-medium text-[#111111]">{enq.assetTitle || "General Advisory Mandate"}</td>
-                      <td className="p-3 uppercase text-[10px] text-[#A68A55]">{enq.preferredSalon || "Geneva"}</td>
-                      <td className="p-3 text-[11px] text-[#686868]">{enq.inquiryType}</td>
-                      <td className="p-3">
-                        <span className="px-2 py-0.5 rounded text-[10px] font-medium uppercase tracking-wider bg-[#EAE5DC] text-[#263A31] border border-[#E5E5EA]">
-                          {enq.status || "pending"}
-                        </span>
-                      </td>
-                      <td className="p-3 text-right">
-                        <a
-                          href={`mailto:${enq.email}?subject=DARBAAR Curatorial Follow-Up&body=Dear ${enq.fullName},%0D%0A%0D%0AThank you for contacting DARBAAR Private Advisory.`}
-                          className="px-2.5 py-1 text-[10px] uppercase tracking-wider font-semibold bg-[#263A31] text-[#C4AC79] hover:bg-[#1B2A23] transition-colors rounded-xs inline-block"
-                        >
-                          Reply Email
-                        </a>
+                  {enquiriesList.length === 0 ? (
+                    <tr>
+                      <td colSpan={6} className="p-8 text-center text-[#686868] bg-[#F7F5F0]">
+                        <p className="text-sm font-serif text-[#111111]">No Client Petitions Received Yet</p>
+                        <p className="text-xs text-[#686868] mt-1">
+                          Direct petitions submitted through website contact and acquisition forms will appear here in real time.
+                        </p>
                       </td>
                     </tr>
-                  ))}
+                  ) : (
+                    enquiriesList.map((enq: any) => (
+                      <tr key={enq._id} className="hover:bg-[#F7F5F0]/50">
+                        <td className="p-3">
+                          <p className="font-medium text-[#111111]">{enq.fullName}</p>
+                          <span className="text-[10px] text-[#686868] block">{enq.email}</span>
+                          {enq.phone && (
+                            <span className="text-[10px] text-[#A68A55] block font-mono">{enq.phone}</span>
+                          )}
+                          {enq.message && (
+                            <p className="text-[11px] text-[#686868] italic mt-1 line-clamp-2 max-w-xs">
+                              &quot;{enq.message}&quot;
+                            </p>
+                          )}
+                        </td>
+                        <td className="p-3 font-medium text-[#111111]">{enq.assetTitle || "General Advisory Mandate"}</td>
+                        <td className="p-3 uppercase text-[10px] text-[#A68A55]">{enq.preferredSalon || "Geneva"}</td>
+                        <td className="p-3 text-[11px] text-[#686868]">{enq.inquiryType}</td>
+                        <td className="p-3">
+                          <span className="px-2 py-0.5 rounded text-[10px] font-medium uppercase tracking-wider bg-[#EAE5DC] text-[#263A31] border border-[#E5E5EA]">
+                            {enq.status || "pending"}
+                          </span>
+                        </td>
+                        <td className="p-3 text-right">
+                          <a
+                            href={`mailto:${enq.email}?subject=DARBAAR Curatorial Follow-Up&body=Dear ${enq.fullName},%0D%0A%0D%0AThank you for contacting DARBAAR Private Advisory.`}
+                            className="px-2.5 py-1 text-[10px] uppercase tracking-wider font-semibold bg-[#263A31] text-[#C4AC79] hover:bg-[#1B2A23] transition-colors rounded-xs inline-block"
+                          >
+                            Reply Email
+                          </a>
+                        </td>
+                      </tr>
+                    ))
+                  )}
                 </tbody>
               </table>
             </div>
@@ -772,39 +784,35 @@ export default function AdminDashboardPage() {
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="p-5 bg-[#F7F5F0] border border-[#E5E5EA] space-y-3">
-                <span className="text-[10px] uppercase tracking-wider text-[#A68A55] font-semibold">
-                  Laboratory Docket: DARBAAR-CHA-GVA-9921
-                </span>
-                <h3 className="text-base font-serif text-[#111111]">
-                  Patek Philippe Ref. 3970E — Movement Timing & Amplitude
-                </h3>
-                <p className="text-xs text-[#686868] leading-relaxed">
-                  Certified by Cabinet d'Horlogerie Ancienne, Geneva. Isochronism testing over 6 positions: +1.8s/day average rate, amplitude 298°, zero mechanical polishing detected.
+            {assets.length === 0 ? (
+              <div className="bg-[#F7F5F0] border border-[#E5E5EA] p-8 text-center space-y-2">
+                <FileCheck className="w-8 h-8 text-[#A68A55] mx-auto" />
+                <h3 className="text-base font-serif text-[#111111]">No Diagnostic Dossiers on File</h3>
+                <p className="text-xs text-[#686868] max-w-md mx-auto">
+                  When genuine specimens are inscribed into the catalogue, their laboratory dockets, spectrometry results, and condition scorecards will appear here.
                 </p>
-                <div className="pt-2 text-[10px] uppercase tracking-wider text-emerald-800 font-medium flex items-center space-x-1.5">
-                  <CheckCircle className="w-3.5 h-3.5 text-emerald-700" />
-                  <span>Grade I Certified • Dossier Inscribed</span>
-                </div>
               </div>
-
-              <div className="p-5 bg-[#F7F5F0] border border-[#E5E5EA] space-y-3">
-                <span className="text-[10px] uppercase tracking-wider text-[#A68A55] font-semibold">
-                  Laboratory Docket: DARBAAR-BIAP-LDN-4421
-                </span>
-                <h3 className="text-base font-serif text-[#111111]">
-                  Royal Durbar of Udaipur — Wasli Pigment Raman Spectroscopy
-                </h3>
-                <p className="text-xs text-[#686868] leading-relaxed">
-                  Certified by British Institute of Fine Art Preservation. Confirmed late-19th-century natural lapis lazuli and mineral vermilion on handmade wasli support.
-                </p>
-                <div className="pt-2 text-[10px] uppercase tracking-wider text-emerald-800 font-medium flex items-center space-x-1.5">
-                  <CheckCircle className="w-3.5 h-3.5 text-emerald-700" />
-                  <span>Archival Integrity Authenticated</span>
-                </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {assets.map((asset) => (
+                  <div key={asset.id} className="p-5 bg-[#F7F5F0] border border-[#E5E5EA] space-y-3">
+                    <span className="text-[10px] uppercase tracking-wider text-[#A68A55] font-semibold">
+                      Laboratory Docket: {asset.referenceNumber}
+                    </span>
+                    <h3 className="text-base font-serif text-[#111111]">
+                      {asset.title} — Condition Scorecard
+                    </h3>
+                    <p className="text-xs text-[#686868] leading-relaxed">
+                      {asset.summary || asset.conditionSummary || "Archival condition inspection completed."}
+                    </p>
+                    <div className="pt-2 text-[10px] uppercase tracking-wider text-emerald-800 font-medium flex items-center space-x-1.5">
+                      <CheckCircle className="w-3.5 h-3.5 text-emerald-700" />
+                      <span>{asset.provenanceStatus} • Archival Record</span>
+                    </div>
+                  </div>
+                ))}
               </div>
-            </div>
+            )}
           </div>
         )}
 

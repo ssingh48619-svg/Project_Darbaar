@@ -8,12 +8,12 @@ import { AssetCategory } from "@/lib/types";
 import { LuxuryImage } from "@/components/LuxuryImage";
 
 export function SearchModal() {
-  const { searchOpen, closeSearch, openSpecimenModal, openInquiryModal, formatRange } = useDarbaar();
+  const { searchOpen, closeSearch, openSpecimenModal, openInquiryModal, formatRange, assets } = useDarbaar();
   const [query, setQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
 
   const filteredAssets = useMemo(() => {
-    return CURATED_ASSETS.filter((asset) => {
+    return (assets || []).filter((asset) => {
       const matchesCategory =
         selectedCategory === "all" || asset.category === selectedCategory;
       const normalized = query.toLowerCase().trim();

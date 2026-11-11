@@ -43,81 +43,118 @@ export function CuratedHoldingsShowcase() {
           </div>
         </div>
 
-        {/* Specimen Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {specimens.map((asset) => (
-            <div
-              key={asset.id}
-              className="bg-[#F7F5F0] border border-[#E5E5EA] overflow-hidden flex flex-col justify-between group hover:border-[#A68A55] transition-all duration-300 shadow-xs"
-            >
-              {/* Image Frame */}
-              <div className="relative h-64 sm:h-72 w-full bg-[#EAE5DC] overflow-hidden">
-                <LuxuryImage
-                  src={asset.image}
-                  alt={asset.title}
-                  fallbackTitle={asset.title}
-                  categoryLabel={asset.categoryLabel}
-                  fill
-                  className="object-cover group-hover:scale-105 transition-transform duration-500"
-                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                />
-                <div className="absolute top-3 left-3 bg-black/75 backdrop-blur-xs text-white text-[9px] uppercase tracking-widest px-2.5 py-1 z-10">
-                  {asset.categoryLabel}
-                </div>
-                <div className="absolute top-3 right-3 bg-white/90 backdrop-blur-xs text-[#263A31] text-[9px] uppercase tracking-wider px-2 py-0.5 font-mono font-medium border border-[#E5E5EA] z-10">
-                  {asset.referenceNumber}
-                </div>
-              </div>
-
-              {/* Card Body */}
-              <div className="p-6 flex-1 flex flex-col justify-between space-y-4">
-                <div className="space-y-1.5">
-                  <span className="text-[10px] uppercase tracking-wider text-[#A68A55] font-semibold">
-                    {asset.makerOrArtist} • {asset.year}
-                  </span>
-                  <h3 className="text-lg font-serif text-[#111111] leading-snug line-clamp-2">
-                    <Link href={`/asset/${asset.slug || asset.id}`} className="hover:text-[#A68A55] transition-colors">
-                      {asset.title}
-                    </Link>
-                  </h3>
-                  <p className="text-xs text-[#686868] font-light line-clamp-2 leading-relaxed">
-                    {asset.summary}
-                  </p>
-                </div>
-
-                {/* Valuation Display with Live Converted Currency */}
-                <div className="pt-4 border-t border-[#E5E5EA] space-y-3">
-                  <div className="flex items-baseline justify-between">
-                    <span className="text-[10px] uppercase tracking-wider text-[#686868]">
-                      Indicative Valuation ({currency}):
-                    </span>
-                    <span className="text-sm font-serif font-bold text-[#263A31]">
-                      {formatRange(asset.valuationMinUSD, asset.valuationMaxUSD)}
-                    </span>
-                  </div>
-
-                  {/* Dual Action Buttons */}
-                  <div className="grid grid-cols-2 gap-2 pt-1">
-                    <button
-                      type="button"
-                      onClick={() => openSpecimenModal(asset)}
-                      className="w-full text-center py-2 text-[10px] uppercase tracking-[0.16em] font-medium text-[#111111] bg-white hover:bg-[#EAE5DC] border border-[#E5E5EA] transition-colors"
-                    >
-                      Dossier
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => openInquiryModal(asset)}
-                      className="w-full text-center py-2 text-[10px] uppercase tracking-[0.16em] font-medium text-white bg-[#263A31] hover:bg-[#1B2A23] transition-colors"
-                    >
-                      Inquire
-                    </button>
-                  </div>
-                </div>
-              </div>
+        {/* Specimen Cards Grid or Authentic Empty State */}
+        {specimens.length === 0 ? (
+          <div className="border border-[#E5E5EA] bg-[#F7F5F0] p-10 sm:p-14 text-center max-w-3xl mx-auto space-y-6">
+            <div className="w-14 h-14 rounded-full bg-[#263A31]/10 text-[#263A31] mx-auto flex items-center justify-center">
+              <ShieldCheck className="w-7 h-7 text-[#A68A55]" />
             </div>
-          ))}
-        </div>
+            <div className="space-y-2">
+              <span className="text-[10px] uppercase tracking-[0.25em] text-[#A68A55] font-semibold">
+                Curatorial Vault Notice
+              </span>
+              <h3 className="text-2xl sm:text-3xl font-serif text-[#111111]">
+                Vault Holdings in Curatorial Assembly
+              </h3>
+              <p className="text-xs sm:text-sm text-[#686868] font-light max-w-xl mx-auto leading-relaxed">
+                DARBAAR adheres strictly to museum conservation, spectrometry testing, and physical provenance documentation. Public holdings are currently undergoing physical cataloguing.
+                Private collectors and institutions may initiate a bespoke off-market acquisition mandate or submit heirlooms for curatorial valuation.
+              </p>
+            </div>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
+              <button
+                type="button"
+                onClick={() => openInquiryModal()}
+                className="inline-flex items-center space-x-2 text-xs uppercase tracking-[0.2em] font-medium text-white bg-[#263A31] hover:bg-[#1B2A23] px-6 py-3 transition-colors"
+              >
+                <span>Initiate Private Mandate</span>
+                <ArrowRight className="w-3.5 h-3.5 text-[#C4AC79]" />
+              </button>
+              <Link
+                href="/sell"
+                className="inline-flex items-center space-x-2 text-xs uppercase tracking-[0.2em] font-medium text-[#263A31] bg-white border border-[#263A31] hover:bg-[#F7F5F0] px-6 py-3 transition-colors"
+              >
+                <span>Consign an Heirloom</span>
+                <ArrowUpRight className="w-3.5 h-3.5" />
+              </Link>
+            </div>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {specimens.map((asset) => (
+              <div
+                key={asset.id}
+                className="bg-[#F7F5F0] border border-[#E5E5EA] overflow-hidden flex flex-col justify-between group hover:border-[#A68A55] transition-all duration-300 shadow-xs"
+              >
+                {/* Image Frame */}
+                <div className="relative h-64 sm:h-72 w-full bg-[#EAE5DC] overflow-hidden">
+                  <LuxuryImage
+                    src={asset.image}
+                    alt={asset.title}
+                    fallbackTitle={asset.title}
+                    categoryLabel={asset.categoryLabel}
+                    fill
+                    className="object-cover group-hover:scale-105 transition-transform duration-500"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                  />
+                  <div className="absolute top-3 left-3 bg-black/75 backdrop-blur-xs text-white text-[9px] uppercase tracking-widest px-2.5 py-1 z-10">
+                    {asset.categoryLabel}
+                  </div>
+                  <div className="absolute top-3 right-3 bg-white/90 backdrop-blur-xs text-[#263A31] text-[9px] uppercase tracking-wider px-2 py-0.5 font-mono font-medium border border-[#E5E5EA] z-10">
+                    {asset.referenceNumber}
+                  </div>
+                </div>
+
+                {/* Card Body */}
+                <div className="p-6 flex-1 flex flex-col justify-between space-y-4">
+                  <div className="space-y-1.5">
+                    <span className="text-[10px] uppercase tracking-wider text-[#A68A55] font-semibold">
+                      {asset.makerOrArtist} • {asset.year}
+                    </span>
+                    <h3 className="text-lg font-serif text-[#111111] leading-snug line-clamp-2">
+                      <Link href={`/asset/${asset.slug || asset.id}`} className="hover:text-[#A68A55] transition-colors">
+                        {asset.title}
+                      </Link>
+                    </h3>
+                    <p className="text-xs text-[#686868] font-light line-clamp-2 leading-relaxed">
+                      {asset.summary}
+                    </p>
+                  </div>
+
+                  {/* Valuation Display with Live Converted Currency */}
+                  <div className="pt-4 border-t border-[#E5E5EA] space-y-3">
+                    <div className="flex items-baseline justify-between">
+                      <span className="text-[10px] uppercase tracking-wider text-[#686868]">
+                        Indicative Valuation ({currency}):
+                      </span>
+                      <span className="text-sm font-serif font-bold text-[#263A31]">
+                        {formatRange(asset.valuationMinUSD, asset.valuationMaxUSD)}
+                      </span>
+                    </div>
+
+                    {/* Dual Action Buttons */}
+                    <div className="grid grid-cols-2 gap-2 pt-1">
+                      <button
+                        type="button"
+                        onClick={() => openSpecimenModal(asset)}
+                        className="w-full text-center py-2 text-[10px] uppercase tracking-[0.16em] font-medium text-[#111111] bg-white hover:bg-[#EAE5DC] border border-[#E5E5EA] transition-colors"
+                      >
+                        Dossier
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => openInquiryModal(asset)}
+                        className="w-full text-center py-2 text-[10px] uppercase tracking-[0.16em] font-medium text-white bg-[#263A31] hover:bg-[#1B2A23] transition-colors"
+                      >
+                        Inquire
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
 
         {/* Bottom CTA to View Full Marketplace / Collection */}
         <div className="text-center pt-4">

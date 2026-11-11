@@ -22,7 +22,7 @@ import { AssetCategory } from "@/lib/types";
 export default function MarketplacePage() {
   const { assets, formatRange, formatAmount, openSpecimenModal, openInquiryModal } = useDarbaar();
 
-  const activeCatalog = assets && assets.length > 0 ? assets : CURATED_ASSETS;
+  const activeCatalog = assets;
 
   // Filter States
   const [searchQuery, setSearchQuery] = useState("");
@@ -202,7 +202,7 @@ export default function MarketplacePage() {
                 onChange={(e) => setCategoryFilter(e.target.value)}
                 className="w-full px-2.5 py-1.5 text-xs border border-[#E5E5EA] bg-white text-[#111111] focus:outline-none focus:border-[#A68A55]"
               >
-                <option value="all">All Departments ({CURATED_ASSETS.length})</option>
+                <option value="all">All Departments ({assets.length})</option>
                 <option value="fine-art">Fine Art & Miniatures</option>
                 <option value="timepieces">Rare Timepieces</option>
                 <option value="collectibles">Heritage Collectibles</option>
