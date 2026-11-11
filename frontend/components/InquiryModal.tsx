@@ -32,7 +32,7 @@ export function InquiryModal() {
     darbaarApi.enquiries
       .create({
         assetId: inquiryAsset?.id,
-        assetTitle: inquiryAsset?.title || "Direct Advisory Inquiry",
+        assetTitle: inquiryAsset?.title || "Direct Curatorial Advisory Inquiry",
         department: (inquiryAsset?.category as any) || "advisory",
         fullName,
         email,
@@ -40,6 +40,7 @@ export function InquiryModal() {
         preferredSalon,
         inquiryType,
         message,
+        confidentialNotes: message || `Private acquisition inquiry for ${inquiryAsset?.title || "curated specimen"}`,
         confidentialityAgreed: ndaAgreed,
       })
       .then(() => {

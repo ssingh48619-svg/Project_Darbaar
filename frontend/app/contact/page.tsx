@@ -27,9 +27,12 @@ export default function ContactPage() {
       await darbaarApi.enquiries.create({
         fullName: formData.name,
         email: formData.email,
+        assetTitle: "Private Viewing & Curatorial Consultation",
+        department: "advisory",
         preferredSalon: formData.corridor,
         inquiryType: formData.interest,
         message: formData.message || "Contact form appointment request",
+        confidentialNotes: formData.message || "Contact form appointment request",
         confidentialityAgreed: true,
       });
       setSubmitted(true);

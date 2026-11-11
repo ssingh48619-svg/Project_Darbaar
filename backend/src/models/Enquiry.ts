@@ -5,6 +5,8 @@ export type SalonType = "Geneva" | "London" | "New York" | "Singapore" | "Mumbai
 
 export interface IEnquiry extends Document {
   assetId?: mongoose.Types.ObjectId;
+  assetReference?: string;
+  assetTitle?: string;
   userId?: mongoose.Types.ObjectId;
   fullName: string;
   email: string;
@@ -24,6 +26,14 @@ const EnquirySchema = new Schema<IEnquiry>(
     assetId: {
       type: Schema.Types.ObjectId,
       ref: "Asset",
+    },
+    assetReference: {
+      type: String,
+      trim: true,
+    },
+    assetTitle: {
+      type: String,
+      trim: true,
     },
     userId: {
       type: Schema.Types.ObjectId,

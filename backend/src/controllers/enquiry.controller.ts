@@ -1,4 +1,5 @@
 import { Response } from "express";
+import mongoose from "mongoose";
 import { Enquiry } from "../models/Enquiry";
 import { AuthenticatedRequest } from "../middleware/auth";
 import { AuditLog } from "../models/AuditLog";
@@ -20,8 +21,12 @@ export async function createEnquiry(req: AuthenticatedRequest, res: Response): P
       confidentialityAgreed,
     } = req.body;
 
+    const isObjectId = assetId && mongoose.Types.ObjectId.isValid(assetId);
+
     const newEnquiry = await Enquiry.create({
-      assetId: assetId || undefined,
+      assetId: isObjectId ? assetId : undefined,
+      assetReference: typeof assetId === "string" ? assetId : undefined,
+      assetTitle: assetTitle || undefined,
       userId: req.user?._id,
       fullName,
       email: email.toLowerCase(),
