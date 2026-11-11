@@ -64,8 +64,14 @@ export default function RegisterPage() {
 
     try {
       setLoading(true);
+      const nameParts = fullName.trim().split(" ");
+      const firstName = nameParts[0] || fullName.trim();
+      const lastName = nameParts.slice(1).join(" ") || firstName;
+
       const res = await darbaarApi.auth.register({
         fullName: fullName.trim(),
+        firstName,
+        lastName,
         email: email.trim().toLowerCase(),
         phone: phone.trim() || undefined,
         password,
@@ -80,7 +86,8 @@ export default function RegisterPage() {
           router.push("/dashboard");
         }, 1800);
       } else {
-        setError(res.error || "Unable to create account. Please verify your details and try again.");
+        const detailMsg = (res as any).details?.map((d: any) => d.message).join(". ");
+        setError(detailMsg || res.error || "Unable to create account. Please verify your details and try again.");
       }
     } catch (err: any) {
       setError(
