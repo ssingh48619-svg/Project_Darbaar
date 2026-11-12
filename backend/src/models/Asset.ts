@@ -134,7 +134,7 @@ const AssetSchema = new Schema<IAsset>(
     },
     isDemonstration: {
       type: Boolean,
-      default: true,
+      default: false,
     },
     image: {
       type: String,

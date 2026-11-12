@@ -7,6 +7,7 @@
     "build": "tsc",
     "start": "node dist/server.js",
     "dev": "ts-node-dev --respawn --transpile-only src/server.ts",
+    "add:product": "node scripts/add-product.js",
     "seed": "ts-node src/utils/seed.ts",
     "test:credentials": "ts-node src/utils/test-credentials.ts",
     "lint": "eslint . --ext .ts",
