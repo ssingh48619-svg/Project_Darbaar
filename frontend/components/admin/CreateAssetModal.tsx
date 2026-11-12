@@ -200,7 +200,7 @@ export function CreateAssetModal({ isOpen, onClose, onAssetCreated }: CreateAsse
         valuationMaxUSD: Number(valuationMaxUSD),
         isFeatured: true,
         isPrivateSale: category === "private-sales",
-        isDemonstration: true,
+        isDemonstration: false,
         image: imageUrl,
         galleryImages: [imageUrl],
         summary: summary || `${title} by ${makerOrArtist}. An exceptional historical creation.`,
