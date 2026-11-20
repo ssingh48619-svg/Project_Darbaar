@@ -181,15 +181,9 @@ export default function AdminDashboardPage() {
               Curatorial Administration Sign In Required
             </h2>
             <p className="text-xs text-[#686868] leading-relaxed">
-              This secure corridor is restricted to the authorized Superadmin and accredited Curators approved by the Directorate.
-              Please sign in with authorized credentials to publish specimens or modify curatorial permissions.
+              This secure corridor is strictly restricted to authorized Directorate Administrators and accredited Curators.
+              Please sign in with your credentials to access curatorial controls.
             </p>
-          </div>
-
-          <div className="p-4 bg-[#F7F5F0] border border-[#E5E5EA] text-left text-xs space-y-1.5 rounded-xs">
-            <p className="font-semibold text-[#111111]">Authorized Superadmin Account:</p>
-            <p className="font-mono text-[#263A31] text-[11px]">Email: darbaar3001@gmail.com</p>
-            <p className="text-[11px] text-[#686868]">Password: 1234@Darbaar</p>
           </div>
 
           <div className="pt-2">

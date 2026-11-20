@@ -33,9 +33,6 @@ export function CreateAssetModal({ isOpen, onClose, onAssetCreated }: CreateAsse
   const [isAuthorized, setIsAuthorized] = useState(false);
   const [currentUser, setCurrentUser] = useState<any>(null);
   const [authReason, setAuthReason] = useState<"UNAUTHENTICATED" | "UNAUTHORIZED_COLLECTOR" | "GRANTED">("UNAUTHENTICATED");
-  const [passkey, setPasskey] = useState("");
-  const [passkeyError, setPasskeyError] = useState("");
-  const [passkeyLoading, setPasskeyLoading] = useState(false);
 
   // Form Fields & State
   const [loading, setLoading] = useState(false);
@@ -62,7 +59,6 @@ export function CreateAssetModal({ isOpen, onClose, onAssetCreated }: CreateAsse
   // Verify authorization whenever modal opens
   const verifyAuthorization = async () => {
     setAuthChecking(true);
-    setPasskeyError("");
     setError("");
 
     try {
@@ -113,37 +109,6 @@ export function CreateAssetModal({ isOpen, onClose, onAssetCreated }: CreateAsse
       verifyAuthorization();
     }
   }, [isOpen]);
-
-  // Authenticate as Directorate Superadmin via passkey or default credentials
-  const handlePasskeyAuth = async (overridePasskey?: string) => {
-    const keyToUse = overridePasskey || passkey;
-    setPasskeyError("");
-    setPasskeyLoading(true);
-
-    try {
-      // If user inputs the Directorate Passkey or clicks "Unlock as Superadmin"
-      if (keyToUse === "DARBAAR-DIRECTORATE-2026" || !keyToUse) {
-        const loginRes = await darbaarApi.auth.login({
-          email: "darbaar3001@gmail.com",
-          password: "1234@Darbaar",
-        });
-        if (loginRes.success && loginRes.token) {
-          localStorage.setItem("darbaar_token", loginRes.token);
-          setCurrentUser(loginRes.user);
-          setIsAuthorized(true);
-          setAuthReason("GRANTED");
-        } else {
-          setPasskeyError("Failed to authenticate with Curatorial Directorate.");
-        }
-      } else {
-        setPasskeyError("Invalid Curatorial Directorate Passkey. Access withheld.");
-      }
-    } catch (err: any) {
-      setPasskeyError(err.message || "Curatorial verification failed.");
-    } finally {
-      setPasskeyLoading(false);
-    }
-  };
 
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -310,13 +275,6 @@ export function CreateAssetModal({ isOpen, onClose, onAssetCreated }: CreateAsse
                   </div>
                 )}
 
-                {passkeyError && (
-                  <div className="p-3 bg-red-50 border border-red-200 text-red-700 text-xs flex items-center space-x-2 text-left">
-                    <AlertCircle className="w-4 h-4 flex-shrink-0" />
-                    <span>{passkeyError}</span>
-                  </div>
-                )}
-
                 {/* Directorate Verification / Authentication Controls */}
                 <div className="pt-4 border-t border-[#E5E5EA] max-w-md mx-auto space-y-4 text-center">
                   <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
@@ -332,18 +290,6 @@ export function CreateAssetModal({ isOpen, onClose, onAssetCreated }: CreateAsse
                     >
                       Create Collector Account →
                     </a>
-                  </div>
-
-                  <div className="pt-3 border-t border-[#E5E5EA]/70">
-                    <button
-                      type="button"
-                      onClick={() => handlePasskeyAuth("DARBAAR-DIRECTORATE-2026")}
-                      disabled={passkeyLoading}
-                      className="text-[11px] uppercase tracking-wider text-[#A68A55] font-semibold hover:underline flex items-center justify-center space-x-1.5 mx-auto"
-                    >
-                      <UserCheck className="w-3.5 h-3.5" />
-                      <span>{passkeyLoading ? "Verifying..." : "Directorate Superadmin Quick Access (darbaar3001@gmail.com)"}</span>
-                    </button>
                   </div>
                 </div>
               </div>
