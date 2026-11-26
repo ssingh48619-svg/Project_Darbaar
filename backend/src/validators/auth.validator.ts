@@ -20,3 +20,16 @@ export const LoginSchema = z.object({
   }),
 });
 
+export const VerifyOtpSchema = z.object({
+  body: z.object({
+    email: z.string().email("Invalid email address"),
+    otp: z.string().min(4, "OTP code is required").max(10, "Invalid OTP format"),
+  }),
+});
+
+export const ResendOtpSchema = z.object({
+  body: z.object({
+    email: z.string().email("Invalid email address"),
+  }),
+});
+

@@ -22,7 +22,12 @@ async function request<T>(endpoint: string, options: RequestOptions = {}): Promi
 
   if (!response.ok) {
     const errorBody = await response.json().catch(() => ({}));
-    throw new Error(errorBody.error || `Request failed with status ${response.status}`);
+    const error: any = new Error(errorBody.error || `Request failed with status ${response.status}`);
+    error.data = errorBody;
+    error.status = response.status;
+    error.requiresOtp = errorBody.requiresOtp;
+    error.email = errorBody.email;
+    throw error;
   }
 
   return response.json();
@@ -32,14 +37,24 @@ export const darbaarApi = {
   // Authentication
   auth: {
     login: (credentials: { email: string; password: string }) =>
-      request<{ success: boolean; token: string; user: any; error?: string; message?: string }>("/auth/login", {
+      request<{ success: boolean; token: string; user: any; error?: string; message?: string; requiresOtp?: boolean; email?: string }>("/auth/login", {
         method: "POST",
         body: JSON.stringify(credentials),
       }),
     register: (userData: any) =>
-      request<{ success: boolean; token: string; user: any; error?: string; message?: string }>("/auth/register", {
+      request<{ success: boolean; requiresOtp?: boolean; email?: string; token?: string; user?: any; error?: string; message?: string }>("/auth/register", {
         method: "POST",
         body: JSON.stringify(userData),
+      }),
+    verifyOtp: (payload: { email: string; otp: string }) =>
+      request<{ success: boolean; token: string; user: any; error?: string; message?: string }>("/auth/verify-otp", {
+        method: "POST",
+        body: JSON.stringify(payload),
+      }),
+    resendOtp: (payload: { email: string }) =>
+      request<{ success: boolean; message: string; error?: string }>("/auth/resend-otp", {
+        method: "POST",
+        body: JSON.stringify(payload),
       }),
     getMe: (token?: string) =>
       request<{ success: boolean; user: any }>("/auth/me", { token }),

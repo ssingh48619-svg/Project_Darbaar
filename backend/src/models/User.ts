@@ -14,6 +14,9 @@ export interface IUser extends Document {
   preferredSalon?: string;
   isKycVerified: boolean;
   kycDocuments: string[];
+  isEmailVerified: boolean;
+  emailVerificationOtp?: string;
+  emailVerificationOtpExpires?: Date;
   createdAt: Date;
   updatedAt: Date;
   comparePassword(candidatePassword: string): Promise<boolean>;
@@ -67,6 +70,19 @@ const UserSchema = new Schema<IUser>(
     isKycVerified: {
       type: Boolean,
       default: false,
+    },
+    isEmailVerified: {
+      type: Boolean,
+      default: false,
+      index: true,
+    },
+    emailVerificationOtp: {
+      type: String,
+      select: false,
+    },
+    emailVerificationOtpExpires: {
+      type: Date,
+      select: false,
     },
     kycDocuments: [
       {
