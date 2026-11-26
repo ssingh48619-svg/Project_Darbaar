@@ -50,6 +50,8 @@ export async function createEnquiry(req: AuthenticatedRequest, res: Response): P
       // Non-blocking
     }
 
+    const refNum = newEnquiry._id.toString().slice(-8).toUpperCase();
+
     // Trigger instant email alert to Directorate (darbaar3001@gmail.com)
     emailService
       .notifyNewEnquiry({
@@ -60,9 +62,20 @@ export async function createEnquiry(req: AuthenticatedRequest, res: Response): P
         preferredSalon: newEnquiry.preferredSalon,
         inquiryType: newEnquiry.inquiryType,
         message: newEnquiry.message,
-        referenceNumber: newEnquiry._id.toString().slice(-8).toUpperCase(),
+        referenceNumber: refNum,
       })
       .catch((e) => console.warn("[Enquiry Alert Error]", e.message));
+
+    // Send customer inquiry confirmation receipt
+    emailService
+      .sendCustomerEnquiryConfirmation({
+        fullName,
+        email,
+        assetTitle,
+        preferredSalon: newEnquiry.preferredSalon,
+        referenceNumber: refNum,
+      })
+      .catch((e) => console.warn("[Customer Confirmation Error]", e.message));
 
     res.status(201).json({
       success: true,

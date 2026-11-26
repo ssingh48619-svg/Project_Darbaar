@@ -25,3 +25,4 @@ export default function ProvenanceLayout({
 }) {
   return <>{children}</>;
 }
+

@@ -96,6 +96,74 @@ export const emailService = {
   },
 
   /**
+   * Send confirmation receipt to the customer who submitted an inquiry
+   */
+  async sendCustomerEnquiryConfirmation(data: {
+    fullName: string;
+    email: string;
+    assetTitle?: string;
+    referenceNumber?: string;
+    preferredSalon?: string;
+  }): Promise<void> {
+    const subject = `[DARBAAR] Inquiry Confirmation — Ref #${data.referenceNumber || "INQ"}`;
+    const html = `
+      <div style="font-family: 'Georgia', serif; background-color: #F7F5F0; padding: 35px 20px; color: #111111;">
+        <div style="max-width: 580px; margin: 0 auto; background-color: #FFFFFF; border: 1px solid #E5E5EA; padding: 35px; box-shadow: 0 4px 12px rgba(0,0,0,0.03);">
+          
+          <!-- Header -->
+          <div style="border-bottom: 2px solid #263A31; padding-bottom: 20px; margin-bottom: 25px; text-align: center;">
+            <h1 style="letter-spacing: 0.3em; font-size: 26px; margin: 0; color: #111111; text-transform: uppercase;">DARBAAR</h1>
+            <p style="letter-spacing: 0.25em; font-size: 10px; color: #A68A55; margin: 6px 0 0 0; text-transform: uppercase;">Where Heritage Meets Rarity</p>
+          </div>
+
+          <!-- Title Bar -->
+          <div style="background-color: #263A31; color: #F7F5F0; padding: 12px 18px; margin-bottom: 25px; font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; text-align: center;">
+            Confidential Inquiry Confirmation
+          </div>
+
+          <!-- Body -->
+          <div style="font-size: 14px; line-height: 1.8; color: #333333;">
+            <p style="margin: 0 0 15px 0;">Dear <strong>${data.fullName}</strong>,</p>
+            <p style="margin: 0 0 20px 0; color: #555555;">
+              Thank you for contacting the Sovereign House of DARBAAR. Your inquiry regarding <strong>${data.assetTitle || "Curatorial Collection Specimen"}</strong> has been registered with our senior curatorial desk.
+            </p>
+
+            <div style="text-align: center; margin: 25px 0; padding: 15px; background-color: #F7F5F0; border: 1px solid #E5E5EA;">
+              <span style="display: block; font-size: 10px; text-transform: uppercase; letter-spacing: 0.25em; color: #686868; margin-bottom: 6px;">Confidential Reference ID</span>
+              <div style="font-size: 20px; font-weight: bold; color: #263A31; letter-spacing: 0.2em; font-family: 'Courier New', monospace;">
+                #${data.referenceNumber || "DARBAAR-REF"}
+              </div>
+            </div>
+
+            <p style="font-size: 13px; color: #555555; line-height: 1.7;">
+              A Senior Advisory Specialist from our <strong>${data.preferredSalon || "Geneva Vault"}</strong> corridor will review your inquiry under strict non-disclosure protocols and contact you within 24 hours.
+            </p>
+          </div>
+
+          <!-- Footer -->
+          <div style="margin-top: 35px; padding-top: 20px; border-top: 1px solid #E5E5EA; font-size: 11px; color: #888888; text-align: center; line-height: 1.7;">
+            <p style="margin: 0; font-weight: bold; color: #263A31;">DARBAAR Curatorial Directorate & Sovereign Advisory</p>
+            <p style="margin: 3px 0 0 0; letter-spacing: 0.1em; text-transform: uppercase;">Mumbai • Geneva • London • Dubai • Singapore</p>
+          </div>
+
+        </div>
+      </div>
+    `;
+
+    try {
+      await transporter.sendMail({
+        from: `"DARBAAR Curatorial Directorate" <${process.env.SMTP_USER || "darbaar3001@gmail.com"}>`,
+        to: data.email,
+        subject,
+        html,
+      });
+      console.log(`[DARBAAR Email Dispatch] Customer confirmation dispatched to: ${data.email}`);
+    } catch (err: any) {
+      console.warn(`[DARBAAR Email Dispatch] Could not send confirmation to customer ${data.email}:`, err.message);
+    }
+  },
+
+  /**
    * Send notification to Directorate when a new Private Advisory Mandate is lodged
    */
   async notifyNewAdvisoryMandate(data: {
