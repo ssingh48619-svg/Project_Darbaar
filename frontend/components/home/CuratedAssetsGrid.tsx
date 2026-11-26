@@ -14,7 +14,7 @@ export function CuratedAssetsGrid() {
       id: "fine-art",
       title: "Imperial Fine Art & Miniatures",
       subtitle: "18th-Century Court Ateliers & Modernist Sculptures",
-      image: "https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&w=1200&q=85",
+      image: "https://upload.wikimedia.org/wikipedia/commons/3/38/5_Radha-and-Krishna-in-the-Boat-of-Love.jpg",
       description:
         "Specializing in the royal ateliers of Mewar, Kangra, Kishangarh, and Mughal courts, executed with mineral pigments and gold foil on wasli paper, alongside significant post-war European modernist sculptures.",
       standards: [
@@ -28,7 +28,7 @@ export function CuratedAssetsGrid() {
       id: "timepieces",
       title: "Haute Horlogerie & Rare Complications",
       subtitle: "Historical Complications & Neo-Vintage Masterworks",
-      image: "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=1200&q=85",
+      image: "https://upload.wikimedia.org/wikipedia/commons/8/8e/Greubel_Forsey_DT30_mechanism.jpg",
       description:
         "Curating investment-grade complications from Patek Philippe, F.P. Journe, Audemars Piguet, and Vacheron Constantin. Prioritizing unpolished factory case geometry, documented archive extracts, and pristine period dials.",
       standards: [
@@ -42,7 +42,7 @@ export function CuratedAssetsGrid() {
       id: "collectibles",
       title: "Palace Toshakhana & Royal Antiquities",
       subtitle: "Imperial Arms, Carved Jade & Ceremonial Regalia",
-      image: "https://images.unsplash.com/photo-1584727638096-042c45049ebe?auto=format&fit=crop&w=1200&q=85",
+      image: "https://upload.wikimedia.org/wikipedia/commons/8/8d/WLA_vanda_Turban_jewels.jpg",
       description:
         "Documenting sovereign court regalia, crucible wootz steel blades with jauhar crystallization, carved nephrite jade hilts, and royal gemstone insignia preserved from royal treasury inventories.",
       standards: [

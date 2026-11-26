@@ -44,7 +44,7 @@ export default function AboutPage() {
           <div className="lg:col-span-6">
             <div className="relative h-[380px] sm:h-[460px] w-full border border-[#E5E5EA] overflow-hidden bg-[#EAE5DC]">
               <LuxuryImage
-                src="https://images.unsplash.com/photo-1582561424760-0321d75e81fa?auto=format&fit=crop&w=1000&q=85"
+                src="https://upload.wikimedia.org/wikipedia/commons/6/69/Udaipur_City_Palace.jpg"
                 alt="Palace Architecture Inspiration"
                 fallbackTitle="Royal Architecture & Sovereign Heritage"
                 categoryLabel="Palace Heritage"

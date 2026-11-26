@@ -53,7 +53,7 @@ export function CreateAssetModal({ isOpen, onClose, onAssetCreated }: CreateAsse
   const [preservationScore, setPreservationScore] = useState<number>(96);
   const [summary, setSummary] = useState("");
   const [historicalContext, setHistoricalContext] = useState("");
-  const [imageUrl, setImageUrl] = useState("https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&w=1200&q=85");
+  const [imageUrl, setImageUrl] = useState("https://upload.wikimedia.org/wikipedia/commons/1/1c/Gallet_multichron_astronomic_450x600.jpg");
   const [uploadingImage, setUploadingImage] = useState(false);
 
   // Verify authorization whenever modal opens

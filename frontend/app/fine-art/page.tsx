@@ -20,7 +20,7 @@ export default function FineArtPage() {
         "Monumental court scenes depicting royal Darbaar audiences, elephant processions, and festival spectacles. Characterized by deep red cinnabar borders, lapis lazuli pigments, and burnished gold leaf on multi-layered wasli paper.",
       focus: "Royal Darbaar audiences, sovereign portraiture, and court ceremonial documents.",
       standards: "Devanagari colophon translation, court treasury seals, and pigment spectrometry.",
-      image: "https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&w=1200&q=85",
+      image: "https://upload.wikimedia.org/wikipedia/commons/3/34/1_Nasiruddin._Malashri_ragini._Page_from_Chawand_Ragamala_series._Chawand%2C_Mewar%2C_Rajasthan._dated_1605%28inscribed%2C_Painted_Nasiruddin_at_Chawand_in_1605%29._LACMA.jpg",
     },
     {
       title: "The Pahari School: Kangra & Basohli",
@@ -29,7 +29,7 @@ export default function FineArtPage() {
         "Lyrical devotion and naturalistic landscape poetry. Originating in the Himalayan foothills under royal patronage, celebrated for delicate facial profiles, flowering creepers, and transcendental compositions.",
       focus: "Gita Govinda series, Ragamala musical modes, and Bhagavata Purana masterworks.",
       standards: "Takri epigraph analysis, organic binder testing, and colonial manifest verification.",
-      image: "https://images.unsplash.com/photo-1582561424760-0321d75e81fa?auto=format&fit=crop&w=1200&q=85",
+      image: "https://upload.wikimedia.org/wikipedia/commons/3/38/5_Radha-and-Krishna-in-the-Boat-of-Love.jpg",
     },
     {
       title: "Post-War European Modernist Bronzes",
@@ -38,7 +38,7 @@ export default function FineArtPage() {
         "Monumental sculptural inquiries into human form, spatial tension, and existential balance. Preserving Susse Fondeur and French foundry casts with authentic dark brown and olive studio patinas.",
       focus: "Attenuated modernist figures, numbered foundry lifetime casts, and artist plinths.",
       standards: "Ultrasonic alloy thickness diagnostics, foundry ledger audit, and catalogue raisonné verification.",
-      image: "https://images.unsplash.com/photo-1544967082-d9d25d867d66?auto=format&fit=crop&w=1200&q=85",
+      image: "https://upload.wikimedia.org/wikipedia/commons/d/d8/75_-_Mus%C3%A9e_Rodin_-_%C3%88ve_au_rocher%2C_grand_mod%C3%A8le_%E2%80%93_Auguste_Rodin.jpg",
     },
   ];
 

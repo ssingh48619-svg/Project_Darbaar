@@ -92,7 +92,7 @@ export function Hero() {
               {/* Primary Architectural / Fine Object Image */}
               <div className="relative h-[440px] sm:h-[520px] w-full bg-white border border-[#E5E5EA] shadow-xl overflow-hidden">
                 <LuxuryImage
-                  src="https://images.unsplash.com/photo-1582561424760-0321d75e81fa?auto=format&fit=crop&w=1200&q=85"
+                  src="https://upload.wikimedia.org/wikipedia/commons/6/69/Udaipur_City_Palace.jpg"
                   alt="Historic Indian Royal Architecture and Heritage Aesthetics"
                   fallbackTitle="Historic Palace Architecture & Royal Ateliers"
                   categoryLabel="Heritage Ateliers"
@@ -125,7 +125,7 @@ export function Hero() {
               <div className="hidden sm:block absolute -bottom-6 -left-8 w-48 h-56 bg-white border border-[#E5E5EA] shadow-2xl p-2 z-10">
                 <div className="relative w-full h-full overflow-hidden bg-[#F7F5F0]">
                   <LuxuryImage
-                    src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=600&q=85"
+                    src="https://upload.wikimedia.org/wikipedia/commons/2/27/OMEGA-Speedmaster-Professional-Front_%28cropped%29.jpg"
                     alt="High Horology Timepiece"
                     fallbackTitle="Perpetual Calendar Chronograph"
                     categoryLabel="Haute Horlogerie"

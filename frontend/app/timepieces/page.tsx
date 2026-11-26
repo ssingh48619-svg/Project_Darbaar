@@ -19,7 +19,7 @@ export default function TimepiecesPage() {
       description:
         "Perpetual calendar chronographs, minute repeaters, split-seconds, and tourbillons from the golden eras of classical watchmaking. Strict curatorial criteria requiring unpolished case bevels, factory hallmarks, and complete archival extracts.",
       protocols: "Extract from the Archives coordination, 360-degree microscopic case geometry audit, isochronism timing verification.",
-      image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=1200&q=85",
+      image: "https://upload.wikimedia.org/wikipedia/commons/1/1c/Gallet_multichron_astronomic_450x600.jpg",
     },
     {
       title: "Independent Contemporary Haute Horlogerie",
@@ -27,7 +27,7 @@ export default function TimepiecesPage() {
       description:
         "The avant-garde mastery of independent watchmakers. Featuring solid gold movements, resonance chronometers, and hand-finished guilloché dials produced in limited annual volumes.",
       protocols: "Movement rate diagnostics, boutique guarantee verification, caseback serial matching.",
-      image: "https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=1200&q=85",
+      image: "https://upload.wikimedia.org/wikipedia/commons/8/8e/Greubel_Forsey_DT30_mechanism.jpg",
     },
     {
       title: "Iconic Historical Design & Monobloc Architecture",
@@ -35,7 +35,7 @@ export default function TimepiecesPage() {
       description:
         "Groundbreaking silhouettes that redefined horological aesthetics: from the Cartier Crash born in Swinging London to the integrated steel revolution of Gérald Genta and Jörg Hysek.",
       protocols: "Dial originality audit, UV luminescence tritium decay analysis, hallmarking spectrometry.",
-      image: "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=1200&q=85",
+      image: "https://upload.wikimedia.org/wikipedia/commons/2/2d/GP_tourbillon.jpg",
     },
   ];
 

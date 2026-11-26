@@ -12,7 +12,7 @@ export function FeaturedCategories() {
       subtitle: "Imperial Indian Court Ateliers & Modernist Works",
       description:
         "Monumental court miniatures, 18th-century Rajput and Mughal masterworks, alongside significant post-war and modern sculptural milestones.",
-      image: "https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&w=800&q=85",
+      image: "https://upload.wikimedia.org/wikipedia/commons/3/34/1_Nasiruddin._Malashri_ragini._Page_from_Chawand_Ragamala_series._Chawand%2C_Mewar%2C_Rajasthan._dated_1605%28inscribed%2C_Painted_Nasiruddin_at_Chawand_in_1605%29._LACMA.jpg",
       link: "/fine-art",
       itemCount: "Indic & Modern Art",
     },
@@ -21,7 +21,7 @@ export function FeaturedCategories() {
       subtitle: "Haute Horlogerie & Historic Complications",
       description:
         "Patek Philippe, F.P. Journe, Audemars Piguet, and historically significant neo-vintage complications preserved in unpolished condition.",
-      image: "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=800&q=85",
+      image: "https://upload.wikimedia.org/wikipedia/commons/1/1c/Gallet_multichron_astronomic_450x600.jpg",
       link: "/timepieces",
       itemCount: "Geneva Vault Council",
     },
@@ -30,7 +30,7 @@ export function FeaturedCategories() {
       subtitle: "Palace Toshakhana Antiquities & Royal Regalia",
       description:
         "Museum-standard wootz steel blades, carved nephrite jade hilts, royal gemstones, and priceless ceremonial relics preserved across centuries.",
-      image: "https://images.unsplash.com/photo-1584727638096-042c45049ebe?auto=format&fit=crop&w=800&q=85",
+      image: "https://upload.wikimedia.org/wikipedia/commons/1/10/Khanjar.jpg",
       link: "/collectibles",
       itemCount: "Royal Toshakhana",
     },

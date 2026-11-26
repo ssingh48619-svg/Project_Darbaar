@@ -20,7 +20,7 @@ export default function CollectiblesPage() {
         "Crucible Damascus steel (jauhar) forged in high-carbon crucibles across Southern and Western India, celebrated worldwide for its crystalline watery damascening. Fitted with nephrite jade hilts, gold koftgari calligraphy, and cabochon gemstones.",
       focus: "Imperial Mughal Khanjars, Rajput Tulwars, and Peshwa court ceremonial daggers.",
       protocols: "Metallurgical crystallite structure analysis, carbon dating of scabbard wood core, and epigraphic verification.",
-      image: "https://images.unsplash.com/photo-1584727638096-042c45049ebe?auto=format&fit=crop&w=1200&q=85",
+      image: "https://upload.wikimedia.org/wikipedia/commons/1/10/Khanjar.jpg",
     },
     {
       title: "Royal Enamelled Jewels & Kundan Regalia",
@@ -29,7 +29,7 @@ export default function CollectiblesPage() {
         "The zenith of Indian royal goldsmithing. Featuring pure 24k gold refined in kundan foil techniques, set with unheated Burmese rubies, Colombian emerald drops, Basra seed pearls, and reverse Jaipur meenakari champlevé polychrome enamel.",
       focus: "Royal turban aigrettes (Sarpech), ceremonial armbands (Bazuband), and sovereign toshakhana regalia.",
       protocols: "SSEF/GIA gemmological origin certification, 24k gold purity spectrometry, and historical palace inventory cross-referencing.",
-      image: "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&w=1200&q=85",
+      image: "https://upload.wikimedia.org/wikipedia/commons/8/8d/WLA_vanda_Turban_jewels.jpg",
     },
     {
       title: "Palace Toshakhana Objects & Bronzes",
@@ -38,7 +38,7 @@ export default function CollectiblesPage() {
         "Priceless lost-wax cast sacred bronzes from the Imperial Chola Dynasty alongside ceremonial toshakhana decorative heirlooms, huqqa bases in bidriware, and rock crystal cups from courtly treasuries.",
       focus: "Utsava Murti temple procession bronzes, royal treasury silver, and bidriware masterworks.",
       protocols: "Thermoluminescence core testing, XRF copper alloy metallurgy report, and international cultural property title clearance.",
-      image: "https://images.unsplash.com/photo-1544967082-d9d25d867d66?auto=format&fit=crop&w=1200&q=85",
+      image: "https://upload.wikimedia.org/wikipedia/commons/d/d8/75_-_Mus%C3%A9e_Rodin_-_%C3%88ve_au_rocher%2C_grand_mod%C3%A8le_%E2%80%93_Auguste_Rodin.jpg",
     },
   ];
 
