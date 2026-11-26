@@ -4,6 +4,7 @@ import React from "react";
 import Link from "next/link";
 import { ShieldCheck, Compass, Mail, Globe, ArrowUpRight } from "lucide-react";
 import { useDarbaar } from "@/features/context/DarbaarContext";
+import { DarbaarCrest } from "@/components/DarbaarCrest";
 
 export function Footer() {
   const { openInquiryModal } = useDarbaar();
@@ -36,13 +37,18 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 lg:gap-8">
           {/* Brand Column */}
           <div className="lg:col-span-2 space-y-5">
-            <Link href="/" className="inline-block group">
-              <span className="text-3xl font-serif tracking-[0.25em] text-white font-normal uppercase">
-                DARBAAR
-              </span>
-              <p className="text-[10px] tracking-[0.35em] text-[#A68A55] uppercase mt-1">
-                Where Heritage Meets Rarity
-              </p>
+            <Link href="/" className="inline-flex items-center space-x-3.5 group">
+              <div className="relative p-0.5 rounded-sm bg-gradient-to-br from-[#C4AC79]/40 to-transparent flex-shrink-0">
+                <DarbaarCrest className="w-12 h-12 shadow-md group-hover:scale-105 transition-transform" />
+              </div>
+              <div>
+                <span className="text-3xl font-serif tracking-[0.25em] text-white font-normal uppercase leading-tight block">
+                  DARBAAR
+                </span>
+                <p className="text-[10px] tracking-[0.35em] text-[#A68A55] uppercase mt-0.5">
+                  Where Heritage Meets Rarity
+                </p>
+              </div>
             </Link>
             <p className="text-xs text-[#EAE5DC]/70 leading-relaxed font-light max-w-sm">
               Inspired by the grandeur of India&apos;s historic royal courts and the refined discretion of international auction houses. Curating exceptional fine art, rare horology, and heirloom assets across generations.

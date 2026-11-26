@@ -16,6 +16,13 @@ export const metadata: Metadata = {
   title: "DARBAAR | Where Heritage Meets Rarity — Global Luxury House",
   description:
     "A Global House of Fine Art, Rare Timepieces and Collectible Assets. Inspired by India's royal courts and the discretion of international private auction houses.",
+  icons: {
+    icon: [
+      { url: "/favicon.svg", type: "image/svg+xml" },
+    ],
+    shortcut: "/favicon.svg",
+    apple: "/favicon.svg",
+  },
   keywords: [
     "DARBAAR",
     "Fine Art",

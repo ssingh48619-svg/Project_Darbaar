@@ -19,6 +19,7 @@ import {
 } from "lucide-react";
 import { darbaarApi } from "@/lib/api";
 import { useDarbaar } from "@/features/context/DarbaarContext";
+import { DarbaarCrest } from "@/components/DarbaarCrest";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -180,7 +181,10 @@ export default function LoginPage() {
 
         {/* Brand Crest & Title */}
         <div className="text-center space-y-2">
-          <Link href="/" className="inline-block group">
+          <Link href="/" className="inline-flex flex-col items-center group">
+            <div className="relative p-0.5 rounded-sm bg-gradient-to-br from-[#C4AC79]/40 to-transparent mb-1.5 flex-shrink-0">
+              <DarbaarCrest className="w-12 h-12 shadow-md group-hover:scale-105 transition-transform" />
+            </div>
             <span className="text-3xl font-serif tracking-[0.25em] text-[#111111] uppercase font-normal">
               DARBAAR
             </span>

@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { Search, User, Globe, ChevronDown, Menu, X, Shield, Lock, Sun, Moon, LogOut, UserCheck } from "lucide-react";
 import { useDarbaar } from "@/features/context/DarbaarContext";
 import { CURRENCIES, SupportedCurrency } from "@/lib/currency";
+import { DarbaarCrest } from "@/components/DarbaarCrest";
 
 export function Header() {
   const pathname = usePathname();
@@ -206,13 +207,18 @@ export function Header() {
         <div className="flex items-center justify-between h-20 md:h-22 gap-6">
           {/* Left: Brand Crest & Typography */}
           <div className="flex-shrink-0">
-            <Link href="/" className="group flex flex-col items-start">
-              <span className="text-2xl sm:text-3xl font-serif tracking-[0.24em] text-[#111111] font-normal group-hover:text-[#A68A55] transition-colors uppercase">
-                DARBAAR
-              </span>
-              <span className="text-[9px] tracking-[0.32em] text-[#686868] uppercase font-light -mt-0.5">
-                Where Heritage Meets Rarity
-              </span>
+            <Link href="/" className="group flex items-center space-x-3 sm:space-x-3.5">
+              <div className="relative p-0.5 rounded-sm bg-gradient-to-br from-[#C4AC79]/40 via-transparent to-[#A68A55]/20 group-hover:from-[#C4AC79]/70 transition-all flex-shrink-0">
+                <DarbaarCrest className="w-10 h-10 sm:w-11 sm:h-11 shadow-sm group-hover:scale-105 transition-transform" />
+              </div>
+              <div className="flex flex-col items-start">
+                <span className="text-2xl sm:text-3xl font-serif tracking-[0.24em] text-[#111111] font-normal group-hover:text-[#A68A55] transition-colors uppercase leading-tight">
+                  DARBAAR
+                </span>
+                <span className="text-[9px] tracking-[0.32em] text-[#686868] uppercase font-light -mt-0.5">
+                  Where Heritage Meets Rarity
+                </span>
+              </div>
             </Link>
           </div>
 
